@@ -18,7 +18,7 @@ export default function Slider() {
 		},
 		{
 			id: 2,
-			imageMobile: slideImageMobile, // Mobilde aynı fotoğraf
+			imageMobile: slideImageDesktop2,
 			imageDesktop: slideImageDesktop2,
 			subtitle: "SUMMER 2020",
 			title: "NEW COLLECTION",
@@ -48,7 +48,7 @@ export default function Slider() {
 					{/* Navigation Arrows */}
 					<button
 						onClick={prevSlide}
-						className={`absolute z-10 left-[5px] top-[330px] text-white bg-transparent border-none cursor-pointer ${slides.length > 1 ? '' : 'opacity-50 cursor-not-allowed'}`}
+						className={`absolute z-50 left-[5px] top-[330px] text-white bg-transparent border-none cursor-pointer ${slides.length > 1 ? '' : 'opacity-50 cursor-not-allowed'}`}
 						aria-label="Previous slide"
 						disabled={slides.length <= 1}
 					>
@@ -56,14 +56,14 @@ export default function Slider() {
 					</button>
 					<button
 						onClick={nextSlide}
-						className={`absolute z-10 right-[5px] top-[330px] text-white bg-transparent border-none cursor-pointer ${slides.length > 1 ? '' : 'opacity-50 cursor-not-allowed'}`}
+						className={`absolute z-50 right-[5px] top-[330px] text-white bg-transparent border-none cursor-pointer ${slides.length > 1 ? '' : 'opacity-50 cursor-not-allowed'}`}
 						aria-label="Next slide"
 						disabled={slides.length <= 1}
 					>
 						<ChevronRight size={80} strokeWidth={1} color="#FFFFFF" />
 					</button>
 					{/* Content */}
-					<div className="relative h-full flex flex-col items-center text-white px-8 z-10 pt-[200px]">
+					<div className="relative h-full flex flex-col items-center text-white px-8 z-10 pt-[200px] pointer-events-none">
 						<h3 className="font-montserrat font-bold text-center text-[16px] leading-[24px] tracking-[0.1px] text-[#FFFFFF] mb-[30px]">
 							{slides[currentSlide].subtitle}
 						</h3>
@@ -73,7 +73,7 @@ export default function Slider() {
 						<p className="font-montserrat font-normal text-center text-[20px] leading-[30px] tracking-[0.2px] text-[#FAFAFA] max-w-[300px] mb-[45px]">
 							We know how large objects will act,<br /> but things on a small scale.
 						</p>
-						<div className="w-full flex items-center justify-center">
+						<div className="w-full flex items-center justify-center pointer-events-auto">
 							<button className="font-montserrat font-bold text-center bg-[#2DC071] text-[#FFFFFF] text-[24px] leading-[32px] tracking-[0.1px] w-[221px] h-[62px] rounded-[5px] border-none cursor-pointer">
 								SHOP NOW
 							</button>
