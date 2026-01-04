@@ -1,8 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 
+// Geçici placeholder reducer
+const dummyReducer = (state = {}) => state;
+
 const store = configureStore({
 	reducer: {
-		// Reducer'lar buraya eklenecek
+		app: dummyReducer,
+		// Diğer reducer'lar buraya eklenecek
 	},
 });
 

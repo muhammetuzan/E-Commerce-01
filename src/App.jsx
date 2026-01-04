@@ -1,14 +1,127 @@
-import { BrowserRouter as Router } from "react-router-dom";
-import Header from "./layout/Header";
+
+import { BrowserRouter as Router, Route, Switch, useLocation } from "react-router-dom";
+import React, { useState } from "react";
+import { Provider } from "react-redux";
+import store from "./store/store";
+import Navbar from "./components/Navbar";
+import Footer from "./layout/Footer";
+import PageContent from "./layout/PageContent";
+import SignUpModal from "./components/SignUpModal";
+import LoginModal from "./components/LoginModal";
+
 import HomePage from "./pages/HomePage";
+import ShopPage from "./pages/ShopPage";
+import ProductDetailPage from "./pages/ProductDetailPage";
+import ContactPage from "./pages/ContactPage";
+import TeamPage from "./pages/TeamPage";
+import AboutUs from "./pages/AboutUs";
+import SignUpPage from "./pages/SignUpPage";
+
+
+function AppContent({ onSignUpClick }) {
+	const location = useLocation();
+	// Shop sayfasında yeşil, diğerlerinde koyu mavi
+	const topBarColor = location.pathname === "/shop" ? "#23856D" : "#252B42";
+	
+	// SignUp sayfası için özel render
+	if (location.pathname === "/signup") {
+		return <SignUpPage />;
+	}
+
+	return (
+		<>
+			<PageContent>
+				   <Switch>
+					   <Route exact path="/" component={HomePage} />
+					   <Route exact path="/shop" component={ShopPage} />				   <Route path="/shop/:gender/:categoryName/:categoryId" component={ShopPage} />					   <Route path="/product/:id" component={ProductDetailPage} />
+					   <Route path="/contact" component={ContactPage} />
+					   <Route path="/team" component={TeamPage} />
+					<Route path="/aboutus" component={AboutUs} />
+				   </Switch>
+			</PageContent>
+			<Footer isShopPage={location.pathname === "/shop"} />
+		</>
+	);
+}
 
 export default function App() {
+	const [showSignUpModal, setShowSignUpModal] = useState(false);
+	const [showLoginModal, setShowLoginModal] = useState(false);
+
 	return (
-		<Router>
-			<div className="min-h-screen max-w-[414px] mx-auto">
-				<Header />
-				<HomePage />
-			</div>
-		</Router>
+		<Provider store={store}>
+			<Router>
+				<AppWrapper 
+					showSignUpModal={showSignUpModal} 
+					setShowSignUpModal={setShowSignUpModal}
+					showLoginModal={showLoginModal}
+					setShowLoginModal={setShowLoginModal}
+				/>
+			</Router>
+		</Provider>
+	);
+}
+
+
+import { useDispatch } from "react-redux";
+import { setUser } from "./store/actions";
+import { verifyToken, fetchCategories, fetchProducts } from "./store/thunks";
+import { useEffect } from "react";
+
+function AppWrapper({ showSignUpModal, setShowSignUpModal, showLoginModal, setShowLoginModal }) {
+	const location = useLocation();
+	const dispatch = useDispatch();
+
+	// App load'da token verify et ve categories fetch et
+	useEffect(() => {
+		// Tarayıcının otomatik scroll davranışını kapat
+		if ('scrollRestoration' in window.history) {
+			window.history.scrollRestoration = 'manual';
+		}
+		// Categories'i fetch et
+		dispatch(fetchCategories());
+		// Products'i fetch et
+		dispatch(fetchProducts());
+		
+		const token = localStorage.getItem('token');
+		
+		if (token) {
+			console.log('Token found in localStorage, verifying...');
+			// Token varsa verify endpoint'ine request yap
+			dispatch(verifyToken());
+		} else {
+			// Token yoksa localStorage'daki user'ı restore et (eski T10 flow)
+			const storedUser = localStorage.getItem('user');
+			if (storedUser) {
+				try {
+					const user = JSON.parse(storedUser);
+					console.log('Restoring user from localStorage:', user);
+					dispatch(setUser(user));
+				} catch (error) {
+					console.error('Error restoring user:', error);
+					localStorage.removeItem('user');
+				}
+			}
+		}
+	}, [dispatch]);
+
+	return (
+		<>
+			<Navbar 
+				onSignUpClick={() => setShowSignUpModal(true)}
+				onLoginClick={() => {
+					// Previous page'i localStorage'a kaydet
+					localStorage.setItem('previousPage', location.pathname);
+					setShowLoginModal(true);
+				}}
+				isShopPage={location.pathname === "/shop" || location.pathname.startsWith("/product")}
+			/>
+			<AppContent />
+			<SignUpModal isOpen={showSignUpModal} onClose={() => setShowSignUpModal(false)} />
+			<LoginModal 
+				isOpen={showLoginModal} 
+				onClose={() => setShowLoginModal(false)}
+			/>
+		</>
 	);
 }
