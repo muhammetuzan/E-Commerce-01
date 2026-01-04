@@ -8,6 +8,8 @@ import kidsImage from "../assets/resimler/media bg-cover (1).png";
 export default function ShopCards() {
 	const categories = useSelector(state => state.product.categories);
 	
+	console.log('📋 Tüm Kategoriler:', categories.map(c => ({ id: c.id, title: c.title })));
+	
 	// Rating'e göre sırala ve top 5 al
 	const top5Categories = [...categories]
 		.sort((a, b) => b.rating - a.rating)

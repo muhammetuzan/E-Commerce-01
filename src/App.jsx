@@ -16,6 +16,9 @@ import ContactPage from "./pages/ContactPage";
 import TeamPage from "./pages/TeamPage";
 import AboutUs from "./pages/AboutUs";
 import SignUpPage from "./pages/SignUpPage";
+import ShoppingCartPage from "./pages/ShoppingCartPage";
+import CreateOrderPage from "./pages/CreateOrderPage";
+import PreviousOrdersPage from "./pages/PreviousOrdersPage";
 
 
 function AppContent({ onSignUpClick }) {
@@ -33,7 +36,13 @@ function AppContent({ onSignUpClick }) {
 			<PageContent>
 				   <Switch>
 					   <Route exact path="/" component={HomePage} />
-					   <Route exact path="/shop" component={ShopPage} />				   <Route path="/shop/:gender/:categoryName/:categoryId" component={ShopPage} />					   <Route path="/product/:id" component={ProductDetailPage} />
+					   <Route exact path="/shop" component={ShopPage} />
+					   <Route path="/shop/:gender/:categoryName/:categoryId/:productNameSlug/:productId" component={ProductDetailPage} />
+					   <Route path="/shop/:gender/:categoryName/:categoryId" component={ShopPage} />
+					   <Route path="/product/:id" component={ProductDetailPage} />
+					   <Route path="/cart" component={ShoppingCartPage} />
+					   <Route path="/create-order" component={CreateOrderPage} />
+					   <Route path="/previous-orders" component={PreviousOrdersPage} />
 					   <Route path="/contact" component={ContactPage} />
 					   <Route path="/team" component={TeamPage} />
 					<Route path="/aboutus" component={AboutUs} />
@@ -114,7 +123,7 @@ function AppWrapper({ showSignUpModal, setShowSignUpModal, showLoginModal, setSh
 					localStorage.setItem('previousPage', location.pathname);
 					setShowLoginModal(true);
 				}}
-				isShopPage={location.pathname === "/shop" || location.pathname.startsWith("/product")}
+				isShopPage={location.pathname === "/shop" || location.pathname.startsWith("/product") || location.pathname.startsWith("/shop/")}
 			/>
 			<AppContent />
 			<SignUpModal isOpen={showSignUpModal} onClose={() => setShowSignUpModal(false)} />

@@ -1,13 +1,15 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import CryptoJS from "crypto-js";
-import { User, Search, ShoppingCart, Menu, ChevronDown, Heart, Phone, Mail, Instagram, Youtube, Facebook, Twitter, LogOut } from "lucide-react";
-import { setUser } from "../store/actions";
+import { User, Search, ShoppingCart, Menu, ChevronDown, Heart, Phone, Mail, Instagram, Youtube, Facebook, Twitter, LogOut, Trash2 } from "lucide-react";
+import { setUser, removeFromCart } from "../store/actions";
 
 export default function Navbar({ topBarColor = "#252B42", onSignUpClick, onLoginClick, isShopPage = false }) {
 	const dispatch = useDispatch();
+	const history = useHistory();
 	const user = useSelector(state => state.client.user);
+	const cart = useSelector(state => state.shoppingCart.cart);
 	
 	// Gravatar hash oluştur
 	const getGravatarUrl = (email) => {
@@ -63,8 +65,14 @@ export default function Navbar({ topBarColor = "#252B42", onSignUpClick, onLogin
 	const shopDropdown = buildShopDropdown();
 
 	const [dropdownOpen, setDropdownOpen] = useState(false);
+	const [cartDropdownOpen, setCartDropdownOpen] = useState(false);
 	const dropdownRef = useRef(null);
 	const shopBtnRef = useRef(null);
+	const cartDropdownRef = useRef(null);
+	const cartBtnRef = useRef(null);
+	
+	// Toplam ürün adedi
+	const cartItemCount = cart.reduce((total, item) => total + item.count, 0);
 
 	// Dropdown mouse enter/leave kontrolü için gecikmeli kapanış
 	const closeDropdownTimeout = useRef();
@@ -75,6 +83,28 @@ export default function Navbar({ topBarColor = "#252B42", onSignUpClick, onLogin
 	const handleShopMouseLeave = () => {
 		closeDropdownTimeout.current = setTimeout(() => setDropdownOpen(false), 120);
 	};
+	
+	// Cart dropdown kontrolü
+	const closeCartDropdownTimeout = useRef();
+	const handleCartMouseEnter = () => {
+		if (closeCartDropdownTimeout.current) clearTimeout(closeCartDropdownTimeout.current);
+		setCartDropdownOpen(true);
+	};
+	const handleCartMouseLeave = () => {
+		closeCartDropdownTimeout.current = setTimeout(() => setCartDropdownOpen(false), 120);
+	};
+	
+	// Mobile cart dropdown açıkken body scroll'u engelle
+	useEffect(() => {
+		if (cartDropdownOpen) {
+			document.body.style.overflow = 'hidden';
+		} else {
+			document.body.style.overflow = 'unset';
+		}
+		return () => {
+			document.body.style.overflow = 'unset';
+		};
+	}, [cartDropdownOpen]);
 
 	useEffect(() => {
 		function handleClickOutside(event) {
@@ -86,13 +116,22 @@ export default function Navbar({ topBarColor = "#252B42", onSignUpClick, onLogin
 			) {
 				setDropdownOpen(false);
 			}
+			if (
+				cartDropdownRef.current &&
+				!cartDropdownRef.current.contains(event.target) &&
+				cartBtnRef.current &&
+				!cartBtnRef.current.contains(event.target)
+			) {
+				setCartDropdownOpen(false);
+			}
 		}
 		function handleEsc(event) {
 			if (event.key === "Escape") {
 				setDropdownOpen(false);
+				setCartDropdownOpen(false);
 			}
 		}
-		if (dropdownOpen) {
+		if (dropdownOpen || cartDropdownOpen) {
 			document.addEventListener("mousedown", handleClickOutside);
 			document.addEventListener("keydown", handleEsc);
 		} else {
@@ -103,7 +142,7 @@ export default function Navbar({ topBarColor = "#252B42", onSignUpClick, onLogin
 			document.removeEventListener("mousedown", handleClickOutside);
 			document.removeEventListener("keydown", handleEsc);
 		};
-	}, [dropdownOpen]);
+	}, [dropdownOpen, cartDropdownOpen]);
 
 	return (
 		<>
@@ -265,32 +304,44 @@ export default function Navbar({ topBarColor = "#252B42", onSignUpClick, onLogin
 							<ul className="flex items-center gap-[10px] w-auto h-[54px] ml-[40px]">
 								<li className="h-[54px] flex items-center">
 									{user ? (
-										<div className="flex items-center gap-3 px-4 py-2 rounded-full hover:bg-gray-100 transition">
-											<img 
-												src={getGravatarUrl(user.email)} 
-												alt={user.name}
-												className="w-8 h-8 rounded-full object-cover"
-												onError={(e) => {
-													e.target.style.display = 'none';
-													e.target.nextElementSibling.style.display = 'flex';
-												}}
-											/>
-											<User size={20} className="text-gray-400 hidden" />
-											<div className="flex flex-col">
-												<span className="font-montserrat font-bold text-[12px] text-[#23A6F0]">
-													{user.name}
-												</span>
-												<span className="font-montserrat text-[10px] text-gray-600">
-													{user.email}
-												</span>
+										<div className="relative group">
+											<div className="flex items-center gap-3 px-4 py-2 rounded-full hover:bg-gray-100 transition cursor-pointer">
+												<img 
+													src={getGravatarUrl(user.email)} 
+													alt={user.name}
+													className="w-8 h-8 rounded-full object-cover"
+													onError={(e) => {
+														e.target.style.display = 'none';
+														e.target.nextElementSibling.style.display = 'flex';
+													}}
+												/>
+												<User size={20} className="text-gray-400 hidden" />
+												<div className="flex flex-col">
+													<span className="font-montserrat font-bold text-[12px] text-[#23A6F0]">
+														{user.name}
+													</span>
+													<span className="font-montserrat text-[10px] text-gray-600">
+														{user.email}
+													</span>
+												</div>
 											</div>
-											<button 
-												onClick={handleLogout}
-												className="p-2 hover:bg-red-50 rounded-full transition ml-2"
-												title="Çıkış Yap"
-											>
-												<LogOut size={16} className="text-red-500" />
-											</button>
+
+											{/* Dropdown Menu */}
+											<div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+												<Link 
+													to="/previous-orders"
+													className="block px-4 py-3 font-montserrat text-[13px] text-[#252B42] hover:bg-gray-50 border-b border-gray-100 first:rounded-t-lg"
+												>
+													Önceki Siparişlerim
+												</Link>
+												<button 
+													onClick={handleLogout}
+													className="w-full text-left px-4 py-3 font-montserrat text-[13px] text-red-600 hover:bg-red-50 rounded-b-lg flex items-center gap-2"
+												>
+													<LogOut size={14} />
+													Çıkış Yap
+												</button>
+											</div>
 										</div>
 									) : (
 										<button onClick={onLoginClick} className="flex items-center gap-[5px] px-[15px] py-[15px] rounded-[37px] whitespace-nowrap overflow-hidden hover:bg-gray-100 transition">
@@ -304,16 +355,98 @@ export default function Navbar({ topBarColor = "#252B42", onSignUpClick, onLogin
 										<Search size={16} className="text-[#23A6F0]" />
 									</button>
 								</li>
-								<li className="w-[56px] h-[46px] flex items-center">
-									<button className="flex items-center w-[56px] h-[46px] rounded-[37px] p-[15px] gap-[5px]">
+								<li className="w-[56px] h-[46px] flex items-center relative">
+									<button 
+										ref={cartBtnRef}
+										onMouseEnter={handleCartMouseEnter}
+										onMouseLeave={handleCartMouseLeave}
+										className="flex items-center w-[56px] h-[46px] rounded-[37px] p-[15px] gap-[5px]"
+									>
 										<ShoppingCart size={16} className="text-[#23A6F0]" />
-										<span className="font-montserrat font-normal text-[12px] leading-[16px] tracking-[0.2px] text-[#23A6F0] w-[5px] h-[16px] flex items-center justify-center">1</span>
+										<span className="font-montserrat font-normal text-[12px] leading-[16px] tracking-[0.2px] text-[#23A6F0] w-[5px] h-[16px] flex items-center justify-center">
+											{cartItemCount}
+										</span>
 									</button>
+									
+									{/* Cart Dropdown */}
+									{cartDropdownOpen && (
+										<div
+											ref={cartDropdownRef}
+											onMouseEnter={handleCartMouseEnter}
+											onMouseLeave={handleCartMouseLeave}
+											className="absolute right-0 top-[46px] w-[400px] bg-white shadow-2xl rounded-lg z-50 border border-gray-100"
+										>
+											{/* Header */}
+											<div className="px-6 py-4 border-b border-gray-200">
+												<h3 className="font-montserrat font-bold text-[16px] text-[#252B42]">
+													Sepetim ({cart.length} Ürün)
+												</h3>
+											</div>
+											
+											{/* Cart Items */}
+											<div className="max-h-[400px] overflow-y-auto">
+												{cart.length === 0 ? (
+													<div className="px-6 py-8 text-center">
+														<ShoppingCart size={48} className="mx-auto text-gray-300 mb-3" />
+														<p className="font-montserrat text-[14px] text-gray-500">Sepetiniz boş</p>
+													</div>
+												) : (
+													cart.map((item, index) => (
+														<div key={index} className="px-6 py-4 border-b border-gray-100 hover:bg-gray-50 transition group">
+															<div className="flex gap-4">
+																<img 
+																	src={item.product.images?.[0]?.url || ''} 
+																	alt={item.product.name}
+																	className="w-16 h-16 object-cover rounded"
+																/>
+																<div className="flex-1">
+																	<h4 className="font-montserrat font-semibold text-[14px] text-[#252B42] line-clamp-2">
+																		{item.product.name}
+																	</h4>
+																	<p className="font-montserrat text-[12px] text-gray-600 mt-1">
+																		Adet: {item.count}
+																	</p>
+																	<p className="font-montserrat font-bold text-[14px] text-[#23A6F0] mt-1">
+																		{item.product.price} TL
+																	</p>
+																</div>
+																<button
+																	onClick={() => dispatch(removeFromCart(item.product.id))}
+																	className="opacity-0 group-hover:opacity-100 transition-opacity p-2 hover:bg-red-50 rounded-full h-fit"
+																	title="Sepetten Çıkar"
+																>
+																	<Trash2 size={16} className="text-red-500" />
+																</button>
+															</div>
+														</div>
+													))
+												)}
+											</div>
+											
+											{/* Footer Buttons */}
+											{cart.length > 0 && (
+												<div className="px-6 py-4 border-t border-gray-200 flex gap-3">
+												<button 
+													onClick={() => { setCartDropdownOpen(false); history.push('/cart'); }}
+													className="flex-1 px-4 py-2 border border-[#23A6F0] text-[#23A6F0] font-montserrat font-semibold text-[14px] rounded hover:bg-[#23A6F0] hover:text-white transition"
+												>
+														Sepete Git
+													</button>
+													<button 
+														onClick={() => { setCartDropdownOpen(false); history.push('/create-order'); }}
+														className="flex-1 px-4 py-2 bg-[#FF6F00] text-white font-montserrat font-semibold text-[14px] rounded hover:bg-[#E66300] transition"
+													>
+														Siparişi Tamamla
+													</button>
+												</div>
+											)}
+										</div>
+									)}
 								</li>
 								<li className="w-[56px] h-[46px] flex items-center">
 									<button className="flex items-center w-[56px] h-[46px] rounded-[37px] p-[15px] gap-[5px]">
 										<Heart size={16} className="text-[#23A6F0]" />
-										<span className="font-montserrat font-normal text-[12px] leading-[16px] tracking-[0.2px] text-[#23A6F0] w-[5px] h-[16px] flex items-center justify-center">1</span>
+										<span className="font-montserrat font-normal text-[12px] leading-[16px] tracking-[0.2px] text-[#23A6F0] w-[5px] h-[16px] flex items-center justify-center">0</span>
 									</button>
 								</li>
 							</ul>
@@ -333,22 +466,39 @@ export default function Navbar({ topBarColor = "#252B42", onSignUpClick, onLogin
 					</h1>
 
 					{/* Right Icons */}
-					<div className="flex items-center gap-[25px]">
+					<div className="flex items-center gap-[25px] relative">
 				{user ? (
-					<div className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition">
-						<img 
-							src={getGravatarUrl(user.email)} 
-							alt={user.name}
-							className="w-6 h-6 rounded-full object-cover"
-							onError={(e) => {
-								e.target.style.display = 'none';
-								e.target.nextElementSibling.style.display = 'flex';
-							}}
-						/>
-						<User size={16} className="text-gray-400 hidden" />
-						<button onClick={handleLogout} title="Çıkış Yap">
-							<LogOut size={16} className="text-red-500" />
-						</button>
+					<div className="relative group">
+						<div className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition">
+							<img 
+								src={getGravatarUrl(user.email)} 
+								alt={user.name}
+								className="w-6 h-6 rounded-full object-cover"
+								onError={(e) => {
+									e.target.style.display = 'none';
+									e.target.nextElementSibling.style.display = 'flex';
+								}}
+							/>
+							<User size={16} className="text-gray-400 hidden" />
+							<ChevronDown size={14} className="text-[#252B42]" />
+						</div>
+						
+						{/* Mobile User Dropdown */}
+						<div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+							<Link 
+								to="/previous-orders"
+								className="block px-4 py-3 font-montserrat text-[13px] text-[#252B42] hover:bg-gray-50 border-b border-gray-100 first:rounded-t-lg"
+							>
+								Önceki Siparişlerim
+							</Link>
+							<button 
+								onClick={handleLogout}
+								className="w-full text-left px-4 py-3 font-montserrat text-[13px] text-red-600 hover:bg-red-50 rounded-b-lg flex items-center gap-2"
+							>
+								<LogOut size={14} />
+								Çıkış Yap
+							</button>
+						</div>
 					</div>
 				) : (
 					<button onClick={onLoginClick}>
@@ -356,7 +506,143 @@ export default function Navbar({ topBarColor = "#252B42", onSignUpClick, onLogin
 					</button>
 				)}
 						<Search size={24} className="text-[#3C403D] cursor-pointer" />
-						<ShoppingCart size={24} className="text-[#3C403D] cursor-pointer" />
+						
+						{/* Mobile Shopping Cart with Badge */}
+						<div className="relative">
+							<button
+								onClick={(e) => {
+									e.stopPropagation();
+									setCartDropdownOpen(!cartDropdownOpen);
+								}}
+								className="relative"
+							>
+								<ShoppingCart size={24} className="text-[#3C403D] cursor-pointer" />
+								{cartItemCount > 0 && (
+									<span className="absolute -top-2 -right-2 bg-[#23A6F0] text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center">
+										{cartItemCount}
+									</span>
+								)}
+							</button>
+							
+							{/* Mobile Cart Dropdown */}
+							{cartDropdownOpen && (
+								<div 
+									className="fixed inset-0 z-[9999] bg-black bg-opacity-50 flex items-end" 
+									onMouseDown={(e) => {
+										if (e.target === e.currentTarget) {
+											setCartDropdownOpen(false);
+										}
+									}}
+								>
+									<div 
+										className="w-full bg-white rounded-t-2xl shadow-2xl max-h-[85vh] overflow-hidden flex flex-col"
+									>
+									{/* Header */}
+									<div className="px-4 py-3 border-b border-gray-200 flex justify-between items-center">
+										<h3 className="font-montserrat font-bold text-[16px] text-[#252B42]">
+											Sepetim ({cart.length} Ürün)
+										</h3>
+										<button 
+											onClick={() => setCartDropdownOpen(false)} 
+											className="text-gray-400 hover:text-gray-600 p-2"
+										>
+											✕
+										</button>
+									</div>
+									
+									{/* Cart Items */}
+									<div className="flex-1 overflow-y-auto">
+										{cart.length === 0 ? (
+											<div className="px-4 py-8 text-center">
+												<ShoppingCart size={40} className="mx-auto text-gray-300 mb-2" />
+												<p className="font-montserrat text-[12px] text-gray-500">Sepetiniz boş</p>
+											</div>
+										) : (
+											cart.map((item, index) => (
+												<div key={index} className="px-4 py-3 border-b border-gray-100 group">
+													<div className="flex gap-3">
+														<img 
+															src={item.product.images?.[0]?.url || ''} 
+															alt={item.product.name}
+															className="w-12 h-12 object-cover rounded"
+														/>
+														<div className="flex-1 min-w-0">
+															<h4 className="font-montserrat font-semibold text-[12px] text-[#252B42] line-clamp-2">
+																{item.product.name}
+															</h4>
+															<p className="font-montserrat text-[11px] text-gray-600 mt-1">
+																Adet: {item.count}
+															</p>
+															<p className="font-montserrat font-bold text-[12px] text-[#23A6F0] mt-1">
+																{item.product.price} TL
+															</p>
+														</div>
+														<button
+															onMouseDown={(e) => {
+																e.preventDefault();
+																e.stopPropagation();
+															}}
+															onClick={(e) => {
+																e.preventDefault();
+																e.stopPropagation();
+																dispatch(removeFromCart(item.product.id));
+															}}
+															className="p-1.5 hover:bg-red-50 rounded-full h-fit"
+															title="Sepetten Çıkar"
+														>
+															<Trash2 size={14} className="text-red-500" />
+														</button>
+													</div>
+												</div>
+											))
+										)}
+									</div>
+									
+									{/* Footer Buttons */}
+									{cart.length > 0 && (
+										<div className="px-4 py-4 border-t border-gray-200 flex flex-col gap-3 bg-gray-50 flex-shrink-0">
+											<button 
+												type="button"
+												onMouseDown={(e) => {
+													e.preventDefault();
+													e.stopPropagation();
+												}}
+												onClick={(e) => {
+													e.preventDefault();
+													e.stopPropagation();
+													console.log('Sepete Git tıklandı!');
+													setCartDropdownOpen(false);
+													history.push('/cart');
+												}}
+												className="w-full px-4 py-4 border-2 border-[#23A6F0] text-[#23A6F0] font-montserrat font-bold text-[14px] rounded-lg active:scale-95"
+												style={{ WebkitTapHighlightColor: 'transparent', touchAction: 'manipulation', userSelect: 'none' }}
+											>
+												Sepete Git
+											</button>
+											<button 
+												type="button"
+												onMouseDown={(e) => {
+													e.preventDefault();
+													e.stopPropagation();
+												}}
+												onClick={(e) => {
+													e.preventDefault();
+													e.stopPropagation();
+													setCartDropdownOpen(false);
+													history.push('/create-order');
+												}}
+												className="w-full px-4 py-4 bg-[#FF6F00] text-white font-montserrat font-bold text-[14px] rounded-lg active:scale-95"
+												style={{ WebkitTapHighlightColor: 'transparent', touchAction: 'manipulation', userSelect: 'none' }}
+											>
+												Siparişi Tamamla
+											</button>
+										</div>
+									)}
+								</div>
+								</div>
+							)}
+						</div>
+						
 						<Menu size={24} className="text-[#3C403D] cursor-pointer" />
 					</div>
 				</div>

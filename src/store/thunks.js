@@ -1,4 +1,4 @@
-import { setRoles, setFetchState, setUser, setCategories, setTotal, setProductList } from './actions';
+import { setRoles, setFetchState, setUser, setCategories, setTotal, setProductList, setProductDetail } from './actions';
 import api from './api';
 
 export const fetchRoles = () => async (dispatch) => {
@@ -110,14 +110,38 @@ export const fetchProducts = (params = {}) => async (dispatch) => {
       ...otherParams,
     };
     
+    console.log('🚀 fetchProducts - Params gönderiliyor:', queryParams);
+    
     const response = await api.get('/products', { params: queryParams });
+    
+    console.log('📦 API Response Status:', response.status);
+    console.log('📦 API Response Data:', response.data);
+    
     const { total, products } = response.data;
+    
+    console.log('✅ Total ürün:', total, '| Gelen ürün sayısı:', products?.length || 0);
     
     dispatch(setTotal(total));
     dispatch(setProductList(products));
     dispatch(setFetchState('FETCHED'));
   } catch (error) {
     console.error('Error fetching products:', error);
+    dispatch(setFetchState('FAILED'));
+  }
+};
+
+export const fetchProductDetail = (productId) => async (dispatch) => {
+  dispatch(setFetchState('FETCHING'));
+  
+  try {
+    const response = await api.get(`/products/${productId}`);
+    
+    console.log('✅ Product detail fetched:', response.data);
+    
+    dispatch(setProductDetail(response.data));
+    dispatch(setFetchState('FETCHED'));
+  } catch (error) {
+    console.error('Error fetching product detail:', error);
     dispatch(setFetchState('FAILED'));
   }
 };

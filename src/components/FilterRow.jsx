@@ -7,6 +7,7 @@ export default function FilterRow() {
     const dispatch = useDispatch();
     const sort = useSelector(state => state.product.sort);
     const filter = useSelector(state => state.product.filter);
+    const total = useSelector(state => state.product.total);
     
     const [dropdownOpen, setDropdownOpen] = useState(false);
     
@@ -37,7 +38,7 @@ export default function FilterRow() {
           {/* Üstteki sort: sonuç sayısı */}
           <div className="w-[168px] h-[24px] flex items-center justify-center pr-[1px] pl-[1px] md:justify-start">
             <span className="w-[166px] h-[24px] flex items-center justify-center font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-[#737373] text-center">
-              Showing all 12 results
+              Showing all {total} results
             </span>
           </div>
           {/* Ortadaki sort: Views ikonları */}

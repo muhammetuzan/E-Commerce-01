@@ -6,24 +6,77 @@ import bestsellerImg4 from '../assets/product-cards/079b4c5d47938d7b09087b31f361
 import bestsellerImg5 from '../assets/product-cards/926bf1d65669af4e049e20ceb30aa6408b6a79f3.jpg';
 import bestsellerImg6 from '../assets/product-cards/a93e41b42e460896a15fe5f82a56836939f30577.jpg';
 
-import { ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { ChevronLeft, ChevronRight, Star, ArrowLeft } from "lucide-react";
 
-import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams, useHistory } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchProductDetail } from "../store/thunks";
+import { addToCart } from "../store/actions";
 
 import MobileClients from "../components/MobileClients";
 import Footer from "../layout/Footer";
-import productImg1 from '../assets/product-cards/2b79e11ed885dbe3ab31e6f0c95ec64b26599246.jpg';
-import productImg2 from '../assets/product-cards/882355260767f5620ba9dda5365be14f4ce71741.jpg';
-import productDescImg from '../assets/product-cards/8b0c0f76c949a2cffacf01d40c82241e905719cb.jpg';
 
 const ProductDetailPage = () => {
-  const { id } = useParams();
-  // Ürün verisini id ile fetch edebilirsiniz
-  const images = [productImg1, productImg2];
+  const { id, productId } = useParams();
+  const history = useHistory();
+  const dispatch = useDispatch();
+  
+  const productDetail = useSelector(state => state.product.productDetail);
+  const fetchState = useSelector(state => state.product.fetchState);
+  
   const [selectedImage, setSelectedImage] = useState(0);
+  
+  // productId varsa onu kullan, yoksa id kullan (eski route için backward compatibility)
+  const actualProductId = productId || id;
+  
+  useEffect(() => {
+    if (actualProductId) {
+      dispatch(fetchProductDetail(actualProductId));
+    }
+  }, [actualProductId, dispatch]);
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  
+  if (fetchState === 'FETCHING' || !productDetail) {
+    return (
+      <div className="w-full min-h-screen flex justify-center items-center bg-white">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-16 h-16 border-4 border-[#FAFAFA] border-t-[#23A6F0] rounded-full animate-spin"></div>
+          <p className="text-[#737373] font-montserrat text-lg">Loading product...</p>
+        </div>
+      </div>
+    );
+  }
+  
+  const images = productDetail.images?.map(img => img.url) || [];
+  const productName = productDetail.name || "Product";
+  const productPrice = productDetail.price || 0;
+  const productDescription = productDetail.description || "";
+  const productStock = productDetail.stock || 0;
+  const productRating = productDetail.rating || 0;
+  
+  const handleAddToCart = () => {
+    dispatch(addToCart(productDetail));
+  };
+  
   return (
     <div className="w-full min-h-screen bg-white">
+      {/* Back Button */}
+      <div className="w-full bg-white border-b border-gray-200">
+        <div className="max-w-[1440px] mx-auto px-6 py-4">
+          <button 
+            onClick={() => history.goBack()}
+            className="flex items-center gap-2 text-[#23A6F0] hover:text-[#1a7ab8] transition-colors font-montserrat font-semibold"
+          >
+            <ArrowLeft size={20} />
+            Back to Products
+          </button>
+        </div>
+      </div>
+      
       {/* Breadcrumb Container - Sıfırdan */}
       <div className="bg-[#FAFAFA] w-[414px] h-[92px] pt-6 pb-6 mx-auto md:w-[1440px] md:h-[92px] md:pt-6 md:pb-6 md:mx-auto">
         {/* Row */}
@@ -51,25 +104,33 @@ const ProductDetailPage = () => {
               <div className="w-[348px] h-[394px] relative flex flex-col items-center mb-[30px] rounded-[5px] opacity-100 md:w-[506px] md:h-[546px] md:rounded-[5px] md:opacity-100">
                 {/* Carousel/Slider */}
                 <div className="w-[348px] h-[277px] rounded-[5px] overflow-hidden bg-gray-100 flex items-center justify-center relative md:w-[506px] md:h-[450px]">
-                  {/* Sol ok */}
-                  <button
-                    className="absolute left-10 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center"
-                    onClick={() => setSelectedImage((selectedImage - 1 + images.length) % images.length)}
-                    aria-label="Önceki görsel"
-                    style={{padding: 0}}  
-                  >
-                    <ChevronLeft size={50} strokeWidth={1.5} color="#FFFFFF" />
-                  </button>
-                  <img src={images[selectedImage]} alt={`Product ${selectedImage + 1}`} className="w-full h-full object-cover" />
-                  {/* Sağ ok */}
-                  <button
-                    className="absolute right-10 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center"
-                    onClick={() => setSelectedImage((selectedImage + 1) % images.length)}
-                    aria-label="Sonraki görsel"
-                    style={{padding: 0}}
-                  >
-                    <ChevronRight size={50} strokeWidth={1.5} color="#FFFFFF" />
-                  </button>
+                  {images.length > 0 ? (
+                    <>
+                      {/* Sol ok */}
+                      <button
+                        className="absolute left-10 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center"
+                        onClick={() => setSelectedImage((selectedImage - 1 + images.length) % images.length)}
+                        aria-label="Önceki görsel"
+                        style={{padding: 0}}  
+                      >
+                        <ChevronLeft size={50} strokeWidth={1.5} color="#FFFFFF" />
+                      </button>
+                      <img src={images[selectedImage]} alt={`Product ${selectedImage + 1}`} className="w-full h-full object-cover" />
+                      {/* Sağ ok */}
+                      <button
+                        className="absolute right-10 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center"
+                        onClick={() => setSelectedImage((selectedImage + 1) % images.length)}
+                        aria-label="Sonraki görsel"
+                        style={{padding: 0}}
+                      >
+                        <ChevronRight size={50} strokeWidth={1.5} color="#FFFFFF" />
+                      </button>
+                    </>
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-gray-200">
+                      <p className="text-gray-500 font-montserrat">No image available</p>
+                    </div>
+                  )}
                 </div>
                 {/* Indicator */}
                 <div className="w-[219px] h-[75px] flex gap-[19px] justify-start self-start absolute left-0 top-[319px] md:w-[219px] md:h-[75px] md:top-[471px] md:opacity-100">
@@ -87,39 +148,40 @@ const ProductDetailPage = () => {
             </div>
             {/* Alttaki col-md-6: Bilgi alanı (yeni) */}
             <div className="w-[348px] h-[471px] flex flex-col gap-[23px] px-6 pt-[11px] pb-0 opacity-100 mt-[30px] relative md:w-[510px] md:h-[471px] md:px-0 md:pt-[11px] md:pb-0 md:mt-0">
-              {/* Floating Phone başlığı */}
-              <h2 className="w-[156px] h-[30px] font-montserrat font-semibold text-[20px] leading-[30px] tracking-[0.2px] antialiased text-[#252B42] whitespace-nowrap md:absolute md:top-[11px] md:left-[24px]">Floating Phone</h2>
-              {/* Frame31: Yıldızlar ve 10 Reviews */}
+              {/* Product Name */}
+              <h2 className="font-montserrat font-semibold text-[20px] leading-[30px] tracking-[0.2px] antialiased text-[#252B42] md:absolute md:top-[11px] md:left-[24px]">{productName}</h2>
+              {/* Frame31: Yıldızlar ve Reviews */}
               <div className="w-[221px] h-[24px] flex items-center gap-[10px] absolute top-[53px] left-[24px] opacity-100 md:w-[221px] md:h-[24px] md:top-[53px] md:left-[24px]">
                 {/* Yıldızlar */}
                 <div className="flex items-center gap-[5px] w-[130px] h-[22px]">
-                  <Star size={22} className="text-[#F3CD03]" fill="#F3CD03" />
-                  <Star size={22} className="text-[#F3CD03]" fill="#F3CD03" />
-                  <Star size={22} className="text-[#F3CD03]" fill="#F3CD03" />
-                  <Star size={22} className="text-[#F3CD03]" fill="#F3CD03" />
-                  <Star size={22} className="text-[#BDBDBD]" fill="#BDBDBD" />
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <Star 
+                      key={star}
+                      size={22} 
+                      className={star <= Math.floor(productRating) ? "text-[#F3CD03]" : "text-[#BDBDBD]"}
+                      fill={star <= Math.floor(productRating) ? "#F3CD03" : "#BDBDBD"}
+                    />
+                  ))}
                 </div>
                 {/* 10 Reviews */}
                 <span className="text-[#737373] font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] whitespace-nowrap flex-nowrap flex items-center">10 Reviews</span>
               </div>
               {/* Fiyat (h5) */}
-              <h5 className="w-[108px] h-[32px] text-[#252B42] font-montserrat font-bold text-[24px] leading-[32px] tracking-[0.1px] text-center opacity-100 absolute top-[97px] left-[24px] md:w-[108px] md:h-[32px] md:top-[97px] md:left-[24px]">$1,139.33</h5>
+              <h5 className="w-[108px] h-[32px] text-[#252B42] font-montserrat font-bold text-[24px] leading-[32px] tracking-[0.1px] text-center opacity-100 absolute top-[97px] left-[24px] md:w-[108px] md:h-[32px] md:top-[97px] md:left-[24px]">${productPrice}</h5>
               {/* Availability Row */}
               <div className="w-[161px] h-[24px] flex items-center gap-[5px] absolute top-[134px] left-[24px] opacity-100 md:w-[161px] md:h-[24px] md:top-[134px] md:left-[24px]">
                 <span className="w-[94px] h-[24px] font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-[#737373]">Availability :</span>
-                <span className="w-[62px] h-[24px] font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-[#23A6F0] text-right">In Stock</span>
+                <span className={`w-[62px] h-[24px] font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-right ${productStock > 0 ? 'text-[#23A6F0]' : 'text-[#E74040]'}`}>
+                  {productStock > 0 ? 'In Stock' : 'Out of Stock'}
+                </span>
               </div>
               {/* Açıklama Paragrafı - Mobile */}
-              <p className="w-[271px] h-[100px] font-montserrat font-normal text-[14px] leading-[20px] tracking-[0.2px] text-[#858585] absolute top-[190px] left-[24px] opacity-100 md:hidden">
-                Met minim Mollie non desert<br />
-                Alamo est sit cliquey dolor do<br />
-                met sent. RELIT official consequent<br />
-                door ENIM RELIT Mollie. Excitation<br />
-                venial consequent sent nostrum met.
+              <p className="w-[271px] font-montserrat font-normal text-[14px] leading-[20px] tracking-[0.2px] text-[#858585] absolute top-[190px] left-[24px] opacity-100 md:hidden line-clamp-5">
+                {productDescription}
               </p>
               {/* Açıklama Paragrafı - Desktop */}
-              <p className="hidden md:block w-[271px] h-[100px] font-montserrat font-normal text-[14px] leading-[20px] tracking-[0.2px] text-[#858585] absolute top-[190px] left-[24px] opacity-100 md:w-[464px] md:h-[60px] md:top-[190px] md:left-[24px]">
-                Met minim Mollie non desert Alamo est sit cliquey dolor<br /> do met sent. RELIT official consequent door ENIM RELIT Mollie.<br/> Excitation venial consequent sent nostrum met.
+              <p className="hidden md:block w-[464px] font-montserrat font-normal text-[14px] leading-[20px] tracking-[0.2px] text-[#858585] absolute top-[190px] left-[24px] opacity-100 line-clamp-3">
+                {productDescription}
               </p>
               {/* Figma hr çizgisi */}
               <hr className="w-[283px] border-t border-[#BDBDBD] absolute top-[306px] left-[29px] opacity-100 md:w-[445px] md:top-[277px] md:left-[25px]" style={{height:0, borderWidth:1}} />
@@ -133,8 +195,14 @@ const ProductDetailPage = () => {
               {/* Select Options ve ikonlar bölümü */}
               <div className="w-[298px] h-[44px] flex items-center gap-[10px] absolute top-[403px] left-[24px] opacity-100 md:w-[298px] md:h-[44px] md:top-[403px] md:left-[24px]">
                 {/* Select Options butonu */}
-                <button className="w-[148px] h-[44px] flex items-center justify-center px-[20px] py-[10px] gap-[10px] rounded-[5px] bg-[#23A6F0]">
-                  <span className="font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-center text-white whitespace-nowrap">Select Options</span>
+                <button 
+                  onClick={handleAddToCart}
+                  disabled={productStock === 0}
+                  className={`w-[148px] h-[44px] flex items-center justify-center px-[20px] py-[10px] gap-[10px] rounded-[5px] ${productStock > 0 ? 'bg-[#23A6F0] hover:bg-[#1a7ab8] cursor-pointer' : 'bg-gray-400 cursor-not-allowed'} transition-colors`}
+                >
+                  <span className="font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-center text-white whitespace-nowrap">
+                    {productStock > 0 ? 'Add to Cart' : 'Out of Stock'}
+                  </span>
                 </button>
                 {/* Kalp kutusu */}
                 <div className="w-[40px] h-[40px] flex items-center justify-center rounded-full bg-white border border-[#E8E8E8]">
@@ -201,7 +269,9 @@ const ProductDetailPage = () => {
               {/* Unsplash background */}
               <div className="w-[325px] h-[282px] absolute left-[3px] rounded-[5.62px] bg-gray-200 md:w-[325px] md:h-[382px] md:left-[3px] md:rounded-[5.62px] md:bg-[#C4C4C433]">
                 {/* Image */}
-                <img src={productDescImg} alt="Product Description" className="w-[321px] h-[271px] rounded-[5.39px] object-cover absolute top-1 left-0.5 md:w-[316px] md:h-[372px] md:rounded-[5.39px]" />
+                {images.length > 0 && (
+                  <img src={images[0]} alt="Product Description" className="w-[321px] h-[271px] rounded-[5.39px] object-cover absolute top-1 left-0.5 md:w-[316px] md:h-[372px] md:rounded-[5.39px]" />
+                )}
               </div>
             </div>
             {/* 2. col-md-4 - Card */}

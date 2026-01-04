@@ -7,6 +7,7 @@ import {
   SET_CREDIT_CARDS,
   SET_CATEGORIES,
   SET_PRODUCT_LIST,
+  SET_PRODUCT_DETAIL,
   SET_TOTAL,
   SET_LIMIT,
   SET_OFFSET,
@@ -15,6 +16,11 @@ import {
   SET_SORT,
   SET_FETCH_STATE,
   SET_CART,
+  ADD_TO_CART,
+  REMOVE_FROM_CART,
+  TOGGLE_CART_ITEM,
+  INCREASE_CART_ITEM,
+  DECREASE_CART_ITEM,
   SET_PAYMENT,
   SET_ADDRESS,
 } from './actionTypes';
@@ -61,6 +67,11 @@ export const setProductList = (productList) => ({
   payload: productList,
 });
 
+export const setProductDetail = (productDetail) => ({
+  type: SET_PRODUCT_DETAIL,
+  payload: productDetail,
+});
+
 export const setTotal = (total) => ({
   type: SET_TOTAL,
   payload: total,
@@ -100,6 +111,31 @@ export const setFetchState = (fetchState) => ({
 export const setCart = (cart) => ({
   type: SET_CART,
   payload: cart,
+});
+
+export const addToCart = (product) => ({
+  type: ADD_TO_CART,
+  payload: product,
+});
+
+export const removeFromCart = (productId) => ({
+  type: REMOVE_FROM_CART,
+  payload: productId,
+});
+
+export const toggleCartItem = (productId) => ({
+  type: TOGGLE_CART_ITEM,
+  payload: productId,
+});
+
+export const increaseCartItem = (productId) => ({
+  type: INCREASE_CART_ITEM,
+  payload: productId,
+});
+
+export const decreaseCartItem = (productId) => ({
+  type: DECREASE_CART_ITEM,
+  payload: productId,
 });
 
 export const setPayment = (payment) => ({

@@ -32,8 +32,12 @@ export default function ShopProductCards() {
   const apiTotal = useSelector(state => state.product.total);
   const fetchState = useSelector(state => state.product.fetchState);
   const category = useSelector(state => state.product.category);
+  const categories = useSelector(state => state.product.categories);
   const sort = useSelector(state => state.product.sort);
   const filter = useSelector(state => state.product.filter);
+  
+  // Category name bul
+  const categoryName = categories?.find(cat => cat.id === parseInt(category))?.title || 'products';
   
   const [page, setPage] = useState(1);
   const [isMobile, setIsMobile] = React.useState(window.innerWidth < 768);
@@ -61,8 +65,11 @@ export default function ShopProductCards() {
   React.useEffect(() => {
     const perPageLimit = isMobile ? 4 : 12;
     
+    // Filter varsa tüm sonuçları çek (999), yoksa normal limit
+    const fetchLimit = filter ? 999 : perPageLimit;
+    
     const params = {
-      limit: perPageLimit,
+      limit: fetchLimit,
       offset: 0,
     };
     
@@ -82,6 +89,10 @@ export default function ShopProductCards() {
   
   // Sayfa değişirse offset ile API'ye istek yap
   React.useEffect(() => {
+    // Filter varsa çağrılmaz (filter change zaten çağırıyor)
+    // Filter yoksa normal pagination
+    if (filter) return;
+    
     const perPageLimit = isMobile ? 4 : 12;
     const offset = (page - 1) * perPageLimit;
     
@@ -101,7 +112,7 @@ export default function ShopProductCards() {
     }
     
     dispatch(fetchProducts(params));
-  }, [page, isMobile, category, sort, filter, dispatch]);
+  }, [page, isMobile, category, sort, dispatch]);
   
   const perPage = isMobile ? 4 : 12;
   
@@ -154,11 +165,32 @@ export default function ShopProductCards() {
   }
   
   const total = allProducts.length;
-  // Pagination için apiTotal kullan (API toplam ürün sayısı)
-  const totalPages = Math.ceil(apiTotal / perPage);
   
-  // API paginated ürün döndürüyor, o ürünleri direkt göster
-  const visibleData = allProducts;
+  // Backend filtreleme zayıf, frontend'te de filter et
+  let visibleData = allProducts;
+  
+  if (filter && hasApiProducts) {
+    // İsimde filter yazısını içerenleri göster
+    visibleData = allProducts.filter((product) =>
+      product.name && product.name.toLowerCase().includes(filter.toLowerCase())
+    );
+  }
+  
+  // Pagination hesaplaması
+  // Filter varsa, API tüm sonuçları döndürdü, frontend'te paginate et
+  // Filter yoksa, API zaten paginated
+  let paginatedData = visibleData;
+  let effectiveTotal = apiTotal;
+  
+  if (filter) {
+    // Frontend pagination: filtrelenen tüm ürünler üzerinde slice yap
+    const startIdx = (page - 1) * perPage;
+    const endIdx = startIdx + perPage;
+    paginatedData = visibleData.slice(startIdx, endIdx);
+    effectiveTotal = visibleData.length;
+  }
+  
+  const totalPages = Math.ceil(effectiveTotal / perPage);
 
   if (fetchState === 'FETCHING') {
     return (
@@ -172,8 +204,8 @@ export default function ShopProductCards() {
   }
 
   const desktopRows = [];
-  for (let i = 0; i < visibleData.length; i += 4) {
-    desktopRows.push(visibleData.slice(i, i + 4));
+  for (let i = 0; i < paginatedData.length; i += 4) {
+    desktopRows.push(paginatedData.slice(i, i + 4));
   }
 
   return (
@@ -182,10 +214,11 @@ export default function ShopProductCards() {
       <div className="w-full max-w-[414px] mx-auto bg-[#FFFFFF] block md:hidden lg:hidden">
         <div className="w-full px-0 pt-6 pb-6 flex flex-col gap-5">
           <div className="w-full flex flex-col gap-5">
-            {visibleData.map((item, i) => (
+            {paginatedData.map((item, i) => (
               <div key={item.id || i} className="w-full flex justify-center">
                 <ProductCard
-                  image={item.image}
+                  id={item.id}                  categoryId={item.category_id}
+                  categoryName={categoryName}                  image={item.image}
                   title={item.name || "Graphic Design"}
                   category={item.category}
                   price={`$${item.price || 16.48}`}
@@ -198,7 +231,7 @@ export default function ShopProductCards() {
           </div>
           <div className="flex justify-center mt-6">
             <Pagination
-              total={apiTotal}
+              total={filter ? effectiveTotal : apiTotal}
               perPage={perPage}
               onPageChange={setPage}
               currentPage={page}
@@ -218,6 +251,9 @@ export default function ShopProductCards() {
                     return (
                       <ProductCard
                         key={item.id || i}
+                        id={item.id}
+                        categoryId={item.category_id}
+                        categoryName={categoryName}
                         image={item.image}
                         title={item.name}
                         category={item.category}
@@ -231,6 +267,9 @@ export default function ShopProductCards() {
                     return (
                       <ProductCard
                         key={item.id || i}
+                        id={item.id}
+                        categoryId={item.category_id}
+                        categoryName={categoryName}
                         image={item.image}
                         title={item.name}
                         category={item.category}
@@ -249,7 +288,7 @@ export default function ShopProductCards() {
           <div className="w-full flex items-center justify-center md:h-full md:mt-auto">
             <div className="w-full flex items-center justify-center bg-white">
               <Pagination
-                total={apiTotal}
+                total={filter ? effectiveTotal : apiTotal}
                 perPage={perPage}
                 onPageChange={setPage}
                 currentPage={page}

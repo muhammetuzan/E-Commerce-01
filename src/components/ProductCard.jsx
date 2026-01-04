@@ -1,10 +1,37 @@
 
 import { useHistory } from "react-router-dom";
 
-export default function ProductCard({ image, title, category, price, salePrice, colors, id, isFromApi }) {
+// Slug oluşturma helper
+const createSlug = (text) => {
+  if (!text) return 'product';
+  return text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/ş/g, 's')
+    .replace(/ğ/g, 'g')
+    .replace(/ü/g, 'u')
+    .replace(/ö/g, 'o')
+    .replace(/ç/g, 'c')
+    .replace(/ı/g, 'i')
+    .replace(/[^\w\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+};
+
+export default function ProductCard({ image, title, category, price, salePrice, colors, id, isFromApi, categoryId, categoryName }) {
   const history = useHistory();
+  
   const handleClick = () => {
-    history.push(`/product/${id}`);
+    if (!id) return;
+    
+    // URL format: /shop/:gender/:categoryName/:categoryId/:productNameSlug/:productId
+    const gender = 'shop'; // API'de gender yok, varsayılan
+    const catName = categoryName ? createSlug(categoryName) : 'category';
+    const catId = categoryId || '1';
+    const productSlug = createSlug(title);
+    
+    history.push(`/shop/${gender}/${catName}/${catId}/${productSlug}/${id}`);
   };
   return (
     <div
