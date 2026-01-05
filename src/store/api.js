@@ -1,10 +1,11 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://workintech-fe-ecommerce.onrender.com',
+  baseURL: import.meta.env.VITE_API_URL || 'https://workintech-fe-ecommerce.onrender.com',
   headers: {
     'Content-Type': 'application/json',
   },
+  timeout: 15000,
 });
 
 // Request interceptor - token'ı header'a ekle
