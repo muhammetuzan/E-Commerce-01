@@ -13,11 +13,6 @@ export default function ShopCards() {
 		.sort((a, b) => b.rating - a.rating)
 		.slice(0, 5);
 
-	// Gender'e göre map et - UI için
-	const mapGenderToLabel = (gender) => {
-		return gender === 'k' ? 'WOMEN' : 'MEN';
-	};
-
 	return (
 		<div className="w-full flex justify-center">
 			<section className="w-full bg-[#FAFAFA] flex flex-col items-center py-20 md:max-w-[1440px] md:min-h-[770px] md:rounded-xl md:mx-auto md:justify-center">
