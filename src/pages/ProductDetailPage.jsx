@@ -11,7 +11,7 @@ import { ChevronLeft, ChevronRight, Star, ArrowLeft } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchProductDetail } from "../store/thunks";
+import { fetchProductDetail, fetchBestsellers } from "../store/thunks";
 import { addToCart } from "../store/actions";
 
 import MobileClients from "../components/MobileClients";
@@ -26,6 +26,7 @@ const ProductDetailPage = () => {
   const fetchState = useSelector(state => state.product.fetchState);
   
   const [selectedImage, setSelectedImage] = useState(0);
+  const [bestsellers, setBestsellers] = useState([]);
   
   // productId varsa onu kullan, yoksa id kullan (eski route için backward compatibility)
   const actualProductId = productId || id;
@@ -35,6 +36,22 @@ const ProductDetailPage = () => {
       dispatch(fetchProductDetail(actualProductId));
     }
   }, [actualProductId, dispatch]);
+  
+  useEffect(() => {
+    // Bestseller ürünlerini rating'e göre fetch et
+    const loadBestsellers = async () => {
+      try {
+        const bestsellerList = await dispatch(fetchBestsellers());
+        if (bestsellerList && bestsellerList.length > 0) {
+          setBestsellers(bestsellerList);
+        }
+      } catch (error) {
+        console.error('Error loading bestsellers:', error);
+        // Fallback gösterilecek
+      }
+    };
+    loadBestsellers();
+  }, [dispatch]);
   
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -342,34 +359,62 @@ const ProductDetailPage = () => {
               {/* 2. row */}
               <div className="w-[328px] h-[2446px] flex flex-col gap-[30px] md:w-[1049px] md:h-[442px] md:flex-row md:gap-[30px] md:opacity-100" style={{opacity:1}}>
                 {/* 4 col-md, each with ProductCardBestseller */}
-                <div className="w-[328px] h-[589px] md:w-[238px] md:h-[442px] md:opacity-100">
-                  <ProductCardBestseller image={bestsellerImg1} />
-                </div>
-                <div className="w-[328px] h-[589px] md:w-[238px] md:h-[442px] md:opacity-100">
-                  <ProductCardBestseller image={bestsellerImg2} />
-                </div>
-                <div className="w-[328px] h-[589px] md:w-[238px] md:h-[442px] md:opacity-100">
-                  <ProductCardBestseller image={bestsellerImg3} />
-                </div>
-                <div className="w-[328px] h-[589px] md:w-[238px] md:h-[442px] md:opacity-100">
-                  <ProductCardBestseller image={bestsellerImg4} />
-                </div>
+                {bestsellers.length > 0 ? (
+                  bestsellers.slice(0, 4).map((product, idx) => (
+                    <div key={idx} className="w-[328px] h-[589px] md:w-[238px] md:h-[442px] md:opacity-100">
+                      <ProductCardBestseller 
+                        image={product.images?.[0]?.url || bestsellerImg1}
+                        name={product.name || "Product"}
+                        price={product.price || 0}
+                      />
+                    </div>
+                  ))
+                ) : (
+                  <>
+                    <div className="w-[328px] h-[589px] md:w-[238px] md:h-[442px] md:opacity-100">
+                      <ProductCardBestseller image={bestsellerImg1} />
+                    </div>
+                    <div className="w-[328px] h-[589px] md:w-[238px] md:h-[442px] md:opacity-100">
+                      <ProductCardBestseller image={bestsellerImg2} />
+                    </div>
+                    <div className="w-[328px] h-[589px] md:w-[238px] md:h-[442px] md:opacity-100">
+                      <ProductCardBestseller image={bestsellerImg3} />
+                    </div>
+                    <div className="w-[328px] h-[589px] md:w-[238px] md:h-[442px] md:opacity-100">
+                      <ProductCardBestseller image={bestsellerImg4} />
+                    </div>
+                  </>
+                )}
               </div>
               {/* 3. row - Desktop only */}
               <div className="hidden md:flex md:w-[1049px] md:h-[442px] md:flex-row md:gap-[30px] md:opacity-100">
                 {/* 4 col-md, each with ProductCardBestseller */}
-                <div className="md:w-[238px] md:h-[442px] md:opacity-100">
-                  <ProductCardBestseller image={bestsellerImg5} />
-                </div>
-                <div className="md:w-[238px] md:h-[442px] md:opacity-100">
-                  <ProductCardBestseller image={bestsellerImg6} />
-                </div>
-                <div className="md:w-[238px] md:h-[442px] md:opacity-100">
-                  <ProductCardBestseller image={bestsellerImg3} />
-                </div>
-                <div className="md:w-[238px] md:h-[442px] md:opacity-100">
-                  <ProductCardBestseller image={bestsellerImg2} />
-                </div>
+                {bestsellers.length > 4 ? (
+                  bestsellers.slice(4, 8).map((product, idx) => (
+                    <div key={idx} className="md:w-[238px] md:h-[442px] md:opacity-100">
+                      <ProductCardBestseller 
+                        image={product.images?.[0]?.url || bestsellerImg5}
+                        name={product.name || "Product"}
+                        price={product.price || 0}
+                      />
+                    </div>
+                  ))
+                ) : (
+                  <>
+                    <div className="md:w-[238px] md:h-[442px] md:opacity-100">
+                      <ProductCardBestseller image={bestsellerImg5} />
+                    </div>
+                    <div className="md:w-[238px] md:h-[442px] md:opacity-100">
+                      <ProductCardBestseller image={bestsellerImg6} />
+                    </div>
+                    <div className="md:w-[238px] md:h-[442px] md:opacity-100">
+                      <ProductCardBestseller image={bestsellerImg3} />
+                    </div>
+                    <div className="md:w-[238px] md:h-[442px] md:opacity-100">
+                      <ProductCardBestseller image={bestsellerImg2} />
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </section>

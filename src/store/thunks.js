@@ -145,3 +145,30 @@ export const fetchProductDetail = (productId) => async (dispatch) => {
     dispatch(setFetchState('FAILED'));
   }
 };
+
+export const fetchBestsellers = () => async (dispatch) => {
+  dispatch(setFetchState('FETCHING'));
+  
+  try {
+    // Tüm ürünleri getir (limit yüksek ayarla)
+    const response = await api.get('/products', { 
+      params: { limit: 100, offset: 0 } 
+    });
+    
+    const { products } = response.data;
+    
+    // Rating'e göre sırala (yüksekten düşüğe) ve ilk 8'i al (mobile 4 + desktop 4)
+    const bestsellerProducts = (products || [])
+      .sort((a, b) => (b.rating || 0) - (a.rating || 0))
+      .slice(0, 8);
+    
+    console.log('✅ Bestseller products fetched:', bestsellerProducts);
+    
+    dispatch(setFetchState('FETCHED'));
+    return bestsellerProducts;
+  } catch (error) {
+    console.error('Error fetching bestsellers:', error);
+    dispatch(setFetchState('FAILED'));
+    return [];
+  }
+};
