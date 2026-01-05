@@ -284,21 +284,11 @@ export default function Navbar({ topBarColor = "#252B42", onSignUpClick, onLogin
                                         <span className="font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-center text-[#737373]">Team</span>
                                     </Link>
                                 </li>
-								<li className="w-[33px] h-[24px] flex items-center justify-center">
-									<a href="#" className="w-[33px] h-[24px] flex items-center justify-center">
-										<span className="font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-center text-[#737373]">Blog</span>
-									</a>
-								</li>
 								   <li className="w-[58px] h-[24px] flex items-center justify-center">
 									   <Link to="/contact" className="w-[58px] h-[24px] flex items-center justify-center">
 										   <span className="font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-center text-[#737373]">Contact</span>
 									   </Link>
 								   </li>
-								<li className="w-[44px] h-[24px] flex items-center justify-center">
-									<a href="#" className="w-[44px] h-[24px] flex items-center justify-center">
-										<span className="font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-center text-[#737373]">Pages</span>
-									</a>
-								</li>
 							</ul>
 							{/* Right Nav */}
 							<ul className="flex items-center gap-[10px] w-auto h-[54px] ml-[40px]">
@@ -661,22 +651,18 @@ export default function Navbar({ topBarColor = "#252B42", onSignUpClick, onLogin
 					   >
 						   Shop
 					   </Link>
+				   <Link
+					   to="/aboutus"
+					   className="font-montserrat font-normal text-center text-[#737373] text-[30px] leading-[45px] tracking-[0.2px]"
+				   >
+					   About
+				   </Link>
                        <Link
                            to="/team"
                            className="font-montserrat font-normal text-center text-[#737373] text-[30px] leading-[45px] tracking-[0.2px]"
                        >
                            Team
-                       </Link>
-					   <div
-						   className="font-montserrat font-normal text-center text-[#737373] text-[30px] leading-[45px] tracking-[0.2px]"
-					   >
-						   Product
-					   </div>
-					   <div
-						   className="font-montserrat font-normal text-center text-[#737373] text-[30px] leading-[45px] tracking-[0.2px]"
-					   >
-						   Pricing
-					   </div>
+                       </Link>					   
 					   <Link
 						   to="/contact"
 						   className="font-montserrat font-normal text-center text-[#737373] text-[30px] leading-[45px] tracking-[0.2px]"

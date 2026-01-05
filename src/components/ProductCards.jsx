@@ -34,7 +34,7 @@ export default function ProductCards() {
 									image={product.images?.[0]?.url || ''}
 									id={product.id}
 									title={product.name}
-									category={product.description}
+							      	category=""
 									price={`$${product.price}`}
 									salePrice={product.price > 0 ? `$${(product.price * 0.7).toFixed(2)}` : `$${product.price}`}
 									colors={["#23A6F0", "#23856D", "#E77C40", "#252B42"]}
@@ -56,7 +56,7 @@ export default function ProductCards() {
 									image={product.images?.[0]?.url || ''}
 									id={product.id}
 									title={product.name}
-									category={product.description}
+									category=""
 									price={`$${product.price}`}
 									salePrice={product.price > 0 ? `$${(product.price * 0.7).toFixed(2)}` : `$${product.price}`}
 									colors={["#23A6F0", "#23856D", "#E77C40", "#252B42"]}
