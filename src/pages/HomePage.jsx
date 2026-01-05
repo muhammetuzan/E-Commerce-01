@@ -8,14 +8,22 @@ import Carousel from "../components/Carousel";
 import Container from "../components/Container";
 import BlogSection from "../components/BlogSection";
 import Footer from "../layout/Footer";
-import { fetchRoles } from '../store/thunks';
+import { fetchRoles, fetchProducts } from '../store/thunks';
+import { setCategory } from '../store/actions';
 
 export default function HomePage() {
 	const dispatch = useDispatch();
 	const roles = useSelector(state => state.client.roles);
 	const fetchState = useSelector(state => state.product.fetchState);
+	const category = useSelector(state => state.product.category);
+	const productList = useSelector(state => state.product.productList);
 
 	useEffect(() => {
+		// Home sayfasına gelindiğinde, category filtrelemesini kaldır (tüm ürünleri çek)
+		dispatch(setCategory(null));
+		// Tüm ürünleri çek (category filter'ı olmadan)
+		dispatch(fetchProducts({ limit: 25, offset: 0 }));
+		
 		// Rolleri Redux'tan fetch et
 		if (roles.length === 0) {
 			dispatch(fetchRoles());

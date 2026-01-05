@@ -19,14 +19,15 @@ const createSlug = (text) => {
     .replace(/-+/g, '-');
 };
 
-export default function ProductCard({ image, title, category, price, salePrice, colors, id, isFromApi, categoryId, categoryName }) {
+export default function ProductCard({ image, title, category, price, salePrice, colors, id, isFromApi, categoryId, categoryName, isHomePage }) {
   const history = useHistory();
   
   const handleClick = () => {
     if (!id) return;
     
     // URL format: /shop/:gender/:categoryName/:categoryId/:productNameSlug/:productId
-    const gender = 'shop'; // API'de gender yok, varsayılan
+    // gender: id 1-8 = 'k' (kız), id 9-14 = 'e' (erkek)
+    const gender = categoryId && categoryId <= 8 ? 'k' : 'e';
     const catName = categoryName ? createSlug(categoryName) : 'category';
     const catId = categoryId || '1';
     const productSlug = createSlug(title);
@@ -59,7 +60,7 @@ export default function ProductCard({ image, title, category, price, salePrice, 
         </a>
         <div className="flex gap-[12px] justify-center items-center md:gap-[8px]">
           <span className={`font-montserrat text-[16px] font-bold leading-[24px] tracking-[0.1px] text-center md:text-[16px] ${
-            isFromApi ? 'text-[#23856D]' : 'text-[#BDBDBD]'
+            isHomePage ? 'text-[#BDBDBD]' : (isFromApi ? 'text-[#23856D]' : 'text-[#BDBDBD]')
           }`}>
             {price}
           </span>

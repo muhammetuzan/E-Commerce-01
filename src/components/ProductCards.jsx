@@ -5,13 +5,15 @@ export default function ProductCards() {
 	const products = useSelector(state => state.product.productList);
 	const fetchState = useSelector(state => state.product.fetchState);
 	
-	// İlk 8 ürünü al
-	const displayProducts = products.slice(0, 8);
+	// Rating'e göre sırala (yüksekten düşüğe) ve ilk 8'i al
+	const displayProducts = [...products]
+		.sort((a, b) => (b.rating || 0) - (a.rating || 0))
+		.slice(0, 8);
 	return (
 		<section className="w-full h-auto bg-white flex justify-center">
 			<div className="w-full flex flex-col items-center px-4 md:max-w-[1440px] md:px-0 md:mx-auto">
 				{/* Container */}
-				<div className="w-full flex flex-col items-center  pt-20 pb-20 gap-12 md:w-[1124px] md:gap-[80px] md:pt-[80px] md:pb-[80px]">
+				<div className="w-full flex flex-col items-center  pt-20 pb-20 gap-12 md:w-[1124px] md:gap-[50px] md:pt-[80px] md:pb-[80px]">
 					{/* Row 1 - Text Section */}
 					<div className="w-[300px] h-[154px] flex items-center justify-center md:w-[692px] md:h-[102px] md:mx-auto">
 						<div className="w-[279px] h-[154px] flex flex-col gap-[10px] items-center justify-center md:w-[692px] md:h-[102px]">
@@ -23,11 +25,11 @@ export default function ProductCards() {
 						</div>
 					</div>
 					{/* Row 2 - Product Cards */}
-					<div className="w-[328px] flex flex-col gap-[30px] md:w-[1049px] md:h-[615px] md:flex-row md:gap-[30px]">
+					<div className="w-[328px] flex flex-col gap-[30px] md:w-[1049px] md:h-auto md:flex-row md:gap-[20px]">
 						{displayProducts.slice(0, 4).map((product) => (
 							<div
 								key={product.id}
-								className="w-[328px] h-auto mx-auto md:w-[238px] md:h-[615px]"
+								className="w-[328px] h-auto mx-auto md:w-[238px] md:h-auto"
 								style={{ minWidth: '0' }}
 							>
 								<ProductCard
@@ -39,17 +41,16 @@ export default function ProductCards() {
 									salePrice={product.price > 0 ? `$${(product.price * 0.7).toFixed(2)}` : `$${product.price}`}
 									colors={["#23A6F0", "#23856D", "#E77C40", "#252B42"]}
 									isFromApi={true}
-									categoryId={product.category_id}
-								/>
+									categoryId={product.category_id}								isHomePage={true}								/>
 							</div>
 						))}
 					</div>
 					{/* Row 3 - More Product Cards */}
-					<div className="w-[328px] flex flex-col gap-[30px] mt-8 md:w-[1049px] md:h-[615px] md:flex-row md:gap-[30px] md:mt-0">
+					<div className="w-[328px] flex flex-col gap-[30px] mt-8 md:w-[1049px] md:h-auto md:flex-row md:gap-[30px] md:mt-0">
 						{displayProducts.slice(4, 8).map((product) => (
 							<div
 								key={product.id}
-								className="w-[328px] h-auto mx-auto md:w-[238px] md:h-[615px]"
+								className="w-[328px] h-auto mx-auto md:w-[238px] md:h-auto"
 								style={{ minWidth: '0' }}
 							>
 								<ProductCard
@@ -61,8 +62,7 @@ export default function ProductCards() {
 									salePrice={product.price > 0 ? `$${(product.price * 0.7).toFixed(2)}` : `$${product.price}`}
 									colors={["#23A6F0", "#23856D", "#E77C40", "#252B42"]}
 									isFromApi={true}
-									categoryId={product.category_id}
-								/>
+									categoryId={product.category_id}								isHomePage={true}								/>
 							</div>
 						))}
 					</div>

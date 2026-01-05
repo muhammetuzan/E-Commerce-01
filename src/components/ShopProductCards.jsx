@@ -57,7 +57,7 @@ export default function ShopProductCards() {
   // URL'den categoryId geldiğinde Redux'a kaydet
   React.useEffect(() => {
     if (categoryId) {
-      dispatch(setCategory(categoryId));
+      dispatch(setCategory(parseInt(categoryId)));
     }
   }, [categoryId, dispatch]);
   
@@ -73,8 +73,11 @@ export default function ShopProductCards() {
       offset: 0,
     };
     
-    if (category) {
-      params.category = category;
+    // URL'den gelmiş categoryId varsa onu kullan (state update'i beklemek yerine)
+    const activeCategoryId = categoryId ? parseInt(categoryId) : category;
+    
+    if (activeCategoryId) {
+      params.category = activeCategoryId;
     }
     if (sort) {
       params.sort = sort;
@@ -85,7 +88,7 @@ export default function ShopProductCards() {
     
     dispatch(fetchProducts(params));
     setPage(1); // Yeni sonuçlara geçince sayfa 1'e dön
-  }, [category, sort, filter, dispatch, isMobile]);
+  }, [categoryId, category, sort, filter, dispatch, isMobile]);
   
   // Sayfa değişirse offset ile API'ye istek yap
   React.useEffect(() => {
@@ -101,8 +104,11 @@ export default function ShopProductCards() {
       offset: offset,
     };
     
-    if (category) {
-      params.category = category;
+    // URL'den gelmiş categoryId varsa onu kullan (state update'i beklemek yerine)
+    const activeCategoryId = categoryId ? parseInt(categoryId) : category;
+    
+    if (activeCategoryId) {
+      params.category = activeCategoryId;
     }
     if (sort) {
       params.sort = sort;
@@ -112,7 +118,7 @@ export default function ShopProductCards() {
     }
     
     dispatch(fetchProducts(params));
-  }, [page, isMobile, category, sort, dispatch]);
+  }, [page, isMobile, categoryId, category, sort, dispatch]);
   
   const perPage = isMobile ? 4 : 12;
   

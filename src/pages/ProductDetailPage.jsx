@@ -41,7 +41,9 @@ const ProductDetailPage = () => {
     // Bestseller ürünlerini rating'e göre fetch et
     const loadBestsellers = async () => {
       try {
-        const bestsellerList = await dispatch(fetchBestsellers());
+        // Eğer productDetail varsa ve category_id varsa, o kategorideki ürünleri çek
+        const categoryId = productDetail?.category_id;
+        const bestsellerList = await dispatch(fetchBestsellers(categoryId));
         if (bestsellerList && bestsellerList.length > 0) {
           setBestsellers(bestsellerList);
         }
@@ -50,8 +52,11 @@ const ProductDetailPage = () => {
         // Fallback gösterilecek
       }
     };
-    loadBestsellers();
-  }, [dispatch]);
+    
+    if (productDetail) {
+      loadBestsellers();
+    }
+  }, [productDetail, dispatch]);
   
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -184,7 +189,7 @@ const ProductDetailPage = () => {
                 <span className="text-[#737373] font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] whitespace-nowrap flex-nowrap flex items-center">10 Reviews</span>
               </div>
               {/* Fiyat (h5) */}
-              <h5 className="w-[108px] h-[32px] text-[#252B42] font-montserrat font-bold text-[24px] leading-[32px] tracking-[0.1px] text-center opacity-100 absolute top-[97px] left-[24px] md:w-[108px] md:h-[32px] md:top-[97px] md:left-[24px]">${productPrice}</h5>
+              <h5 className="w-[108px] h-[32px] text-[#23856D] font-montserrat font-bold text-[24px] leading-[32px] tracking-[0.1px] text-center opacity-100 absolute top-[97px] left-[24px] md:w-[108px] md:h-[32px] md:top-[97px] md:left-[24px]">${productPrice}</h5>
               {/* Availability Row */}
               <div className="w-[161px] h-[24px] flex items-center gap-[5px] absolute top-[134px] left-[24px] opacity-100 md:w-[161px] md:h-[24px] md:top-[134px] md:left-[24px]">
                 <span className="w-[94px] h-[24px] font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-[#737373]">Availability :</span>

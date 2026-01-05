@@ -146,14 +146,17 @@ export const fetchProductDetail = (productId) => async (dispatch) => {
   }
 };
 
-export const fetchBestsellers = () => async (dispatch) => {
+export const fetchBestsellers = (categoryId) => async (dispatch) => {
   dispatch(setFetchState('FETCHING'));
   
   try {
-    // Tüm ürünleri getir (limit yüksek ayarla)
-    const response = await api.get('/products', { 
-      params: { limit: 100, offset: 0 } 
-    });
+    // Eğer categoryId varsa, o kategorideki ürünleri getir; yoksa tüm ürünleri getir
+    const params = { limit: 100, offset: 0 };
+    if (categoryId) {
+      params.category = categoryId;
+    }
+    
+    const response = await api.get('/products', { params });
     
     const { products } = response.data;
     
@@ -162,7 +165,7 @@ export const fetchBestsellers = () => async (dispatch) => {
       .sort((a, b) => (b.rating || 0) - (a.rating || 0))
       .slice(0, 8);
     
-    console.log('✅ Bestseller products fetched:', bestsellerProducts);
+    console.log('✅ Bestseller/Category products fetched:', bestsellerProducts);
     
     dispatch(setFetchState('FETCHED'));
     return bestsellerProducts;

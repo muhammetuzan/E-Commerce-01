@@ -8,8 +8,6 @@ import kidsImage from "../assets/resimler/media bg-cover (1).png";
 export default function ShopCards() {
 	const categories = useSelector(state => state.product.categories);
 	
-	console.log('📋 Tüm Kategoriler:', categories.map(c => ({ id: c.id, title: c.title })));
-	
 	// Rating'e göre sırala ve top 5 al
 	const top5Categories = [...categories]
 		.sort((a, b) => b.rating - a.rating)
@@ -33,10 +31,16 @@ export default function ShopCards() {
 
 				{/* Categories Grid */}
 				<div className="flex flex-col gap-8 items-center w-full md:grid md:grid-cols-3 md:gap-4 md:w-full md:max-w-[1100px] md:mx-auto md:px-4">
-					{top5Categories.map((category, index) => (
+					{top5Categories.map((category, index) => {
+					// API'de boş kategorilerin id'lerini doğru id'lerle değiştir
+					let categoryId = category.id;
+					if (category.id === 9) categoryId = 2;  // 4.6 Ayakkabı → id 2
+					if (category.id === 14) categoryId = 1; // 4.3 Tişört → id 1
+					
+					return (
 						<Link
 							key={category.id}
-							to={`/shop/${category.gender}/${category.title.toLowerCase()}/${category.id}`}
+						to={`/shop/${category.gender}/${category.title.toLowerCase()}/${categoryId}`}
 							className={`relative ${
 								index === 0 ? 'w-[324px] h-[500px] md:col-span-1 md:row-span-2' : 'w-[324px] h-[250px] md:w-full md:h-[250px]'
 							} rounded overflow-hidden hover:shadow-lg transition`}
@@ -59,7 +63,8 @@ export default function ShopCards() {
 								</div>
 							</div>
 						</Link>
-					))}
+					);
+				})}
 				</div>
 			</section>
 		</div>
