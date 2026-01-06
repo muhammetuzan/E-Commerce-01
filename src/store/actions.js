@@ -23,6 +23,9 @@ import {
   DECREASE_CART_ITEM,
   SET_PAYMENT,
   SET_ADDRESS,
+  ADD_TO_LIKED,
+  REMOVE_FROM_LIKED,
+  SET_LIKED,
 } from './actionTypes';
 
 // CLIENT ACTION CREATORS
@@ -146,4 +149,20 @@ export const setPayment = (payment) => ({
 export const setAddress = (address) => ({
   type: SET_ADDRESS,
   payload: address,
+});
+
+// LIKED PRODUCTS ACTION CREATORS
+export const addToLiked = (product) => ({
+  type: ADD_TO_LIKED,
+  payload: product,
+});
+
+export const removeFromLiked = (productId) => ({
+  type: REMOVE_FROM_LIKED,
+  payload: productId,
+});
+
+export const setLiked = (liked) => ({
+  type: SET_LIKED,
+  payload: liked,
 });

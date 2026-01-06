@@ -1,11 +1,13 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
+import { useHistory } from "react-router-dom";
 import slideImageMobile from "../assets/resimler/product-slide-1.jpg";
 import slideImageDesktop from "../assets/resimler/96c86912d491d421800e62998b9af7c838cc25d1.jpg";
 import slideImageDesktop2 from "../assets/resimler/423043b5fa33ead140411b2645af5ca11e8d3429.jpg";
 
 export default function Slider() {
 	const [currentSlide, setCurrentSlide] = useState(0);
+	const history = useHistory();
 
 	const slides = [
 		{
@@ -74,7 +76,9 @@ export default function Slider() {
 							We know how large objects will act,<br /> but things on a small scale.
 						</p>
 						<div className="w-full flex items-center justify-center pointer-events-auto">
-							<button className="font-montserrat font-bold text-center bg-[#2DC071] text-[#FFFFFF] text-[24px] leading-[32px] tracking-[0.1px] w-[221px] h-[62px] rounded-[5px] border-none cursor-pointer">
+							<button 
+								onClick={() => history.push('/shop')}
+								className="font-montserrat font-bold text-center bg-[#2DC071] text-[#FFFFFF] text-[24px] leading-[32px] tracking-[0.1px] w-[221px] h-[62px] rounded-[5px] border-none cursor-pointer">
 								SHOP NOW
 							</button>
 						</div>
@@ -117,7 +121,9 @@ export default function Slider() {
 							We know how large objects will act,<br /> but things on a small scale.
 						</p>
 						<div className="w-[221px] h-[62px] flex items-center justify-start">
-							<button className="font-montserrat font-bold text-center bg-[#2DC071] text-[#FFFFFF] text-[24px] leading-[32px] tracking-[0.1px] w-[221px] h-[62px] rounded-[5px] border-none cursor-pointer px-[40px] py-[15px] whitespace-nowrap">
+							<button 
+								onClick={() => history.push('/shop')}
+								className="font-montserrat font-bold text-center bg-[#2DC071] text-[#FFFFFF] text-[24px] leading-[32px] tracking-[0.1px] w-[221px] h-[62px] rounded-[5px] border-none cursor-pointer px-[40px] py-[15px] whitespace-nowrap">
 								SHOP NOW
 							</button>
 						</div>

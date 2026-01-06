@@ -12,7 +12,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchProductDetail, fetchBestsellers } from "../store/thunks";
-import { addToCart } from "../store/actions";
+import { addToCart, addToLiked, removeFromLiked } from "../store/actions";
 
 import MobileClients from "../components/MobileClients";
 import Footer from "../layout/Footer";
@@ -24,6 +24,9 @@ const ProductDetailPage = () => {
   
   const productDetail = useSelector(state => state.product.productDetail);
   const fetchState = useSelector(state => state.product.fetchState);
+  const likedProducts = useSelector(state => state.liked.liked);
+  
+  const isLiked = likedProducts.some(item => item.id === productDetail?.id);
   
   const [selectedImage, setSelectedImage] = useState(0);
   const [bestsellers, setBestsellers] = useState([]);
@@ -130,18 +133,22 @@ const ProductDetailPage = () => {
                     <>
                       {/* Sol ok */}
                       <button
-                        className="absolute left-10 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center"
-                        onClick={() => setSelectedImage((selectedImage - 1 + images.length) % images.length)}
+                        className="absolute left-10 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center transition-opacity"
+                        onClick={() => setSelectedImage((selectedImage - 1 + 2) % 2)}
                         aria-label="Önceki görsel"
-                        style={{padding: 0}}  
+                        style={{padding: 0}}
                       >
                         <ChevronLeft size={50} strokeWidth={1.5} color="#FFFFFF" />
                       </button>
-                      <img src={images[selectedImage]} alt={`Product ${selectedImage + 1}`} className="w-full h-full object-cover" />
+                      <img 
+                        src={images[selectedImage] || images[0] || ''} 
+                        alt={`Product ${selectedImage + 1}`} 
+                        className={`w-full h-full ${selectedImage === 1 ? 'object-contain' : 'object-cover'}`}
+                      />
                       {/* Sağ ok */}
                       <button
-                        className="absolute right-10 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center"
-                        onClick={() => setSelectedImage((selectedImage + 1) % images.length)}
+                        className="absolute right-10 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center transition-opacity"
+                        onClick={() => setSelectedImage((selectedImage + 1) % 2)}
                         aria-label="Sonraki görsel"
                         style={{padding: 0}}
                       >
@@ -156,13 +163,18 @@ const ProductDetailPage = () => {
                 </div>
                 {/* Indicator */}
                 <div className="w-[219px] h-[75px] flex gap-[19px] justify-start self-start absolute left-0 top-[319px] md:w-[219px] md:h-[75px] md:top-[471px] md:opacity-100">
-                  {images.map((img, idx) => (
+                  {[0, 1].map((idx) => (
                     <div
                       key={idx}
                       className={`w-[100px] h-[75px] rounded-[5px] overflow-hidden border-2 ${selectedImage === idx ? 'border-[#23A6F0]' : 'border-transparent'} cursor-pointer ${selectedImage !== idx ? 'opacity-50' : ''}`}
                       onClick={() => setSelectedImage(idx)}
                     >
-                      <img src={img} alt={`Product ${idx + 1} thumb`} className="w-full h-full object-cover" />
+                      <img 
+                        src={images[idx] || images[0] || ''} 
+                        alt={`Product ${idx + 1} thumb`} 
+                        className={`w-full h-full object-cover ${idx === 1 ? 'scale-50' : ''}`}
+                        style={idx === 1 ? {transform: 'scale(0.5)', transformOrigin: 'center'} : {}}
+                      />
                     </div>
                   ))}
                 </div>
@@ -227,9 +239,18 @@ const ProductDetailPage = () => {
                   </span>
                 </button>
                 {/* Kalp kutusu */}
-                <div className="w-[40px] h-[40px] flex items-center justify-center rounded-full bg-white border border-[#E8E8E8]">
+                <div 
+                  onClick={() => {
+                    if (isLiked) {
+                      dispatch(removeFromLiked(productDetail.id));
+                    } else {
+                      dispatch(addToLiked(productDetail));
+                    }
+                  }}
+                  className="w-[40px] h-[40px] flex items-center justify-center rounded-full bg-white border border-[#E8E8E8] cursor-pointer hover:bg-gray-100 transition"
+                >
                   <svg width="18" height="16" viewBox="0 0 18 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M8.995 14.5C8.7 14.5 8.4 14.4 8.2 14.2C3.1 9.7 0.6 7.4 0.6 4.8C0.6 2.6 2.3 0.9 4.5 0.9C5.7 0.9 6.8 1.5 7.5 2.4C8.2 1.5 9.3 0.9 10.5 0.9C12.7 0.9 14.4 2.6 14.4 4.8C14.4 7.4 11.9 9.7 6.8 14.2C6.6 14.4 6.3 14.5 6 14.5H8.995Z" stroke="#252B42" strokeWidth="1" fill="none"/>
+                    <path d="M8.995 14.5C8.7 14.5 8.4 14.4 8.2 14.2C3.1 9.7 0.6 7.4 0.6 4.8C0.6 2.6 2.3 0.9 4.5 0.9C5.7 0.9 6.8 1.5 7.5 2.4C8.2 1.5 9.3 0.9 10.5 0.9C12.7 0.9 14.4 2.6 14.4 4.8C14.4 7.4 11.9 9.7 6.8 14.2C6.6 14.4 6.3 14.5 6 14.5H8.995Z" stroke={isLiked ? "#E74C3C" : "#252B42"} strokeWidth="1" fill={isLiked ? "#E74C3C" : "none"}/>
                   </svg>
                 </div>
                 {/* Sepet kutusu */}
@@ -371,6 +392,9 @@ const ProductDetailPage = () => {
                         image={product.images?.[0]?.url || bestsellerImg1}
                         name={product.name || "Product"}
                         price={product.price || 0}
+                        id={product.id}
+                        categoryId={product.category_id}
+                        categoryName={product.category?.title}
                       />
                     </div>
                   ))
@@ -401,6 +425,9 @@ const ProductDetailPage = () => {
                         image={product.images?.[0]?.url || bestsellerImg5}
                         name={product.name || "Product"}
                         price={product.price || 0}
+                        id={product.id}
+                        categoryId={product.category_id}
+                        categoryName={product.category?.title}
                       />
                     </div>
                   ))

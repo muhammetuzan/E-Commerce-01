@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import productImage from '../assets/resimler/c7a19f43aa4437b65bb40c3e3edb92e61a4d6184.png';
 import slide2Background from '../assets/resimler/1aca44542643e83770bd4886880e082aecdda745.jpg';
@@ -6,6 +7,7 @@ import slide2Product from '../assets/resimler/da519ff7fee0eaecabd5f47e2ad5f6c8e9
 
 export default function Carousel() {
 	const [currentSlide, setCurrentSlide] = useState(0);
+	const history = useHistory();
 
 	const nextSlide = () => {
 		setCurrentSlide((prev) => (prev + 1) % 2);
@@ -43,7 +45,7 @@ export default function Carousel() {
 							<p className="font-montserrat w-[77px] h-[32px] text-[24px] font-bold leading-[32px] tracking-[0.1px] text-center text-[#FAFAFA] md:text-left">
 								$16.48
 							</p>
-							<button className="font-montserrat w-[184px] h-[52px] pt-[15px] pr-[40px] pb-[15px] pl-[40px] bg-[#2DC071] text-[#FAFAFA] text-[14px] font-bold leading-[22px] tracking-[0.2px] text-center border-none rounded-[5px] cursor-pointer flex items-center justify-center gap-[10px] md:w-[184px] md:h-[52px] md:px-0 md:whitespace-nowrap md:ml-0">
+							<button onClick={() => currentSlide === 1 && (window.scrollTo(0, 0), history.push('/shop'))} className="font-montserrat w-[184px] h-[52px] pt-[15px] pr-[40px] pb-[15px] pl-[40px] bg-[#2DC071] text-[#FAFAFA] text-[14px] font-bold leading-[22px] tracking-[0.2px] text-center border-none rounded-[5px] cursor-pointer flex items-center justify-center gap-[10px] md:w-[184px] md:h-[52px] md:px-0 md:whitespace-nowrap md:ml-0">
 								{currentSlide === 0 ? 'ADD TO CART' : 'SHOP NOW'}
 							</button>
 						</div>

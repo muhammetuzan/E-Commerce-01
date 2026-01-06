@@ -1,15 +1,36 @@
 import React, { useState, useRef, useEffect } from "react";
+import ReactDOM from 'react-dom';
 import { Link, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import CryptoJS from "crypto-js";
 import { User, Search, ShoppingCart, Menu, ChevronDown, Heart, Phone, Mail, Instagram, Youtube, Facebook, Twitter, LogOut, Trash2 } from "lucide-react";
-import { setUser, removeFromCart } from "../store/actions";
+import { setUser, removeFromCart, removeFromLiked, addToLiked } from "../store/actions";
+import api from "../store/api";
 
 export default function Navbar({ topBarColor = "#252B42", onSignUpClick, onLoginClick, isShopPage = false }) {
 	const dispatch = useDispatch();
 	const history = useHistory();
 	const user = useSelector(state => state.client.user);
 	const cart = useSelector(state => state.shoppingCart.cart);
+	const likedProducts = useSelector(state => state.liked.liked);
+	
+	// Slug oluşturma helper
+	const createSlug = (text) => {
+		if (!text) return 'product';
+		return text
+			.toString()
+			.toLowerCase()
+			.trim()
+			.replace(/ş/g, 's')
+			.replace(/ğ/g, 'g')
+			.replace(/ü/g, 'u')
+			.replace(/ö/g, 'o')
+			.replace(/ç/g, 'c')
+			.replace(/ı/g, 'i')
+			.replace(/[^\w\s-]/g, '')
+			.replace(/\s+/g, '-')
+			.replace(/-+/g, '-');
+	};
 	
 	// Gravatar hash oluştur
 	const getGravatarUrl = (email) => {
@@ -66,83 +87,108 @@ export default function Navbar({ topBarColor = "#252B42", onSignUpClick, onLogin
 
 	const [dropdownOpen, setDropdownOpen] = useState(false);
 	const [cartDropdownOpen, setCartDropdownOpen] = useState(false);
+	const [likedDropdownOpen, setLikedDropdownOpen] = useState(false);
+	const [searchOpen, setSearchOpen] = useState(false);
+	const [searchQuery, setSearchQuery] = useState('');
+	const [searchResults, setSearchResults] = useState([]);
+	const [searchLoading, setSearchLoading] = useState(false);
+
+	// refs for dropdowns/buttons (defined at top-level of component)
 	const dropdownRef = useRef(null);
 	const shopBtnRef = useRef(null);
 	const cartDropdownRef = useRef(null);
 	const cartBtnRef = useRef(null);
-	
-	// Toplam ürün adedi
-	const cartItemCount = cart.reduce((total, item) => total + item.count, 0);
-
-	// Dropdown mouse enter/leave kontrolü için gecikmeli kapanış
+	const likedDropdownRef = useRef(null);
+	const likedBtnRef = useRef(null);
+	const searchDropdownRef = useRef(null);
+	const searchInputRef = useRef(null);
 	const closeDropdownTimeout = useRef();
+
+	const cartItemCount = cart.reduce((acc, item) => acc + (item.count || 0), 0);
+
+	const visibleResults = searchResults.slice(0, 5);
+	const hiddenCount = Math.max(0, searchResults.length - visibleResults.length);
+
+	// Mobile Search Modal kaldırıldı, event handler kodu da temizlendi
+
+	// Dropdown için event handler'lar
 	const handleShopMouseEnter = () => {
 		if (closeDropdownTimeout.current) clearTimeout(closeDropdownTimeout.current);
 		setDropdownOpen(true);
 	};
 	const handleShopMouseLeave = () => {
-		closeDropdownTimeout.current = setTimeout(() => setDropdownOpen(false), 120);
+		closeDropdownTimeout.current = setTimeout(() => setDropdownOpen(false), 200);
 	};
-	
-	// Cart dropdown kontrolü
-	const closeCartDropdownTimeout = useRef();
 	const handleCartMouseEnter = () => {
-		if (closeCartDropdownTimeout.current) clearTimeout(closeCartDropdownTimeout.current);
 		setCartDropdownOpen(true);
 	};
 	const handleCartMouseLeave = () => {
-		closeCartDropdownTimeout.current = setTimeout(() => setCartDropdownOpen(false), 120);
+		setCartDropdownOpen(false);
 	};
-	
-	// Mobile cart dropdown açıkken body scroll'u engelle
-	useEffect(() => {
-		if (cartDropdownOpen) {
-			document.body.style.overflow = 'hidden';
-		} else {
-			document.body.style.overflow = 'unset';
-		}
-		return () => {
-			document.body.style.overflow = 'unset';
-		};
-	}, [cartDropdownOpen]);
+	const handleLikedMouseEnter = () => {
+		setLikedDropdownOpen(true);
+	};
+	const handleLikedMouseLeave = () => {
+		setLikedDropdownOpen(false);
+	};
+
+	const closeSearch = () => {
+		setSearchOpen(false);
+		setSearchQuery('');
+		setSearchResults([]);
+		setSearchLoading(false);
+	};
 
 	useEffect(() => {
-		function handleClickOutside(event) {
+		if (!searchQuery.trim()) {
+			setSearchResults([]);
+			return;
+		}
+		setSearchLoading(true);
+		const timer = setTimeout(() => {
+			api.get('/products', {
+				params: {
+					limit: 50,
+					offset: 0,
+					filter: searchQuery
+				}
+			})
+				.then(res => {
+					setSearchResults(res.data.products || []);
+					setSearchLoading(false);
+				})
+				.catch(() => {
+					setSearchResults([]);
+					setSearchLoading(false);
+				});
+		}, 300);
+		return () => clearTimeout(timer);
+	}, [searchQuery]);
+
+	// Sadece desktop için ESC ve dış tıklama ile search dropdown kapama
+	useEffect(() => {
+		if (!searchOpen) return;
+		if (window.innerWidth <= 768) return; // Mobilde bu eventleri ekleme
+		function handleKeyDown(e) {
+			if (e.key === 'Escape') closeSearch();
+		}
+		function handleClick(e) {
 			if (
-				dropdownRef.current &&
-				!dropdownRef.current.contains(event.target) &&
-				shopBtnRef.current &&
-				!shopBtnRef.current.contains(event.target)
+				searchDropdownRef.current &&
+				!searchDropdownRef.current.contains(e.target) &&
+				searchInputRef.current &&
+				!searchInputRef.current.contains(e.target)
 			) {
-				setDropdownOpen(false);
-			}
-			if (
-				cartDropdownRef.current &&
-				!cartDropdownRef.current.contains(event.target) &&
-				cartBtnRef.current &&
-				!cartBtnRef.current.contains(event.target)
-			) {
-				setCartDropdownOpen(false);
+				closeSearch();
 			}
 		}
-		function handleEsc(event) {
-			if (event.key === "Escape") {
-				setDropdownOpen(false);
-				setCartDropdownOpen(false);
-			}
-		}
-		if (dropdownOpen || cartDropdownOpen) {
-			document.addEventListener("mousedown", handleClickOutside);
-			document.addEventListener("keydown", handleEsc);
-		} else {
-			document.removeEventListener("mousedown", handleClickOutside);
-			document.removeEventListener("keydown", handleEsc);
-		}
+		document.addEventListener('keydown', handleKeyDown);
+		document.addEventListener('mousedown', handleClick);
 		return () => {
-			document.removeEventListener("mousedown", handleClickOutside);
-			document.removeEventListener("keydown", handleEsc);
+			document.removeEventListener('keydown', handleKeyDown);
+			document.removeEventListener('mousedown', handleClick);
 		};
-	}, [dropdownOpen, cartDropdownOpen]);
+	}, [searchOpen]);
 
 	return (
 		<>
@@ -165,21 +211,9 @@ export default function Navbar({ topBarColor = "#252B42", onSignUpClick, onLogin
 							{/* 2. col-md-4 */}
 							<div className="mx-8 flex items-center justify-center">
 								<h6 className="font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-white text-center">
-									Follow Us  and get a chance to win 80% off
+									Follow Us and get a chance to win 80% off
 								</h6>
-							</div>
-							{/* 3. col-md-4 */}
-							<div className="flex items-center gap-2 pr-[30px] justify-end">
-								<h6 className="font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-white w-auto">
-									Follow Us :
-								</h6>
-								<div className="flex gap-[10px] items-center">
-									<a href="#" className="flex items-center justify-center w-[26px] h-[26px] p-[5px] rounded bg-transparent">
-										<Instagram size={16} className="text-white" />
-									</a>
-									<a href="#" className="flex items-center justify-center w-[26px] h-[26px] p-[5px] rounded bg-transparent">
-										<Youtube size={16} className="text-white" />
-									</a>
+								<div className="flex items-center gap-2 ml-3">
 									<a href="#" className="flex items-center justify-center w-[26px] h-[26px] p-[5px] rounded bg-transparent">
 										<Facebook size={16} className="text-white" />
 									</a>
@@ -187,6 +221,7 @@ export default function Navbar({ topBarColor = "#252B42", onSignUpClick, onLogin
 										<Twitter size={16} className="text-white" />
 									</a>
 								</div>
+							
 							</div>
 						</div>
 					</div>
@@ -198,7 +233,7 @@ export default function Navbar({ topBarColor = "#252B42", onSignUpClick, onLogin
 					<div className="w-[1437px] flex items-center h-[58px] mx-auto relative pr-[38px]">
 						{/* Brand */}
 						<div className="w-[187px] h-[58px] flex items-center pl-[38px]">
-							<span className="font-montserrat font-bold text-[24px] leading-[32px] tracking-[0.1px] text-[#252B42]">Bandage</span>
+						<span className="font-montserrat font-bold text-[24px] leading-[32px] tracking-[0.1px] text-[#252B42] cursor-pointer" onClick={() => window.location.href = '/'}>Bandage</span>
 						</div>
 						{/* Main Nav */}
 						<div className="flex items-center w-[1155px] h-[58px] ml-[70px] pr-[38px] justify-between">
@@ -261,8 +296,8 @@ export default function Navbar({ topBarColor = "#252B42", onSignUpClick, onLogin
 												<div className="w-[210px] h-[216px] px-6 py-4 flex flex-col gap-4 overflow-y-auto" style={{paddingTop:16,paddingBottom:16,paddingLeft:24,paddingRight:24}}>
 													{shopDropdown[1].items.map((item) => (
 														<Link
-															key={item.id}
-															to={`/shop/e/${item.title.toLowerCase()}/${item.id}`}
+														key={item.id}
+														to={`/shop/e/${item.title.toLowerCase()}/${item.id}`}
 															onClick={() => setDropdownOpen(false)}
 															className="font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-[#737373] hover:text-[#23A6F0] transition-colors cursor-pointer"
 														>
@@ -276,14 +311,14 @@ export default function Navbar({ topBarColor = "#252B42", onSignUpClick, onLogin
 								</li>
 								<li className="w-[45px] h-[24px] flex items-center justify-center">
 									<Link to="/aboutus" className="w-[45px] h-[24px] flex items-center justify-center">
-										<span className="font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-center text-[#737373]">About</span>
+										<span className="font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-center text-[#737373]">Home</span>
 									</Link>
 								</li>
-                                <li className="w-[50px] h-[24px] flex items-center justify-center">
-                                    <Link to="/team" className="w-[50px] h-[24px] flex items-center justify-center">
-                                        <span className="font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-center text-[#737373]">Team</span>
-                                    </Link>
-                                </li>
+								<li className="w-[50px] h-[24px] flex items-center justify-center">
+									<Link to="/team" className="w-[50px] h-[24px] flex items-center justify-center">
+										<span className="font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-center text-[#737373]">Team</span>
+									</Link>
+								</li>
 								   <li className="w-[58px] h-[24px] flex items-center justify-center">
 									   <Link to="/contact" className="w-[58px] h-[24px] flex items-center justify-center">
 										   <span className="font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-center text-[#737373]">Contact</span>
@@ -340,10 +375,100 @@ export default function Navbar({ topBarColor = "#252B42", onSignUpClick, onLogin
 										</button>
 									)}
 								</li>
-								<li className="w-[46px] h-[46px] flex items-center">
-									<button className="flex items-center justify-center w-[46px] h-[46px] rounded-[37px] p-[15px] gap-[5px]">
+								<li className="w-[46px] h-[46px] flex items-center relative">
+									<button 
+										ref={searchInputRef}
+										onClick={() => setSearchOpen(!searchOpen)}
+										className="flex items-center justify-center w-[46px] h-[46px] rounded-[37px] p-[15px] gap-[5px] hover:bg-gray-100 transition"
+									>
 										<Search size={16} className="text-[#23A6F0]" />
 									</button>
+									
+									{/* Search Dropdown */}
+									{searchOpen && (
+										<div
+											ref={searchDropdownRef}
+											className="absolute right-0 top-[46px] w-[400px] bg-white shadow-2xl rounded-lg z-50 border border-gray-100"
+										>
+											{/* Search Input */}
+											<div className="px-6 py-3 border-b border-gray-200">
+												<input 
+													type="text"
+													placeholder="Ürün ara..."
+													value={searchQuery}
+													onChange={(e) => setSearchQuery(e.target.value)}
+													className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23A6F0] font-montserrat text-[14px]"
+													autoFocus
+												/>
+											</div>
+											
+											{/* Search Results */}
+											<div className="max-h-[400px] overflow-y-auto">
+												{!searchQuery.trim() ? (
+													<div className="px-6 py-8 text-center">
+														<Search size={48} className="mx-auto text-gray-300 mb-3" />
+														<p className="font-montserrat text-[14px] text-gray-500">Arama yapınız</p>
+													</div>
+												) : searchLoading ? (
+													<div className="px-6 py-8 text-center">
+														<p className="font-montserrat text-[14px] text-gray-500">Aranıyor...</p>
+													</div>
+												) : searchResults.length === 0 ? (
+													<div className="px-6 py-8 text-center">
+														<p className="font-montserrat text-[14px] text-gray-500">Sonuç bulunamadı</p>
+													</div>
+												) : (
+													<>
+														{visibleResults.map((product, index) => {
+															const gender = product.category_id <= 8 ? 'k' : 'e';
+															const catName = product.category?.title || 'category';
+															const slug = createSlug(product.name);
+															
+															return (
+																<div 
+																	key={index}
+																	role="button"
+																	tabIndex={0}
+																	onClick={() => {
+																		console.log('Product clicked:', product, 'ID:', product.id);
+																		setSearchOpen(false);
+																		setSearchQuery('');
+																		setTimeout(() => {
+																			history.push(`/product/${product.id}`);
+																		}, 100);
+																	}}
+																	className="px-6 py-3 border-b border-gray-100 hover:bg-gray-50 transition cursor-pointer group flex gap-3"
+																>
+																	<img 
+																		src={product.images?.[0]?.url || ''} 
+																		alt={product.name}
+																		className="w-12 h-12 object-cover rounded"
+																	/>
+																	<div className="flex-1">
+																		<h4 className="font-montserrat font-semibold text-[13px] text-[#252B42] line-clamp-2">
+																			{product.name}
+																		</h4>
+																		<p className="font-montserrat font-bold text-[12px] text-[#23A6F0] mt-1">
+																			{product.price} TL
+																		</p>
+																	</div>
+																</div>
+															);
+														})}
+														
+														{/* Show More Message */}
+														{hiddenCount > 0 && (
+															<div className="px-6 py-3 text-center border-t border-gray-200 bg-gray-50">
+																<p className="font-montserrat text-[13px] text-gray-600">
+																	+{hiddenCount} ürün daha
+																</p>
+															</div>
+														)}
+													</>
+												)}
+											</div>
+										</div>
+									)}
 								</li>
 								<li className="w-[56px] h-[46px] flex items-center relative">
 									<button 
@@ -423,7 +548,17 @@ export default function Navbar({ topBarColor = "#252B42", onSignUpClick, onLogin
 														Sepete Git
 													</button>
 													<button 
-														onClick={() => { setCartDropdownOpen(false); history.push('/create-order'); }}
+														onClick={() => { 
+															console.log('Desktop - Siparişi Tamamla tıklandı! User:', user);
+															setCartDropdownOpen(false); 
+															if (user) {
+																console.log('Desktop - User var, /create-order sayfasına yönlendiriliyor');
+																history.push('/create-order');
+															} else {
+																console.log('Desktop - User yok, login modal açılıyor');
+																onLoginClick();
+															}
+														}}
 														className="flex-1 px-4 py-2 bg-[#FF6F00] text-white font-montserrat font-semibold text-[14px] rounded hover:bg-[#E66300] transition"
 													>
 														Siparişi Tamamla
@@ -433,11 +568,88 @@ export default function Navbar({ topBarColor = "#252B42", onSignUpClick, onLogin
 										</div>
 									)}
 								</li>
-								<li className="w-[56px] h-[46px] flex items-center">
-									<button className="flex items-center w-[56px] h-[46px] rounded-[37px] p-[15px] gap-[5px]">
+								<li className="w-[56px] h-[46px] flex items-center relative">
+									<button 
+										ref={likedBtnRef}
+										onMouseEnter={handleLikedMouseEnter}
+										onMouseLeave={handleLikedMouseLeave}
+										className="flex items-center w-[56px] h-[46px] rounded-[37px] p-[15px] gap-[5px]"
+									>
 										<Heart size={16} className="text-[#23A6F0]" />
-										<span className="font-montserrat font-normal text-[12px] leading-[16px] tracking-[0.2px] text-[#23A6F0] w-[5px] h-[16px] flex items-center justify-center">0</span>
+										<span className="font-montserrat font-normal text-[12px] leading-[16px] tracking-[0.2px] text-[#23A6F0] w-[5px] h-[16px] flex items-center justify-center">
+											{likedProducts.length}
+										</span>
 									</button>
+									
+									{/* Liked Products Dropdown */}
+									{likedDropdownOpen && (
+										<div
+											ref={likedDropdownRef}
+											onMouseEnter={handleLikedMouseEnter}
+											onMouseLeave={handleLikedMouseLeave}
+											className="absolute right-0 top-[46px] w-[400px] bg-white shadow-2xl rounded-lg z-50 border border-gray-100"
+										>
+											{/* Header */}
+											<div className="px-6 py-4 border-b border-gray-200">
+												<h3 className="font-montserrat font-bold text-[16px] text-[#252B42]">
+													Beğenilenler ({likedProducts.length} Ürün)
+												</h3>
+											</div>
+											
+											{/* Liked Items */}
+											<div className="max-h-[400px] overflow-y-auto">
+												{likedProducts.length === 0 ? (
+													<div className="px-6 py-8 text-center">
+														<Heart size={48} className="mx-auto text-gray-300 mb-3" />
+														<p className="font-montserrat text-[14px] text-gray-500">Beğenilen ürün yok</p>
+													</div>
+												) : (
+													likedProducts.map((product, index) => {
+														const gender = product.category_id <= 8 ? 'k' : 'e';
+														const catName = product.category?.title || 'category';
+														const slug = createSlug(product.name);
+														
+														return (
+															<div key={index} className="px-6 py-4 border-b border-gray-100 hover:bg-gray-50 transition group">
+																<div className="flex gap-4">
+																	<img 
+																		src={product.images?.[0]?.url || ''} 
+																		alt={product.name}
+																		className="w-16 h-16 object-cover rounded cursor-pointer hover:opacity-80 transition"
+																		onClick={() => {
+																			setLikedDropdownOpen(false);
+																			history.push(`/shop/${gender}/${catName}/${product.category_id}/${slug}/${product.id}`);
+																		}}
+																	/>
+																	<div 
+																		className="flex-1 cursor-pointer hover:opacity-80 transition"
+																		onClick={() => {
+																			setLikedDropdownOpen(false);
+																			history.push(`/shop/${gender}/${catName}/${product.category_id}/${slug}/${product.id}`);
+																		}}
+																	>
+																		<h4 className="font-montserrat font-semibold text-[14px] text-[#252B42] line-clamp-2">
+																			{product.name}
+																		</h4>
+																		<p className="font-montserrat font-bold text-[14px] text-[#23A6F0] mt-1">
+																			{product.price} TL
+																		</p>
+																	</div>
+																	<button
+																		onClick={() => dispatch(removeFromLiked(product.id))}
+																		className="opacity-0 group-hover:opacity-100 transition-opacity p-2 hover:bg-red-50 rounded-full h-fit"
+																		title="Beğenilenlerden Çıkar"
+																	>
+																		<Trash2 size={16} className="text-red-500" />
+																	</button>
+																</div>
+															</div>
+														);
+													})
+												)}
+											</div>
+										</div>
+									)}
 								</li>
 							</ul>
 						</div>
@@ -450,9 +662,8 @@ export default function Navbar({ topBarColor = "#252B42", onSignUpClick, onLogin
 				<div className="flex items-center justify-between pt-[13px] pb-[13px]">
 					{/* Logo */}
 					<h1 
-						className="font-montserrat font-bold text-[#252B42] text-[24px] leading-[32px] tracking-[0.1px] no-underline"
-					>
-						Bandage
+					className="font-montserrat font-bold text-[#252B42] text-[24px] leading-[32px] tracking-[0.1px] no-underline cursor-pointer"
+					onClick={() => window.location.href = '/'}>Bandage
 					</h1>
 
 					{/* Right Icons */}
@@ -495,7 +706,107 @@ export default function Navbar({ topBarColor = "#252B42", onSignUpClick, onLogin
 						<User size={21} className="text-[#3C403D] cursor-pointer hover:text-[#23A6F0] transition" />
 					</button>
 				)}
-						<Search size={24} className="text-[#3C403D] cursor-pointer" />
+						<button 
+							onClick={() => (searchOpen ? closeSearch() : setSearchOpen(true))}
+							className="relative hover:text-[#23A6F0] transition"
+						>
+							<Search size={24} className="text-[#3C403D] cursor-pointer" />
+						</button>
+						
+						{/* Mobile Search Dropdown */}
+						{searchOpen && (
+							<div
+								className="fixed inset-0 z-[9999] pointer-events-auto"
+								onClick={closeSearch}
+							>
+								{/* Overlay */}
+								<div className="absolute inset-0 bg-black bg-opacity-50" />
+								
+								{/* Modal - İçerik */}
+								<div 
+									className="absolute bottom-0 left-0 right-0 w-full bg-white rounded-t-2xl shadow-2xl max-h-[85vh] overflow-hidden flex flex-col"
+									onClick={(e) => e.stopPropagation()}
+									onPointerDown={(e) => e.stopPropagation()}
+								>
+									{/* Search Header */}
+									<div className="px-4 py-3 border-b border-gray-200 flex justify-between items-center">
+										<h3 className="font-montserrat font-bold text-[16px] text-[#252B42]">Ürün Ara</h3>
+										<button 
+											onClick={closeSearch} 
+											className="text-gray-400 hover:text-gray-600 p-2"
+										>
+											✕
+										</button>
+									</div>
+									
+									{/* Search Input */}
+									<div className="px-4 py-3 border-b border-gray-200">
+										<input 
+											type="text"
+											placeholder="Ürün ara..."
+											value={searchQuery}
+											onChange={(e) => setSearchQuery(e.target.value)}
+											className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23A6F0] font-montserrat text-[14px]"
+											autoFocus
+										/>
+									</div>
+									
+									{/* Sonuçlar */}
+									<div className="flex-1 overflow-y-auto">
+										{!searchQuery.trim() ? (
+											<div className="px-6 py-8 text-center">
+												<Search size={48} className="mx-auto text-gray-300 mb-3" />
+												<p className="font-montserrat text-[14px] text-gray-500">Arama yapınız</p>
+											</div>
+										) : searchLoading ? (
+											<div className="px-6 py-8 text-center">
+												<p className="font-montserrat text-[14px] text-gray-500">Aranıyor...</p>
+											</div>
+										) : searchResults.length === 0 ? (
+											<div className="px-6 py-8 text-center">
+												<p className="font-montserrat text-[14px] text-gray-500">Sonuç bulunamadı</p>
+											</div>
+										) : (
+											<>
+												{searchResults.slice(0, 5).map((product, index) => (
+													<div
+														key={index}
+														role="button"
+														tabIndex={0}
+														onClick={() => {
+															history.push(`/product/${product.id}`);
+															closeSearch();
+														}}
+														className="px-4 py-3 border-b border-gray-100 hover:bg-gray-50 transition cursor-pointer flex gap-3"
+													>
+														<img
+															src={product.images?.[0]?.url || ''} 
+															alt={product.name}
+															className="w-12 h-12 object-cover rounded"
+														/>
+														<div className="flex-1">
+															<h4 className="font-montserrat font-semibold text-[13px] text-[#252B42] line-clamp-2">
+																{product.name}
+															</h4>
+															<p className="font-montserrat font-bold text-[12px] text-[#23A6F0] mt-1">
+																{product.price} TL
+															</p>
+														</div>
+													</div>
+												))}
+												{searchResults.length > 5 && (
+													<div className="px-6 py-3 text-center border-t border-gray-200 bg-gray-50">
+														<p className="font-montserrat text-[13px] text-gray-600">
+															+{searchResults.length - 5} ürün daha
+														</p>
+													</div>
+												)}
+											</>
+										)}
+									</div>
+								</div>
+							</div>
+						)}
 						
 						{/* Mobile Shopping Cart with Badge */}
 						<div className="relative">
@@ -618,8 +929,15 @@ export default function Navbar({ topBarColor = "#252B42", onSignUpClick, onLogin
 												onClick={(e) => {
 													e.preventDefault();
 													e.stopPropagation();
+													console.log('Siparişi Tamamla tıklandı! User:', user);
 													setCartDropdownOpen(false);
-													history.push('/create-order');
+													if (user) {
+														console.log('User var, /create-order sayfasına yönlendiriliyor');
+														history.push('/create-order');
+													} else {
+														console.log('User yok, login modal açılıyor');
+														onLoginClick();
+													}
 												}}
 												className="w-full px-4 py-4 bg-[#FF6F00] text-white font-montserrat font-bold text-[14px] rounded-lg active:scale-95"
 												style={{ WebkitTapHighlightColor: 'transparent', touchAction: 'manipulation', userSelect: 'none' }}

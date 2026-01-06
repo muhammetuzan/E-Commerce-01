@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Trash2, Plus, Minus, ShoppingCart as CartIcon, X, Check } from "lucide-react";
 import { removeFromCart, toggleCartItem, increaseCartItem, decreaseCartItem } from "../store/actions";
+import LoginModal from "../components/LoginModal";
+import SignUpModal from "../components/SignUpModal";
 
 // Geçerli kuponlar listesi (mock data)
 const VALID_COUPONS = {
@@ -16,12 +18,15 @@ export default function ShoppingCartPage() {
   const dispatch = useDispatch();
   const history = useHistory();
   const cart = useSelector(state => state.shoppingCart.cart);
+  const user = useSelector(state => state.client.user);
   
   // Kupon state'leri
   const [showCouponInput, setShowCouponInput] = useState(false);
   const [couponCode, setCouponCode] = useState('');
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [couponError, setCouponError] = useState('');
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showSignUpModal, setShowSignUpModal] = useState(false);
 
   // Kupon uygulama fonksiyonu
   const handleApplyCoupon = () => {
@@ -79,6 +84,25 @@ export default function ShoppingCartPage() {
 
   if (cart.length === 0) {
     return (
+      <>
+        <LoginModal 
+          isOpen={showLoginModal} 
+          onClose={() => setShowLoginModal(false)}
+          onSwitchToSignUp={() => {
+            setShowLoginModal(false);
+            setShowSignUpModal(true);
+          }}
+        />
+        
+        <SignUpModal 
+          isOpen={showSignUpModal} 
+          onClose={() => setShowSignUpModal(false)}
+          onSwitchToLogin={() => {
+            setShowSignUpModal(false);
+            setShowLoginModal(true);
+          }}
+        />
+      
       <div className="min-h-screen bg-[#FAFAFA] flex items-center justify-center">
         <div className="text-center py-20">
           <CartIcon size={80} className="mx-auto text-gray-300 mb-6" />
@@ -96,10 +120,30 @@ export default function ShoppingCartPage() {
           </button>
         </div>
       </div>
+      </>
     );
   }
 
   return (
+    <>
+      <LoginModal 
+        isOpen={showLoginModal} 
+        onClose={() => setShowLoginModal(false)}
+        onSwitchToSignUp={() => {
+          setShowLoginModal(false);
+          setShowSignUpModal(true);
+        }}
+      />
+      
+      <SignUpModal 
+        isOpen={showSignUpModal} 
+        onClose={() => setShowSignUpModal(false)}
+        onSwitchToLogin={() => {
+          setShowSignUpModal(false);
+          setShowLoginModal(true);
+        }}
+      />
+    
     <div className="min-h-screen bg-[#FAFAFA] pb-4">
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
@@ -434,7 +478,13 @@ export default function ShoppingCartPage() {
 
               {/* Create Order Button */}
               <button
-                onClick={() => history.push('/create-order')}
+                onClick={() => {
+                  if (user) {
+                    history.push('/create-order');
+                  } else {
+                    setShowLoginModal(true);
+                  }
+                }}
                 disabled={selectedItemCount === 0}
                 className="w-full px-6 py-4 bg-[#FF6F00] text-white font-montserrat font-bold text-[16px] rounded-lg hover:bg-[#E66300] disabled:opacity-50 disabled:cursor-not-allowed transition active:scale-[0.98] shadow-lg"
               >
@@ -601,7 +651,13 @@ export default function ShoppingCartPage() {
 
           {/* Create Order Button */}
           <button
-            onClick={() => history.push('/create-order')}
+            onClick={() => {
+              if (user) {
+                history.push('/create-order');
+              } else {
+                setShowLoginModal(true);
+              }
+            }}
             disabled={selectedItemCount === 0}
             className="w-full px-6 py-3 bg-[#FF6F00] text-white font-montserrat font-bold text-[14px] rounded-lg hover:bg-[#E66300] disabled:opacity-50 disabled:cursor-not-allowed transition active:scale-[0.98] shadow-lg"
           >
@@ -623,5 +679,6 @@ export default function ShoppingCartPage() {
         </div>
       </div>
     </div>
+    </>
   );
 }

@@ -28,3 +28,8 @@ export const DECREASE_CART_ITEM = 'DECREASE_CART_ITEM';
 export const SET_PAYMENT = 'SET_PAYMENT';
 export const SET_ADDRESS = 'SET_ADDRESS';
 export const CLEAR_CART = 'CLEAR_CART';
+
+// LIKED PRODUCTS ACTION TYPES
+export const ADD_TO_LIKED = 'ADD_TO_LIKED';
+export const REMOVE_FROM_LIKED = 'REMOVE_FROM_LIKED';
+export const SET_LIKED = 'SET_LIKED';

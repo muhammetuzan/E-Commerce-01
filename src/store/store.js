@@ -5,11 +5,13 @@ import { logger } from 'redux-logger';
 import clientReducer from './reducers/clientReducer';
 import productReducer from './reducers/productReducer';
 import shoppingCartReducer from './reducers/shoppingCartReducer';
+import likedReducer from './reducers/likedReducer';
 
 const rootReducer = combineReducers({
   client: clientReducer,
   product: productReducer,
   shoppingCart: shoppingCartReducer,
+  liked: likedReducer,
 });
 
 const middleware = [thunk, logger];
