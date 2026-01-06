@@ -4,6 +4,7 @@ import team1 from "../assets/ourteam/0a05d6ce0fd1eeff9355b162a7e7c01605dd3c55.jp
 import team2 from "../assets/ourteam/54268cf04ad0f612e9f8f311e9d1c6bbd31a03f3.jpg";
 import team3 from "../assets/ourteam/24a6b8d9efd1b9c2401fb0702dc41f18a42ed89c.jpg";
 import videoCardImg from "../assets/AboutUs/bf5361f308dd0c5a04f10121bc68f6cb9ff0d63d.jpg";
+import TriangleIcon from "../assets/ikonvektorleri/3gen.png";
 import testimonialImg from "../assets/AboutUs/a01449552eeaef7ecedd3954687aefbdb6236bb6.jpg";
 
 import MobileClients from "../components/MobileClients";
@@ -30,9 +31,7 @@ const VideoCard = ({ imageSrc = videoCardImg, imageAlt = "Video" }) => (
         className="absolute flex items-center justify-center bg-[#23A6F0] opacity-100 rounded-full w-[56.95px] h-[56.95px] p-[21.4px] px-[22.63px] left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
         aria-label="Play Video"
       >
-        <svg width="19" height="22" viewBox="0 0 19 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M17.7396 12.7028L2.62818 21.7265C1.34574 22.4915 -0.300049 21.5652 -0.300049 20.0229V1.97568C-0.300049 0.435901 1.34337 -0.492858 2.62818 0.27459L17.7396 9.29821C18.0313 9.4696 18.2738 9.71734 18.4424 10.0163C18.6111 10.3153 18.7 10.6548 18.7 11.0005C18.7 11.3462 18.6111 11.6858 18.4424 11.9848C18.2738 12.2837 18.0313 12.5315 17.7396 12.7028Z" fill="white"/>
-        </svg>
+        <img src={TriangleIcon} alt="Play" width={19} height={22} />
       </button>
     </div>
   </div>

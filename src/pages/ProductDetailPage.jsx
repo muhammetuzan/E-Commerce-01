@@ -6,7 +6,9 @@ import bestsellerImg4 from '../assets/product-cards/079b4c5d47938d7b09087b31f361
 import bestsellerImg5 from '../assets/product-cards/926bf1d65669af4e049e20ceb30aa6408b6a79f3.jpg';
 import bestsellerImg6 from '../assets/product-cards/a93e41b42e460896a15fe5f82a56836939f30577.jpg';
 
-import { ChevronLeft, ChevronRight, Star, ArrowLeft } from "lucide-react";
+
+import { ChevronLeft, ChevronRight, Star, ArrowLeft, Heart, ShoppingCart, Eye } from "lucide-react";
+import { FaStar, FaRegStar, FaStarHalfAlt } from "react-icons/fa";
 
 import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
@@ -63,7 +65,7 @@ const ProductDetailPage = () => {
   
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+  }, [actualProductId]);
   
   if (fetchState === 'FETCHING' || !productDetail) {
     return (
@@ -92,8 +94,8 @@ const ProductDetailPage = () => {
       {/* Back Button */}
       <div className="w-full bg-white border-b border-gray-200">
         <div className="max-w-[1440px] mx-auto px-6 py-4">
-          <button 
-            onClick={() => history.goBack()}
+          <button
+            onClick={() => history.push('/shop')}
             className="flex items-center gap-2 text-[#23A6F0] hover:text-[#1a7ab8] transition-colors font-montserrat font-semibold"
           >
             <ArrowLeft size={20} />
@@ -111,9 +113,7 @@ const ProductDetailPage = () => {
             {/* Breadcrumb */}
             <nav className="w-[117px] h-[44px] flex items-center justify-center gap-[15px] py-[10px] mx-auto md:w-[119px] md:justify-start md:mx-0 md:h-[44px] md:gap-[15px] md:py-[10px]">
               <span className="font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-[#252B42]">Home</span>
-              <svg width="7" height="12" viewBox="0 0 7 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M1 1L6 6L1 11" stroke="#BDBDBD" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
+              <ChevronRight size={24} color="#737373" strokeWidth={2} className="flex-shrink-0" />
               <span className="font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-[#737373]">Shop</span>
             </nav>
           </div>
@@ -133,12 +133,12 @@ const ProductDetailPage = () => {
                     <>
                       {/* Sol ok */}
                       <button
-                        className="absolute left-10 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center transition-opacity"
+                        className="absolute left-2 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center transition-opacity"
                         onClick={() => setSelectedImage((selectedImage - 1 + 2) % 2)}
                         aria-label="Önceki görsel"
                         style={{padding: 0}}
                       >
-                        <ChevronLeft size={50} strokeWidth={1.5} color="#FFFFFF" />
+                        <ChevronLeft size={50} strokeWidth={1.5} color="#98BFEC" />
                       </button>
                       <img 
                         src={images[selectedImage] || images[0] || ''} 
@@ -147,12 +147,12 @@ const ProductDetailPage = () => {
                       />
                       {/* Sağ ok */}
                       <button
-                        className="absolute right-10 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center transition-opacity"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 z-10 flex items-center justify-center transition-opacity"
                         onClick={() => setSelectedImage((selectedImage + 1) % 2)}
                         aria-label="Sonraki görsel"
                         style={{padding: 0}}
                       >
-                        <ChevronRight size={50} strokeWidth={1.5} color="#FFFFFF" />
+                        <ChevronRight size={50} strokeWidth={1.5} color="#98BFEC" />
                       </button>
                     </>
                   ) : (
@@ -188,14 +188,15 @@ const ProductDetailPage = () => {
               <div className="w-[221px] h-[24px] flex items-center gap-[10px] absolute top-[53px] left-[24px] opacity-100 md:w-[221px] md:h-[24px] md:top-[53px] md:left-[24px]">
                 {/* Yıldızlar */}
                 <div className="flex items-center gap-[5px] w-[130px] h-[22px]">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star 
-                      key={star}
-                      size={22} 
-                      className={star <= Math.floor(productRating) ? "text-[#F3CD03]" : "text-[#BDBDBD]"}
-                      fill={star <= Math.floor(productRating) ? "#F3CD03" : "#BDBDBD"}
-                    />
-                  ))}
+                  {[1,2,3,4,5].map((starIdx) => {
+                    if (productRating >= starIdx) {
+                      return <FaStar key={starIdx} size={18} color="#F3CD03" style={{marginRight:'2px'}} />;
+                    } else if (productRating > starIdx - 1) {
+                      return <FaStarHalfAlt key={starIdx} size={18} color="#F3CD03" style={{marginRight:'2px'}} />;
+                    } else {
+                      return <FaRegStar key={starIdx} size={18} color="#BDBDBD" style={{marginRight:'2px'}} />;
+                    }
+                  })}
                 </div>
                 {/* 10 Reviews */}
                 <span className="text-[#737373] font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] whitespace-nowrap flex-nowrap flex items-center">10 Reviews</span>
@@ -249,25 +250,22 @@ const ProductDetailPage = () => {
                   }}
                   className="w-[40px] h-[40px] flex items-center justify-center rounded-full bg-white border border-[#E8E8E8] cursor-pointer hover:bg-gray-100 transition"
                 >
-                  <svg width="18" height="16" viewBox="0 0 18 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M8.995 14.5C8.7 14.5 8.4 14.4 8.2 14.2C3.1 9.7 0.6 7.4 0.6 4.8C0.6 2.6 2.3 0.9 4.5 0.9C5.7 0.9 6.8 1.5 7.5 2.4C8.2 1.5 9.3 0.9 10.5 0.9C12.7 0.9 14.4 2.6 14.4 4.8C14.4 7.4 11.9 9.7 6.8 14.2C6.6 14.4 6.3 14.5 6 14.5H8.995Z" stroke={isLiked ? "#E74C3C" : "#252B42"} strokeWidth="1" fill={isLiked ? "#E74C3C" : "none"}/>
-                  </svg>
+                  <Heart size={18} color={isLiked ? "#E74C3C" : "#252B42"} fill={isLiked ? "#E74C3C" : "none"} strokeWidth={1.5} />
                 </div>
                 {/* Sepet kutusu */}
                 <div className="w-[40px] h-[40px] flex items-center justify-center rounded-full bg-white border border-[#E8E8E8]">
-                  <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M2.5 5.5H16.5L15 13.5H4L2.5 5.5Z" stroke="#252B42" strokeWidth="1.2" fill="none"/>
-                    <path d="M6 5.5V4C6 3.17157 6.67157 2.5 7.5 2.5H11.5C12.3284 2.5 13 3.17157 13 4V5.5" stroke="#252B42" strokeWidth="1.2" fill="none"/>
-                    <circle cx="6" cy="15.5" r="1" stroke="#252B42" strokeWidth="1" fill="none"/>
-                    <circle cx="13" cy="15.5" r="1" stroke="#252B42" strokeWidth="1" fill="none"/>
-                  </svg>
+                  <div 
+                    onClick={productStock > 0 ? handleAddToCart : undefined}
+                    className={`w-full h-full flex items-center justify-center ${productStock > 0 ? 'cursor-pointer hover:bg-gray-100' : 'cursor-not-allowed opacity-50'}`}
+                    style={{ pointerEvents: productStock > 0 ? 'auto' : 'none' }}
+                    title={productStock > 0 ? 'Sepete ekle' : 'Stokta yok'}
+                  >
+                    <ShoppingCart size={22} color="#252B42" strokeWidth={1.5} />
+                  </div>
                 </div>
                 {/* Göz kutusu */}
                 <div className="w-[40px] h-[40px] flex items-center justify-center rounded-full bg-white border border-[#E8E8E8]">
-                  <svg width="16" height="11" viewBox="0 0 16 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <ellipse cx="8" cy="5.5" rx="7" ry="4.5" stroke="#000" strokeWidth="1" fill="none"/>
-                    <circle cx="8" cy="5.5" r="2" fill="#000" />
-                  </svg>
+                  <Eye size={20} color="#252B42" strokeWidth={1.5} />
                 </div>
               </div>
             </div>
@@ -340,9 +338,8 @@ const ProductDetailPage = () => {
                 <ul className="w-[303px] h-[126px] flex flex-col gap-[10px] md:w-[303px] md:h-[126px] md:gap-[10px] md:opacity-100">
                   {Array(4).fill().map((_, idx) => (
                     <li key={idx} className="w-[303px] h-[24px] flex items-center gap-[20px] overflow-visible md:w-[303px] md:h-[24px] md:gap-[20px] md:opacity-100">
-                      <svg className="flex-shrink-0" width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M1 1L7 7L1 13" stroke="#737373" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
+                      
+                      <ChevronRight size={16} color="#737373" strokeWidth={2} className="flex-shrink-0" />
                       <span className="font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-[#737373] whitespace-nowrap">the quick fox jumps over the lazy dog</span>
                     </li>
                   ))}
@@ -354,9 +351,7 @@ const ProductDetailPage = () => {
                 <ul className="w-[303px] h-[87px] flex flex-col gap-[10px] md:w-[303px] md:h-[92px] md:gap-[10px] md:opacity-100">
                   {Array(3).fill().map((_, idx) => (
                     <li key={idx} className="w-[303px] h-[24px] flex items-center gap-[20px] overflow-visible md:w-[303px] md:h-[24px] md:gap-[20px] md:opacity-100">
-                      <svg className="flex-shrink-0" width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M1 1L7 7L1 13" stroke="#737373" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
+                       <ChevronRight size={16} color="#737373" strokeWidth={2} className="flex-shrink-0" />
                       <span className="font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-[#737373] whitespace-nowrap">the quick fox jumps over the lazy dog</span>
                     </li>
                   ))}

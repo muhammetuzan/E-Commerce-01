@@ -1,4 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
+import InstaWhite from '../assets/ikonvektorleri/insta-white.png';
+import FbWhite from '../assets/ikonvektorleri/fbbeyaz.png';
+import TwWhite from '../assets/ikonvektorleri/twbeyaz.png';
+import YtWhite from '../assets/ikonvektorleri/ytbeyaz.png';
 import ReactDOM from 'react-dom';
 import { Link, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -92,6 +96,7 @@ export default function Navbar({ topBarColor = "#252B42", onSignUpClick, onLogin
 	const [searchQuery, setSearchQuery] = useState('');
 	const [searchResults, setSearchResults] = useState([]);
 	const [searchLoading, setSearchLoading] = useState(false);
+	const [showMobileUserMenu, setShowMobileUserMenu] = useState(false);
 
 	// refs for dropdowns/buttons (defined at top-level of component)
 	const dropdownRef = useRef(null);
@@ -106,8 +111,30 @@ export default function Navbar({ topBarColor = "#252B42", onSignUpClick, onLogin
 
 	const cartItemCount = cart.reduce((acc, item) => acc + (item.count || 0), 0);
 
-	const visibleResults = searchResults.slice(0, 5);
+	// Desktop ve mobil için görünür sonuç sayısı
+	const [visibleCount, setVisibleCount] = useState(5);
+	const visibleResults = searchResults.slice(0, visibleCount);
 	const hiddenCount = Math.max(0, searchResults.length - visibleResults.length);
+
+	// Mobilde daha fazla göster fonksiyonu
+	const handleMobileShowMore = () => {
+		setVisibleCount((prev) => Math.min(prev + 5, searchResults.length));
+	};
+
+	// Desktop search dropdown scroll handler
+	const handleDesktopSearchScroll = (e) => {
+		const el = e.target;
+		if (el.scrollTop + el.clientHeight >= el.scrollHeight - 10) {
+			if (visibleCount < searchResults.length) {
+				setVisibleCount((prev) => Math.min(prev + 5, searchResults.length));
+			}
+		}
+	};
+
+	// Reset visibleCount when searchQuery or searchOpen changes
+	useEffect(() => {
+		setVisibleCount(5);
+	}, [searchQuery, searchOpen]);
 
 	// Mobile Search Modal kaldırıldı, event handler kodu da temizlendi
 
@@ -194,38 +221,47 @@ export default function Navbar({ topBarColor = "#252B42", onSignUpClick, onLogin
 		<>
 			{/* Desktop Top Bar - Sadece lg ve üzeri ekranlarda göster */}
 			<div className="hidden md:block w-full text-white" style={{ backgroundColor: actualTopBarColor }}>
-				<div className="w-full">
-					<div className="max-w-[1440px] mx-auto w-full h-[58px] flex items-center px-0">
-						<div className="flex w-full h-[46px] items-center justify-between">
-							{/* 1. col-md-4 */}
-							<div className="flex items-center gap-2 pl-[25px]">
-								<button className="flex items-center gap-[5px] rounded-[5px] px-[10px] py-[10px] h-[44px] min-w-[145px]">
-									<Phone size={16} className="text-white" />
-									<h6 className="font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-white min-w-[104px]">(225) 555-0118</h6>
-								</button>
-								<button className="flex items-center gap-[5px] rounded-[5px] px-[10px] py-[10px] h-[44px] min-w-[260px]">
-									<Mail size={16} className="text-white" />
-									<h6 className="font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-white min-w-[180px]">michelle.rivera@example.com</h6>
-								</button>
+			  
+				<div className="w-[1437px] flex items-center h-[58px] mx-auto relative px-6">
+					<div className="flex items-center w-full h-[46px] flex-nowrap">
+						{/* 1. col-md-4 */}
+						<div className="w-[320px] h-[46px] flex  gap-[5px]  mr-auto">
+							<button className="flex items-center gap-[5px] rounded-[5px] px-[10px] py-[10px] h-[44px] min-w-[145px]">
+								<Phone size={16} className="text-white" />
+								<h6 className="font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-white min-w-[104px]">(225) 555-0118</h6>
+							</button>
+							<button className="flex items-center gap-[5px] rounded-[5px] px-[10px] py-[10px] h-[44px] min-w-[260px]">
+								<Mail size={16} className="text-white" />
+								<h6 className="font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-white min-w-[180px]">michelle.rivera@example.com</h6>
+							</button>
 							</div>
 							{/* 2. col-md-4 */}
-							<div className="mx-8 flex items-center justify-center">
+							<div className="w-[332px] h-[46px] flex items-center justify-center mx-auto">
 								<h6 className="font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-white text-center">
 									Follow Us and get a chance to win 80% off
 								</h6>
-								<div className="flex items-center gap-2 ml-3">
-									<a href="#" className="flex items-center justify-center w-[26px] h-[26px] p-[5px] rounded bg-transparent">
-										<Facebook size={16} className="text-white" />
-									</a>
-									<a href="#" className="flex items-center justify-center w-[26px] h-[26px] p-[5px] rounded bg-transparent">
-										<Twitter size={16} className="text-white" />
-									</a>
-								</div>
-							
+							</div>
+							{/* 3. col-md-4 */}
+							<div className="w-[233px] h-[46px] flex justify-center	 items-center gap-2 ml-3">
+								<span className="font-montserrat font-bold text-[14px] leading-[4px] tracking-[0.2px] text-white">
+									Follow Us :
+								</span>
+								<a href="#" className="flex items-center justify-center w-[26px] h-[26px] p-[5px] rounded bg-transparent">
+									<img src={InstaWhite} alt="Instagram" className="w-[16px] h-[16px] object-contain" />
+								</a>
+								<a href="#" className="flex items-center justify-center w-[26px] h-[26px] p-[5px] rounded bg-transparent">
+									<img src={YtWhite} alt="Youtube" className="w-[16px] h-[16px] object-contain" />
+								</a>
+								<a href="#" className="flex items-center justify-center w-[26px] h-[26px] p-[5px] rounded bg-transparent">
+									<img src={FbWhite} alt="Facebook" className="w-[16px] h-[16px] object-contain" />
+								</a>
+								<a href="#" className="flex items-center justify-center w-[26px] h-[26px] p-[5px] rounded bg-transparent">
+									<img src={TwWhite} alt="Twitter" className="w-[16px] h-[16px] object-contain" />
+								</a>
 							</div>
 						</div>
 					</div>
-				</div>
+				
 			</div>
 			{/* Desktop Navbar alt - Sadece lg ve üzeri ekranlarda göster */}
 			<nav className="hidden md:block w-full bg-white shadow z-50 relative">
@@ -255,9 +291,11 @@ export default function Navbar({ topBarColor = "#252B42", onSignUpClick, onLogin
 										className="flex items-center font-montserrat font-medium text-[14px] leading-[28px] tracking-[0.2px] text-[#252B42] focus:outline-none"
 									>
 										<span className="w-[38px] h-[28px]">Shop</span>
-										<svg className={`ml-2 transition-transform duration-200 ${dropdownOpen ? 'rotate-0' : '-rotate-90'}`} width="10" height="5.7" viewBox="0 0 10 5.7" fill="none" xmlns="http://www.w3.org/2000/svg">
-											<path d="M1 1L5 5L9 1" stroke="#252B42" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-										</svg>
+										<ChevronDown 
+											className={`ml-2 transition-transform duration-200 ${dropdownOpen ? 'rotate-0' : '-rotate-90'} text-[#252B42]`} 
+											size={16} 
+											strokeWidth={1.5} 
+										/>
 									</Link>
 									{dropdownOpen && (
 										<div
@@ -278,7 +316,7 @@ export default function Navbar({ topBarColor = "#252B42", onSignUpClick, onLogin
 															key={item.id}
 															to={`/shop/k/${item.title.toLowerCase()}/${item.id}`}
 															onClick={() => setDropdownOpen(false)}
-															className="font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-[#737373] hover:text-[#23A6F0] transition-colors cursor-pointer"
+															className="font-montserrat font-normaltext-[14px] leading-[24px] tracking-[0.2px] text-[#737373] hover:text-[#23A6F0] transition-colors cursor-pointer"
 														>
 															{item.title}
 														</Link>
@@ -299,7 +337,7 @@ export default function Navbar({ topBarColor = "#252B42", onSignUpClick, onLogin
 														key={item.id}
 														to={`/shop/e/${item.title.toLowerCase()}/${item.id}`}
 															onClick={() => setDropdownOpen(false)}
-															className="font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-[#737373] hover:text-[#23A6F0] transition-colors cursor-pointer"
+															className="font-montserrat font-normal text-[14px] leading-[24px] tracking-[0.2px] text-[#737373] hover:text-[#23A6F0] transition-colors cursor-pointer"
 														>
 															{item.title}
 														</Link>
@@ -311,7 +349,7 @@ export default function Navbar({ topBarColor = "#252B42", onSignUpClick, onLogin
 								</li>
 								<li className="w-[45px] h-[24px] flex items-center justify-center">
 									<Link to="/aboutus" className="w-[45px] h-[24px] flex items-center justify-center">
-										<span className="font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-center text-[#737373]">Home</span>
+										<span className="font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-center text-[#737373]">About</span>
 									</Link>
 								</li>
 								<li className="w-[50px] h-[24px] flex items-center justify-center">
@@ -392,18 +430,20 @@ export default function Navbar({ topBarColor = "#252B42", onSignUpClick, onLogin
 										>
 											{/* Search Input */}
 											<div className="px-6 py-3 border-b border-gray-200">
-												<input 
-													type="text"
-													placeholder="Ürün ara..."
-													value={searchQuery}
-													onChange={(e) => setSearchQuery(e.target.value)}
-													className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23A6F0] font-montserrat text-[14px]"
-													autoFocus
-												/>
+												   <input 
+													   type="text"
+													   placeholder="Ürün ara..."
+													   value={searchQuery}
+													   onChange={(e) => setSearchQuery(e.target.value)}
+													   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23A6F0] font-montserrat text-[14px]"
+													   autoFocus
+													   inputMode="search"
+													   style={{ fontSize: 16 }}
+												   />
 											</div>
 											
 											{/* Search Results */}
-											<div className="max-h-[400px] overflow-y-auto">
+											<div className="max-h-[400px] overflow-y-auto" onScroll={handleDesktopSearchScroll}>
 												{!searchQuery.trim() ? (
 													<div className="px-6 py-8 text-center">
 														<Search size={48} className="mx-auto text-gray-300 mb-3" />
@@ -669,13 +709,19 @@ export default function Navbar({ topBarColor = "#252B42", onSignUpClick, onLogin
 					{/* Right Icons */}
 					<div className="flex items-center gap-[25px] relative">
 				{user ? (
-					<div className="relative group">
-						<div className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition">
+					<div className="relative">
+						<div
+							className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition"
+							onClick={e => {
+								e.stopPropagation();
+								setShowMobileUserMenu(v => !v);
+							}}
+						>
 							<img 
 								src={getGravatarUrl(user.email)} 
 								alt={user.name}
 								className="w-6 h-6 rounded-full object-cover"
-								onError={(e) => {
+								onError={e => {
 									e.target.style.display = 'none';
 									e.target.nextElementSibling.style.display = 'flex';
 								}}
@@ -683,23 +729,30 @@ export default function Navbar({ topBarColor = "#252B42", onSignUpClick, onLogin
 							<User size={16} className="text-gray-400 hidden" />
 							<ChevronDown size={14} className="text-[#252B42]" />
 						</div>
-						
-						{/* Mobile User Dropdown */}
-						<div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
-							<Link 
-								to="/previous-orders"
-								className="block px-4 py-3 font-montserrat text-[13px] text-[#252B42] hover:bg-gray-50 border-b border-gray-100 first:rounded-t-lg"
-							>
-								Önceki Siparişlerim
-							</Link>
-							<button 
-								onClick={handleLogout}
-								className="w-full text-left px-4 py-3 font-montserrat text-[13px] text-red-600 hover:bg-red-50 rounded-b-lg flex items-center gap-2"
-							>
-								<LogOut size={14} />
-								Çıkış Yap
-							</button>
-						</div>
+						{showMobileUserMenu && (
+							<>
+								<div
+									className="fixed inset-0 z-40"
+									onClick={() => setShowMobileUserMenu(false)}
+								/>
+								<div className="left-1/2 -translate-x-1/2 absolute top-full mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 z-50 flex flex-col items-center" style={{ minWidth: '220px' }}>
+									<Link 
+										to="/previous-orders"
+										className="block px-4 py-3 font-montserrat text-[14px] text-[#252B42] hover:bg-gray-50 border-b border-gray-100 first:rounded-t-lg text-center"
+										onClick={() => setShowMobileUserMenu(false)}
+									>
+										Önceki Siparişlerim
+									</Link>
+									<button 
+										onClick={() => { handleLogout(); setShowMobileUserMenu(false); }}
+										className="w-full px-4 py-3 font-montserrat text-[14px] text-red-600 hover:bg-red-50 rounded-b-lg flex items-center gap-2 justify-center"
+									>
+										<LogOut size={14} />
+										Çıkış Yap
+									</button>
+								</div>
+							</>
+						)}
 					</div>
 				) : (
 					<button onClick={onLoginClick}>
@@ -768,7 +821,7 @@ export default function Navbar({ topBarColor = "#252B42", onSignUpClick, onLogin
 											</div>
 										) : (
 											<>
-												{searchResults.slice(0, 5).map((product, index) => (
+												{visibleResults.map((product, index) => (
 													<div
 														key={index}
 														role="button"
@@ -794,11 +847,14 @@ export default function Navbar({ topBarColor = "#252B42", onSignUpClick, onLogin
 														</div>
 													</div>
 												))}
-												{searchResults.length > 5 && (
-													<div className="px-6 py-3 text-center border-t border-gray-200 bg-gray-50">
-														<p className="font-montserrat text-[13px] text-gray-600">
-															+{searchResults.length - 5} ürün daha
-														</p>
+												{hiddenCount > 0 && (
+													<div 
+														onClick={e => e.stopPropagation()} 
+														onPointerDown={e => e.stopPropagation()} 
+														className="px-6 py-3 text-center border-t border-gray-200 bg-gray-50">
+														<button onClick={handleMobileShowMore} className="font-montserrat text-[13px] text-[#23A6F0] font-bold py-2 px-4 rounded bg-gray-100 hover:bg-gray-200 transition">
+															Daha fazla göster (+{hiddenCount})
+														</button>
 													</div>
 												)}
 											</>

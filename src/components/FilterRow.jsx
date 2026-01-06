@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setSort, setFilter } from "../store/actions";
 import { Grid, List } from "lucide-react";
+import { MdKeyboardArrowDown } from "react-icons/md";
+import FourSquareIcon from "../assets/ikonvektorleri/4kare.png";
 
 export default function FilterRow() {
     const dispatch = useDispatch();
@@ -47,13 +49,7 @@ export default function FilterRow() {
             <div className="w-[107px] h-[46px] flex items-center gap-[15px] justify-between">
               <button className="w-[46px] h-[46px] flex items-center justify-center rounded-[5px] border border-[#ECECEC] bg-white p-[15px]">
                 <span className="w-[16px] h-[16px] flex items-center justify-center">
-                  {/* 4 küçük kareden oluşan grid ikon */}
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" style={{marginTop: '1px', marginLeft: '1px'}}>
-                    <rect x="0" y="0" width="6" height="6" rx="2" fill="#252B42" />
-                    <rect x="8" y="0" width="6" height="6" rx="2" fill="#252B42" />
-                    <rect x="0" y="8" width="6" height="6" rx="2" fill="#252B42" />
-                    <rect x="8" y="8" width="6" height="6" rx="2" fill="#252B42" />
-                  </svg>
+                  <img src={FourSquareIcon} alt="Grid" width={14} height={14} style={{marginTop: '1px', marginLeft: '1px'}} />
                 </span>
               </button>
               <button className="w-[46px] h-[46px] flex items-center justify-center rounded-[5px] border border-[#ECECEC] bg-white p-[15px]">
@@ -77,9 +73,7 @@ export default function FilterRow() {
             {/* Sort Dropdown */}
             <div className="relative w-[141px] h-[50px] rounded-[5px] border border-[#DDDDDD] bg-[#F9F9F9] flex items-center px-3 cursor-pointer" onClick={() => setDropdownOpen((v) => !v)}>
               <span className="font-montserrat font-normal text-[14px] leading-[28px] tracking-[0.2px] text-[#737373]">{currentSortLabel}</span>
-              <svg className="absolute right-3 top-1/2 -translate-y-1/2" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 6L8 10L12 6" stroke="#737373" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+              <MdKeyboardArrowDown className="absolute right-3 top-1/2 -translate-y-1/2 text-[#737373]" size={16} />
               {dropdownOpen && (
                 <div className="absolute left-0 top-full mt-1 w-full rounded-[5px] border border-[#DDDDDD] bg-[#F9F9F9] shadow z-10">
                   {sortOptions.map((option) => (

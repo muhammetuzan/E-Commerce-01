@@ -74,11 +74,11 @@ export default function PreviousOrdersPage() {
     <div className="bg-[#FAFAFA] pb-8">
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
-        <div className="max-w-[1200px] mx-auto px-4 md:px-6 py-4 md:py-6">
-          <h1 className="font-montserrat font-bold text-[20px] md:text-[28px] text-[#252B42]">
+        <div className="max-w-[1200px] mx-auto px-4 md:px-6 py-4 md:py-6 flex flex-col items-start md:items-center">
+          <h1 className="font-montserrat font-bold text-[20px] md:text-[28px] text-[#252B42] text-center md:text-center w-full md:w-auto">
             Önceki Siparişlerim
           </h1>
-          <p className="font-montserrat text-[14px] text-gray-600 mt-2">
+          <p className="font-montserrat text-[14px] text-gray-600 mt-2 text-center md:text-center w-full md:w-auto">
             {user.name} - Toplam {orders.length} sipariş
           </p>
         </div>

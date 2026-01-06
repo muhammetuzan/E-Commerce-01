@@ -1,4 +1,5 @@
 import { Calendar, ChevronRight } from 'lucide-react';
+import grafikIcon from '../assets/ikonvektorleri/grafik.png';
 import blogImage1 from '../assets/resimler/6fa1d42dda5f231255f5a899906c50f4f3638388.jpg';
 import blogImage2 from '../assets/resimler/3f46bc27bfdeda7c44028b59453c136c10512828.jpg';
 import blogImage3 from '../assets/resimler/6e5a1e407b100e0e65dada874a961f311a92cfce.jpg';
@@ -115,18 +116,13 @@ export default function BlogSection() {
 
 										{/* Comments */}
 										<div className="w-[105px] h-[16px] flex gap-[5px] items-center">
-											<svg 
-												width="16" 
-												height="15" 
-												viewBox="0 0 16 15" 
-												fill="none"
-												className="w-[16px] h-[14.666666984558105px]"
-											>
-												<path 
-													d="M2 0.5C1.46957 0.5 0.960859 0.710714 0.585786 1.08579C0.210714 1.46086 0 1.96957 0 2.5V10.5C0 11.0304 0.210714 11.5391 0.585786 11.9142C0.960859 12.2893 1.46957 12.5 2 12.5H3.5L7.5 14.5L11.5 12.5H14C14.5304 12.5 15.0391 12.2893 15.4142 11.9142C15.7893 11.5391 16 11.0304 16 10.5V2.5C16 1.96957 15.7893 1.46086 15.4142 1.08579C15.0391 0.710714 14.5304 0.5 14 0.5H2Z" 
-													fill="#23A6F0"
-												/>
-											</svg>
+											  <img 
+												src={grafikIcon} 
+												alt="Comments" 
+												width={16} 
+												height={15} 
+												className="w-[16px] h-[14.666666984558105px]" 
+											  />
 											<span className="font-montserrat w-[84px] h-[16px] text-[12px] font-normal leading-[16px] tracking-[0.2px] text-[#737373]">
 												10 comments
 											</span>

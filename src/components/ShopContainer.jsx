@@ -1,4 +1,5 @@
 import React from "react";
+import { ChevronRight } from "lucide-react";
 
 export default function ShopContainer() {
   return (
@@ -31,21 +32,9 @@ export default function ShopContainer() {
               Home
             </span>
             {/* Vector icon: right arrow */}
-            <svg
-              width="7"
-              height="12"
-              viewBox="0 0 7 12"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M1 1L6 6L1 11"
-                stroke="#BDBDBD"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <span className="inline-flex items-center justify-center w-[16px] h-[16px]">
+              <ChevronRight size={16} strokeWidth={2} color="#BDBDBD" className="w-[16px] h-[16px] min-w-[16px] min-h-[16px] max-w-[16px] max-h-[16px]" />
+            </span>
             <span
               className="w-[37px] h-[24px] font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-center text-[#737373]"
             >

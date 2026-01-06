@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Trash2, Plus, Minus, ShoppingCart as CartIcon, X, Check } from "lucide-react";
+import { MdCheck } from "react-icons/md";
 import { removeFromCart, toggleCartItem, increaseCartItem, decreaseCartItem } from "../store/actions";
 import LoginModal from "../components/LoginModal";
 import SignUpModal from "../components/SignUpModal";
@@ -363,9 +364,9 @@ export default function ShoppingCartPage() {
                 {discount > 0 && (
                   <div className="flex justify-between items-center bg-green-50 -mx-2 px-2 py-2 rounded">
                     <span className="font-montserrat text-[14px] text-green-700 flex items-center gap-1">
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
+                      <span className="w-4 h-4 flex items-center justify-center rounded-full bg-green-600">
+                        <MdCheck size={12} color="#fff" />
+                      </span>
                       150 TL ve Üzeri Kargo Bedava (Satıcı Karşılar)
                     </span>
                     <span className="font-montserrat font-semibold text-[16px] text-green-700">
@@ -536,9 +537,9 @@ export default function ShoppingCartPage() {
             {discount > 0 && (
               <div className="flex justify-between items-center bg-green-50 -mx-2 px-2 py-2 rounded">
                 <span className="font-montserrat text-[11px] text-green-700 flex items-center gap-1">
-                  <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
+                  <span className="w-3 h-3 flex items-center justify-center rounded-full bg-green-600">
+                        <MdCheck size={12} color="#fff" />
+                      </span>
                   150 TL ve Üzeri Kargo Bedava
                 </span>
                 <span className="font-montserrat font-semibold text-[13px] text-green-700">

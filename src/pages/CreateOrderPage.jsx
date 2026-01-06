@@ -4,6 +4,8 @@ import { useHistory } from "react-router-dom";
 import { addressAPI, cardAPI, orderAPI } from "../store/api";
 import { CLEAR_CART } from "../store/actionTypes";
 import { Plus, MapPin, Edit2, Trash2, X, Check, CreditCard, ChevronDown, ChevronUp } from "lucide-react";
+import troyLogo from '../assets/bank/Troy_logo.png';
+import { MdCheck } from "react-icons/md";
 
 // Geçerli kuponlar (ShoppingCartPage ile aynı)
 const VALID_COUPONS = {
@@ -180,6 +182,7 @@ export default function CreateOrderPage() {
       setShowAddressForm(false);
       setEditingAddress(null);
       setFormType('shipping'); // Reset form type
+      setIsFormCollapsed(true); // Formu kapat
       fetchAddresses();
       setError('');
     } catch (err) {
@@ -365,6 +368,7 @@ export default function CreateOrderPage() {
         cvv: ''
       });
       setEditingCard(null);
+      setIsCardFormCollapsed(true); // Kart formunu kapat
       fetchCards();
       setError('');
     } catch (err) {
@@ -490,6 +494,9 @@ export default function CreateOrderPage() {
         
         // Home sayfasına yönlendir
         history.push('/');
+        if (window.innerWidth < 768) {
+          setTimeout(() => { window.scrollTo(0, 0); }, 150);
+        }
       }
     } catch (err) {
       console.error('Error creating order:', err);
@@ -564,7 +571,7 @@ export default function CreateOrderPage() {
           <div className="lg:col-span-2">
         {/* Adres Bilgileri Tab */}
         {activeTab === 'address' && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
             {/* Sol: Adres Listesi ve Seçim */}
             <div className="space-y-6">
               {/* Teslimat Adresi */}
@@ -626,11 +633,11 @@ export default function CreateOrderPage() {
                               <p className="font-montserrat text-[13px] text-gray-700">
                                 {address.name} {address.surname}
                               </p>
-                              <p className="font-montserrat text-[12px] text-gray-600 mt-1">
-                                {address.neighborhood}, {address.district}/{address.city}
-                              </p>
                               <p className="font-montserrat text-[12px] text-gray-600">
                                 {address.phone}
+                              </p>
+                              <p className="font-montserrat text-[12px] text-gray-600 mt-1">
+                                {address.neighborhood}, {address.district}/{address.city}
                               </p>
                             </div>
                             <div className="flex gap-2">
@@ -761,11 +768,11 @@ export default function CreateOrderPage() {
                                   <p className="font-montserrat text-[13px] text-gray-700">
                                     {address.name} {address.surname}
                                   </p>
-                                  <p className="font-montserrat text-[12px] text-gray-600 mt-1">
-                                    {address.neighborhood}, {address.district}/{address.city}
-                                  </p>
                                   <p className="font-montserrat text-[12px] text-gray-600">
                                     {address.phone}
+                                  </p>
+                                  <p className="font-montserrat text-[12px] text-gray-600 mt-1">
+                                    {address.neighborhood}, {address.district}/{address.city}
                                   </p>
                                 </div>
                                 <div className="flex gap-2">
@@ -1023,7 +1030,7 @@ export default function CreateOrderPage() {
         {activeTab === 'payment' && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Sol: Kayıtlı Kartlar */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
+            <div className="bg-white rounded-lg shadow-sm p-6 flex flex-col items-center justify-center md:items-start md:justify-start lg:items-center lg:justify-center">
               <h2 className="font-montserrat font-bold text-[18px] text-[#252B42] mb-4 flex items-center gap-2">
                 <CreditCard size={20} className="text-[#23A6F0]" />
                 Kart Bilgileri
@@ -1037,7 +1044,7 @@ export default function CreateOrderPage() {
                 </div>
               ) : (
                 <>
-                  <div className="space-y-3 mb-4">
+                  <div className="space-y-3 mb-4 flex flex-col items-center">
                     {cards.map(card => {
                       // Kart numarasını formatla
                       const fullNumber = card.card_no;
@@ -1048,9 +1055,10 @@ export default function CreateOrderPage() {
                           key={card.id}
                           onClick={() => setSelectedCard(card)}
                           className="cursor-pointer"
+                          style={{ width: '220px' }}
                         >
                           {/* Kart Başlığı ve Radio Button */}
-                          <div className="flex items-center justify-between mb-2" style={{width: '300px'}}>
+                          <div className="flex items-center justify-between mb-2" style={{width: '220px'}}>
                             {/* Sol: Radio Button + Title */}
                             <div className="flex items-center gap-2">
                               {/* Radio Button */}
@@ -1108,18 +1116,13 @@ export default function CreateOrderPage() {
                                 ? 'border-[#23A6F0] bg-blue-50'
                                 : 'border-gray-200 hover:border-gray-300'
                             }`}
-                            style={{width: '300px'}}
-                          >
+                            style={{width: '220px'}}>
                             {/* Kart Ön Yüzü Tasarımı */}
-                            <div className="relative bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg p-3 text-white mb-1" style={{aspectRatio: '1.58', maxWidth: '280px'}}>
-{/* Sağ Üst: Logo */}
-                            <div className="absolute top-4 right-4 flex gap-0.5">
-                              {/* Mastercard Logo */}
-                              <div className="flex">
-                                <div className="w-4 h-4 rounded-full bg-red-500"></div>
-                                <div className="w-4 h-4 rounded-full bg-orange-400 -ml-1"></div>
-                                </div>
-                              </div>
+                            <div className="relative bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg p-3 text-white mb-1" style={{aspectRatio: '1.585', maxWidth: '220px'}}>
+                            {/* Sağ Üst: Troy Logo */}
+                            <div className="absolute top-3 right-3 flex items-center">
+                              <img src={troyLogo} alt="Troy Logo" style={{ width: 38, height: 16, objectFit: 'contain' }} />
+                            </div>
 
                               {/* Sol Üst: İsim Soyisim */}
                               <div className="absolute top-4 left-4">
@@ -1127,11 +1130,15 @@ export default function CreateOrderPage() {
                                 <p className="text-[11px] font-semibold mt-0.5 truncate">{card.name_on_card}</p>
                               </div>
 
-                              {/* Sol Alt: Kart Numarası */}
-                              <div className="absolute bottom-4 left-4">
+                              {/* Tam Ortada: Kart Numarası */}
+                              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full flex justify-center">
                                 <p className="font-mono text-[13px] tracking-widest">{maskedNumber}</p>
                               </div>
 
+                              {/* Sol Alt: E-com Bank */}
+                              <div className="absolute bottom-4 left-4 text-left">
+                                <p className="text-[10px] font-bold text-white tracking-wide">E-com Bank</p>
+                              </div>
                               {/* Sağ Alt: Son Kullanma Tarihi */}
                               <div className="absolute bottom-4 right-4 text-right">
                                 <p className="text-[7px] text-gray-400 uppercase">Valid Thru</p>
@@ -1172,7 +1179,7 @@ export default function CreateOrderPage() {
 
             {/* Sağ: Kart Formu */}
             {(!isCardFormCollapsed || editingCard) ? (
-            <div className="bg-white rounded-lg shadow-sm p-6">
+            <div className="bg-white rounded-lg shadow-sm p-6 self-start">
               <div className="mb-6">
                 <div 
                   onClick={() => !editingCard && setIsCardFormCollapsed(!isCardFormCollapsed)}
@@ -1349,9 +1356,11 @@ export default function CreateOrderPage() {
             </div>
             )}
           </div>
-        )}
+          
+        )} 
           </div>
 
+          
           {/* Sağ: Sipariş Özeti */}
           <div className="lg:col-span-1">
             <div className="space-y-4">
@@ -1383,9 +1392,9 @@ export default function CreateOrderPage() {
                 {cart.reduce((total, item) => total + (item.product.price * item.count), 0) >= 150 && (
                   <div className="flex justify-between items-center bg-green-50 -mx-2 px-2 py-2 rounded">
                     <span className="font-montserrat text-[14px] text-green-700 flex items-center gap-1">
-                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
+                      <span className="w-4 h-4 flex items-center justify-center rounded-full bg-green-600">
+                        <MdCheck size={12} color="#fff" />
+                      </span>
                       150 TL ve Üzeri Kargo Bedava (Satıcı Karşılar)
                     </span>
                     <span className="font-montserrat font-semibold text-[16px] text-green-700">
