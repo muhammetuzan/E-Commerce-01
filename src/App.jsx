@@ -6,7 +6,7 @@ import store from "./store/store";
 import Navbar from "./components/Navbar";
 import Footer from "./layout/Footer";
 import PageContent from "./layout/PageContent";
-import SignUpModal from "./components/SignUpModal";
+
 import LoginModal from "./components/LoginModal";
 
 import HomePage from "./pages/HomePage";
@@ -15,7 +15,7 @@ import ProductDetailPage from "./pages/ProductDetailPage";
 import ContactPage from "./pages/ContactPage";
 import TeamPage from "./pages/TeamPage";
 import AboutUs from "./pages/AboutUs";
-import SignUpPage from "./pages/SignUpPage";
+
 import ShoppingCartPage from "./pages/ShoppingCartPage";
 import CreateOrderPage from "./pages/CreateOrderPage";
 import PreviousOrdersPage from "./pages/PreviousOrdersPage";
@@ -26,10 +26,7 @@ function AppContent({ onSignUpClick }) {
 	// Shop sayfasında yeşil, diğerlerinde koyu mavi
 	const topBarColor = location.pathname === "/shop" ? "#23856D" : "#252B42";
 	
-	// SignUp sayfası için özel render
-	if (location.pathname === "/signup") {
-		return <SignUpPage />;
-	}
+	
 
 	return (
 		<>
@@ -54,15 +51,14 @@ function AppContent({ onSignUpClick }) {
 }
 
 export default function App() {
-	const [showSignUpModal, setShowSignUpModal] = useState(false);
+
 	const [showLoginModal, setShowLoginModal] = useState(false);
 
 	return (
 		<Provider store={store}>
 			<Router>
 				<AppWrapper 
-					showSignUpModal={showSignUpModal} 
-					setShowSignUpModal={setShowSignUpModal}
+				
 					showLoginModal={showLoginModal}
 					setShowLoginModal={setShowLoginModal}
 				/>
@@ -77,7 +73,7 @@ import { setUser } from "./store/actions";
 import { verifyToken, fetchCategories, fetchProducts } from "./store/thunks";
 import { useEffect } from "react";
 
-function AppWrapper({ showSignUpModal, setShowSignUpModal, showLoginModal, setShowLoginModal }) {
+function AppWrapper({showLoginModal, setShowLoginModal }) {
 	const location = useLocation();
 	const dispatch = useDispatch();
 
@@ -117,7 +113,7 @@ function AppWrapper({ showSignUpModal, setShowSignUpModal, showLoginModal, setSh
 	return (
 		<>
 			<Navbar 
-				onSignUpClick={() => setShowSignUpModal(true)}
+				
 				onLoginClick={() => {
 					// Previous page'i localStorage'a kaydet
 					localStorage.setItem('previousPage', location.pathname);
@@ -126,7 +122,7 @@ function AppWrapper({ showSignUpModal, setShowSignUpModal, showLoginModal, setSh
 				isShopPage={location.pathname === "/shop" || location.pathname.startsWith("/product") || location.pathname.startsWith("/shop/")}
 			/>
 			<AppContent />
-			<SignUpModal isOpen={showSignUpModal} onClose={() => setShowSignUpModal(false)} />
+			
 			<LoginModal 
 				isOpen={showLoginModal} 
 				onClose={() => setShowLoginModal(false)}

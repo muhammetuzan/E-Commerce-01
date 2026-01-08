@@ -217,7 +217,7 @@ export default function ShopProductCards() {
   return (
     <>
       {/* Mobile Layout */}
-      <div className="w-full max-w-[414px] mx-auto bg-[#FFFFFF] block md:hidden lg:hidden">
+      <div className="w-full max-w-[414px] mx-auto bg-[#FFFFFF] block lg:hidden lg:hidden">
         <div className="w-full px-0 pt-6 pb-6 flex flex-col gap-5">
           <div className="w-full flex flex-col gap-5">
             {paginatedData.map((item, i) => (
@@ -247,11 +247,11 @@ export default function ShopProductCards() {
       </div>
 
       {/* Desktop Layout */}
-      <div className="hidden md:block w-full md:max-w-[1440px] md:mx-auto md:bg-[#FFFFFF]">
-        <div className="md:w-[1124px] md:mx-auto md:flex md:flex-col md:items-center md:justify-between md:pt-[48px] md:pb-[48px]">
-          <div className="w-full flex flex-col md:gap-[48px] md:items-center">
+      <div className="hidden lg:block w-full lg:max-w-[1440px] lg:mx-auto lg:bg-[#FFFFFF]">
+        <div className="lg:w-[1124px] lg:mx-auto lg:flex lg:flex-col lg:items-center lg:justify-between lg:pt-[48px] lg:pb-[48px]">
+          <div className="w-full flex flex-col lg:gap-[48px] lg:items-center">
             {desktopRows.length > 0 && desktopRows.map((row, rowIdx) => (
-              <div key={rowIdx} className="md:w-[1048px] md:flex md:flex-row md:gap-[30px] md:justify-center">
+              <div key={rowIdx} className="lg:w-[1048px] lg:flex lg:flex-row lg:gap-[30px] lg:justify-center">
                 {row.map((item, i) => {
                   if (item.isFromApi === true) {
                     return (
@@ -291,7 +291,7 @@ export default function ShopProductCards() {
             ))}
           </div>
           {/* Pagination */}
-          <div className="w-full flex items-center justify-center md:h-full md:mt-auto">
+          <div className="w-full flex items-center justify-center lg:h-full lg:mt-auto">
             <div className="w-full flex items-center justify-center bg-white">
               <Pagination
                 total={filter ? effectiveTotal : apiTotal}

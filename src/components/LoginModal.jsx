@@ -231,7 +231,8 @@ const LoginModal = ({ isOpen, onClose }) => {
       ></div>
 
       {/* Modal */}
-      <div className="w-full max-w-lg bg-white p-8 rounded-2xl shadow-2xl relative z-10 max-h-[90vh] overflow-y-auto">
+      <div className="w-full max-w-[404px] bg-white p-6 rounded-2xl shadow-2xl relative z-10 max-h-[90vh] overflow-y-auto box-border">
+
         {/* Close Button */}
         <button
           onClick={onClose}

@@ -34,17 +34,17 @@ export default function FilterRow() {
       ? sortOptions.find(opt => opt.value === sort)?.label || 'Sort'
       : 'Sort';
   return (
-    <div className="w-[412px] h-[216px] mx-auto bg-white md:w-full md:h-[98px] md:bg-white md:flex md:items-center md:justify-center">
-      <div className="w-[412px] h-[216px] pt-[24px] pb-[24px] flex items-center justify-center md:w-[1050px] md:h-[98px] md:bg-white md:mx-auto md:flex md:items-center md:gap-[80px] md:pt-[24px] md:pb-[24px]">
-        <div className="w-[252px] h-[168px] flex flex-col gap-[24px] items-center justify-center md:w-[1049px] md:h-[50px] md:flex-row md:justify-between md:gap-0">
+    <div className="w-[412px] h-[216px] mx-auto bg-white lg:w-full lg:h-[98px] lg:bg-white lg:flex lg:items-center lg:justify-center">
+      <div className="w-[412px] h-[216px] pt-[24px] pb-[24px] flex items-center justify-center lg:w-[1050px] lg:h-[98px] lg:bg-white lg:mx-auto lg:flex lg:items-center lg:gap-[80px] lg:pt-[24px] lg:pb-[24px]">
+        <div className="w-[252px] h-[168px] flex flex-col gap-[24px] items-center justify-center lg:w-[1049px] lg:h-[50px] lg:flex-row lg:justify-between lg:gap-0">
           {/* Üstteki sort: sonuç sayısı */}
-          <div className="w-[168px] h-[24px] flex items-center justify-center pr-[1px] pl-[1px] md:justify-start">
+          <div className="w-[168px] h-[24px] flex items-center justify-center pr-[1px] pl-[1px] lg:justify-start">
             <span className="w-[166px] h-[24px] flex items-center justify-center font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-[#737373] text-center">
               Showing all {total} results
             </span>
           </div>
           {/* Ortadaki sort: Views ikonları */}
-          <div className="w-[177px] h-[46px] flex items-center gap-[15px] px-[1px] justify-between md:w-[177px] md:h-[46px] md:gap-[15px] md:px-[1px]">
+          <div className="w-[177px] h-[46px] flex items-center gap-[15px] px-[1px] justify-between lg:w-[177px] lg:h-[46px] lg:gap-[15px] lg:px-[1px]">
             <span className="w-[53px] h-[24px] font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-[#737373] flex items-center">Views:</span>
             <div className="w-[107px] h-[46px] flex items-center gap-[15px] justify-between">
               <button className="w-[46px] h-[46px] flex items-center justify-center rounded-[5px] border border-[#ECECEC] bg-white p-[15px]">
@@ -60,7 +60,7 @@ export default function FilterRow() {
             </div>
           </div>
           {/* Alttaki sort: Sort ve Filter input */}
-          <div className="w-[252px] h-[50px] flex items-center gap-[15px] px-[1px] justify-center md:w-[400px] md:h-[50px] md:justify-end md:gap-[15px] md:px-[1px]">
+          <div className="w-[252px] h-[50px] flex items-center gap-[15px] px-[1px] justify-center lg:w-[400px] lg:h-[50px] lg:justify-end lg:gap-[15px] lg:px-[1px]">
             {/* Filter Input */}
             <input
               type="text"

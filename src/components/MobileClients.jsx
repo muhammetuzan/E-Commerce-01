@@ -20,30 +20,30 @@ const logos = [
 export default function MobileClients({ bg = "#FAFAFA" }) {
   // Her logo için kutu ölçüleri (mobil ve desktop)
   const boxStyles = [
-    "w-[153px] h-[50px] md:w-[153px] md:h-[34px]",   // hooli
-    "w-[146px] h-[99px] md:w-[146px] md:h-[59px]",  // lyft
-    "w-[152px] h-[109px] md:w-[152px] md:h-[75px]", // piperhat
-    "w-[149px] h-[60px] md:w-[151px] md:h-[42px]",  // stripe
-    "w-[151px] h-[92px] md:w-[151px] md:h-[62px]",  // aws
-    "w-[151px] h-[142px] md:w-[151px] md:h-[72px]", // reddit
+    "w-[153px] h-[50px] lg:w-[153px] lg:h-[34px]",   // hooli
+    "w-[146px] h-[99px] lg:w-[146px] lg:h-[59px]",  // lyft
+    "w-[152px] h-[109px] lg:w-[152px] lg:h-[75px]", // piperhat
+    "w-[149px] h-[60px] lg:w-[151px] lg:h-[42px]",  // stripe
+    "w-[151px] h-[92px] lg:w-[151px] lg:h-[62px]",  // aws
+    "w-[151px] h-[142px] lg:w-[151px] lg:h-[72px]", // reddit
   ];
   const imgStyles = [
-    "md:w-[103px] md:h-[34px]",   // hooli
-    "md:w-[83px] md:h-[59px]",   // lyft
-    "md:w-[102px] md:h-[75px]",  // piperhat
-    "md:w-[103px] md:h-[42px]",  // stripe
-    "md:w-[104px] md:h-[62px]",  // aws
-    "md:w-[76px] md:h-[72px]",   // reddit
+    "lg:w-[103px] lg:h-[34px]",   // hooli
+    "lg:w-[83px] lg:h-[59px]",   // lyft
+    "lg:w-[102px] lg:h-[75px]",  // piperhat
+    "lg:w-[103px] lg:h-[42px]",  // stripe
+    "lg:w-[104px] lg:h-[62px]",  // aws
+    "lg:w-[76px] lg:h-[72px]",   // reddit
   ];
 
   return (
-    <section className={`w-[414px] h-[1173px] flex flex-col justify-center items-center mx-auto md:w-[1440px] md:h-[175px] md:mx-auto`} style={{ background: '#FAFAFA' }}>
-      <div className="w-[414px] h-[952px] md:w-[1050px] md:h-[175px] md:mx-auto">
-        <div className="w-full flex flex-col items-center pt-[50px] pb-[50px] gap-[60px] md:w-[1054px] md:h-[175px] md:flex-row md:gap-[30px] md:items-center md:pt-[50px] md:pb-[50px]">
+    <section className={`w-[414px] h-[1173px] flex flex-col justify-center items-center mx-auto lg:w-[1440px] lg:h-[175px] lg:mx-auto`} style={{ background: '#FAFAFA' }}>
+      <div className="w-[414px] h-[952px] lg:w-[1050px] lg:h-[175px] lg:mx-auto">
+        <div className="w-full flex flex-col items-center pt-[50px] pb-[50px] gap-[60px] lg:w-[1054px] lg:h-[175px] lg:flex-row lg:gap-[30px] lg:items-center lg:pt-[50px] lg:pb-[50px]">
           {logos.map((logo, i) => (
             <div
               key={i}
-              className={`flex items-center justify-center ${boxStyles[i]} md:rounded-none`}
+              className={`flex items-center justify-center ${boxStyles[i]} lg:rounded-none`}
               style={{ opacity: 1 }}
             >
               <img

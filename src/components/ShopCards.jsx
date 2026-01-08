@@ -15,17 +15,17 @@ export default function ShopCards() {
 
 	return (
 		<div className="w-full flex justify-center">
-			<section className="w-full bg-[#FAFAFA] flex flex-col items-center py-20 md:max-w-[1440px] md:min-h-[770px] md:rounded-xl md:mx-auto md:justify-center">
+			<section className="w-full bg-[#FAFAFA] flex flex-col items-center py-20 lg:max-w-[1440px] lg:min-h-[770px] lg:rounded-xl lg:mx-auto lg:justify-center">
 				{/* Header */}
 				<div className="flex flex-col gap-2 items-center mb-12">
-					<h2 className="font-montserrat font-bold text-[24px] leading-[32px] tracking-[0.1px] text-[#252B42] text-center md:text-[32px] md:leading-[40px]">TOP CATEGORIES</h2>
-					<p className="font-montserrat font-normal text-[14px] leading-[20px] tracking-[0.2px] text-[#737373] text-center md:text-[16px] md:leading-[24px]">
-						Most rated categories<br className="block md:hidden" /> on our platform
+					<h2 className="font-montserrat font-bold text-[24px] leading-[32px] tracking-[0.1px] text-[#252B42] text-center lg:text-[32px] lg:leading-[40px]">TOP CATEGORIES</h2>
+					<p className="font-montserrat font-normal text-[14px] leading-[20px] tracking-[0.2px] text-[#737373] text-center lg:text-[16px] lg:leading-[24px]">
+						Most rated categories<br className="block lg:hidden" /> on our platform
 					</p>
 				</div>
 
 				{/* Categories Grid */}
-				<div className="flex flex-col gap-8 items-center w-full md:grid md:grid-cols-3 md:gap-4 md:w-full md:max-w-[1100px] md:mx-auto md:px-4">
+				<div className="flex flex-col gap-8 items-center w-full lg:grid lg:grid-cols-3 lg:gap-4 lg:w-full lg:max-w-[1100px] lg:mx-auto lg:px-4">
 					{top5Categories.map((category, index) => {
 					// API'de boş kategorilerin id'lerini doğru id'lerle değiştir
 					let categoryId = category.id;
@@ -37,7 +37,7 @@ export default function ShopCards() {
 							key={category.id}
 						to={`/shop/${category.gender}/${category.title.toLowerCase()}/${categoryId}`}
 							className={`relative ${
-								index === 0 ? 'w-[324px] h-[500px] md:col-span-1 md:row-span-2' : 'w-[324px] h-[250px] md:w-full md:h-[250px]'
+								index === 0 ? 'w-[324px] h-[500px] lg:col-span-1 lg:row-span-2' : 'w-[324px] h-[250px] lg:w-full lg:h-[250px]'
 							} rounded overflow-hidden hover:shadow-lg transition`}
 						>
 							<img 

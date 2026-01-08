@@ -59,7 +59,7 @@ export default function Pagination({ total = 12, perPage = 4, onPageChange, curr
   return (
     <div className="flex flex-col items-center justify-center gap-3 py-8 px-4">
       {/* Üst kısım: First, Prev, Sayfa Kutucukları, Next, Last */}
-      <div className="flex items-center justify-center gap-2 flex-wrap md:flex-nowrap">
+      <div className="flex items-center justify-center gap-2 flex-wrap lg:flex-nowrap">
         {/* First Butonu */}
         <button
           onClick={() => handlePage(1)}
@@ -115,7 +115,7 @@ export default function Pagination({ total = 12, perPage = 4, onPageChange, curr
       </div>
 
       {/* Alt kısım: Sayfa Göstergesi ve Input Kutucuğu */}
-      <div className="flex items-center gap-4 md:gap-6">
+      <div className="flex items-center gap-4 lg:gap-6">
         <div className="flex items-center gap-2">
           <span className="text-sm text-gray-600">Sayfaya git:</span>
           <input

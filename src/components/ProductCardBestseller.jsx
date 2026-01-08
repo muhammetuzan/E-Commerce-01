@@ -37,18 +37,18 @@ const ProductCardBestseller = ({ image, name = "Graphic Design", price = 16.48, 
 
   return (
   <div 
-    className={`w-[348px] h-[589px] bg-white rounded-[9px] overflow-hidden flex flex-col md:w-[238px] md:h-[442px] ${id ? 'cursor-pointer hover:shadow-lg transition' : ''}`}
+    className={`w-[348px] h-[589px] bg-white rounded-[9px] overflow-hidden flex flex-col lg:w-[238px] lg:h-[442px] ${id ? 'cursor-pointer hover:shadow-lg transition' : ''}`}
     onClick={handleClick}
     role={id ? "button" : undefined}
     tabIndex={id ? 0 : undefined}
     onKeyPress={id ? (e) => { if (e.key === 'Enter') handleClick(); } : undefined}
   >
     {/* Image section */}
-    <div className="w-[348px] h-[427px] flex items-center justify-center bg-gray-100 md:w-[238px] md:h-[280px]">
+    <div className="w-[348px] h-[427px] flex items-center justify-center bg-gray-100 lg:w-[238px] lg:h-[280px]">
       <img src={image} alt={name} className="w-full h-full object-cover" />
     </div>
     {/* Frame 3: Info section */}
-    <div className="w-[348px] h-[162px] flex flex-col justify-between pt-[25px] pr-[25px] pb-[35px] pl-[25px] md:w-[238px] md:h-[162px]">
+    <div className="w-[348px] h-[162px] flex flex-col justify-between pt-[25px] pr-[25px] pb-[35px] pl-[25px] lg:w-[238px] lg:h-[162px]">
       <h4 className="font-montserrat font-bold text-[18px] leading-[28px] tracking-[0.1px] text-[#252B42] text-center line-clamp-2">{name}</h4>
       <div className="flex gap-2 items-center justify-center">
         <span className="font-montserrat font-bold text-[16px] leading-[24px] tracking-[0.1px] text-[#BDBDBD]">${(price * 1.5).toFixed(2)}</span>

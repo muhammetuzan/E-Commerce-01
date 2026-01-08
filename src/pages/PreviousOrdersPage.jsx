@@ -71,20 +71,22 @@ export default function PreviousOrdersPage() {
   }
 
   return (
-    <div className="bg-[#FAFAFA] pb-8">
+  <>
+    {/* Mobilde max genişlik sınırı, desktopta normal max-width */}
+     <div className="w-full bg-[#fAFAFA] max-w-[410px] lg:max-w-[1200px] mx-auto    lg:px-6"> 
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
-        <div className="max-w-[1200px] mx-auto px-4 md:px-6 py-4 md:py-6 flex flex-col items-start md:items-center">
-          <h1 className="font-montserrat font-bold text-[20px] md:text-[28px] text-[#252B42] text-center md:text-center w-full md:w-auto">
+        <div className="max-w-[1200px] mx-auto px-4 lg:px-6 py-4 lg:py-6 flex flex-col items-start lg:items-center">
+          <h1 className="font-montserrat font-bold text-[20px] lg:text-[28px] text-[#252B42] text-center lg:text-center w-full lg:w-auto">
             Önceki Siparişlerim
           </h1>
-          <p className="font-montserrat text-[14px] text-gray-600 mt-2 text-center md:text-center w-full md:w-auto">
+          <p className="font-montserrat text-[14px] text-gray-600 mt-2 text-center lg:text-center w-full lg:w-auto">
             {user.name} - Toplam {orders.length} sipariş
           </p>
         </div>
       </div>
 
-      <div className="max-w-[1200px] mx-auto px-4 md:px-6 py-8">
+      <div className="max-w-[1200px] mx-auto px-4 lg:px-6 py-8">
         {error && (
           <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
             <p className="font-montserrat text-[14px] text-red-700">{error}</p>
@@ -95,7 +97,7 @@ export default function PreviousOrdersPage() {
           <div className="bg-white rounded-lg shadow-sm p-12 text-center">
             <Package size={48} className="mx-auto text-gray-300 mb-4" />
             <p className="font-montserrat text-[16px] text-gray-600">
-              Henüz siparış vermemisiniz.
+              Henüz sipariş vermediniz.
             </p>
             <button
               onClick={() => history.push('/shop')}
@@ -294,5 +296,6 @@ export default function PreviousOrdersPage() {
         )}
       </div>
     </div>
+    </>
   );
 }

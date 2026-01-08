@@ -13,7 +13,7 @@ import aboutUsImg from "../assets/AboutUs/7466f01545eb1f33b39fa1e1f6b0ddf5bb7033
 
 // VideoCard Component (Tailwind only)
 const VideoCard = ({ imageSrc = videoCardImg, imageAlt = "Video" }) => (
-  <div className="w-[307px] h-[316px] rounded-[12.3px] overflow-hidden relative opacity-100 md:w-[989px] md:h-[540px] md:opacity-100 md:rounded-[20px]">
+  <div className="w-[307px] h-[316px] rounded-[12.3px] overflow-hidden relative opacity-100 lg:w-[989px] lg:h-[540px] lg:opacity-100 lg:rounded-[20px]">
     {/* Media bg-cover with image */}
     <div className="w-full h-full bg-cover relative">
       <img
@@ -42,62 +42,62 @@ const VideoCard = ({ imageSrc = videoCardImg, imageAlt = "Video" }) => (
 const AboutUs = () => (
   <div className="w-full min-h-screen bg-white flex flex-col items-center">
     {/* About Us Container */}
-    <div className="w-[418px] h-[1080px] flex flex-col items-center mx-auto md:w-[1440px] md:h-[758px]  md:relative md:flex md:items-center md:justify-center">
+    <div className="w-[418px] h-[1080px] flex flex-col items-center mx-auto lg:w-[1440px] lg:h-[758px]  lg:relative lg:flex lg:items-center lg:justify-center">
       {/* Row */}
-      <div className="w-[418px] h-[1071px] flex flex-col items-center mx-auto md:w-[1044px] md:h-[321px] md:gap-[30px] md:bg-[#FFFFFF] md:mx-auto md:flex-row md:justify-start md:items-start">
+      <div className="w-[418px] h-[1071px] flex flex-col items-center mx-auto lg:w-[1044px] lg:h-[321px] lg:gap-[30px] lg:bg-[#FFFFFF] lg:mx-auto lg:flex-row lg:justify-start lg:items-start">
         {/* Main Content */}
         <div className="w-[418px] h-[590px] flex flex-col items-center justify-center gap-[40px]
-          md:w-[599px] md:h-[321px] md:items-start md:justify-center md:gap-[35px]">
+          lg:w-[599px] lg:h-[321px] lg:items-start lg:justify-center lg:gap-[35px]">
           {/* Desktop h5 başlık */}
-          <h5 className="hidden md:block w-[149px] h-[24px] font-montserrat font-bold text-[16px] leading-[24px] tracking-[0.1px] text-[#252B42] text-left whitespace-nowrap">ABOUT COMPANY</h5>
+          <h5 className="hidden lg:block w-[149px] h-[24px] font-montserrat font-bold text-[16px] leading-[24px] tracking-[0.1px] text-[#252B42] text-left whitespace-nowrap">ABOUT COMPANY</h5>
           {/* h1 başlık */}
           <h1 className="w-[213px] h-[50px] font-montserrat font-bold text-[40px] leading-[50px] tracking-[0.2px] text-center text-[#252B42] whitespace-nowrap
-            md:w-[542px] md:h-[80px] md:text-[58px] md:leading-[80px] md:tracking-[0.2px] md:text-left">ABOUT US</h1>
+            lg:w-[542px] lg:h-[80px] lg:text-[58px] lg:leading-[80px] lg:tracking-[0.2px] lg:text-left">ABOUT US</h1>
           {/* h4 açıklama */}
           <h4 className="w-[277px] h-[120px] font-montserrat font-normal text-[20px] leading-[30px] tracking-[0.2px] text-center text-[#737373]
-            md:w-[376px] md:h-[60px] md:text-[20px] md:leading-[30px] md:tracking-[0.2px] md:text-left">We know how large <span className="md:hidden"><br />objects will act, but things <br />on a small scale just do <br />not act that way.</span><span className="hidden md:inline">objects will act, <br />but things on a small scale</span></h4>
+            lg:w-[376px] lg:h-[60px] lg:text-[20px] lg:leading-[30px] lg:tracking-[0.2px] lg:text-left">We know how large <span className="lg:hidden"><br />objects will act, but things <br />on a small scale just do <br />not act that way.</span><span className="hidden lg:inline">objects will act, <br />but things on a small scale</span></h4>
           {/* Buton */}
-          <button className="w-[195px] h-[52px] flex items-center justify-center gap-[10px] pt-[15px] pr-[40px] pb-[15px] pl-[40px] rounded-[5px] bg-[#23A6F0] md:mt-auto">
+          <button className="w-[195px] h-[52px] flex items-center justify-center gap-[10px] pt-[15px] pr-[40px] pb-[15px] pl-[40px] rounded-[5px] bg-[#23A6F0] lg:mt-auto">
             <span className="w-[115px] h-[22px] font-montserrat font-bold text-[14px] leading-[22px] tracking-[0.2px] text-center text-white">Get Quote Now</span>
           </button>
         </div>
         {/* None Bölümü - Mobil ve desktop uyumlu */}
         <div
-          className="w-full flex justify-center mt-8 md:absolute md:w-[632px] md:h-[612px] md:top-[0px] md:left-[742px] md:mt-0"
+          className="w-full flex justify-center mt-8 lg:absolute lg:w-[632px] lg:h-[612px] lg:top-[0px] lg:left-[742px] lg:mt-0"
           style={{ pointerEvents: 'none' }}
         >
           <AboutNoneBg
             imgSrc={aboutUsImg}
             imgAlt="About Us Visual"
-            imgClassName=" md:!top-[-65px]"
+            imgClassName=" lg:!top-[-65px]"
           />
         </div>               
       </div>
     </div>
     {/* Content Section (Figma specs) */}
-    <div  className="w-[414px] h-[500px] mx-auto flex flex-col items-center justify-center bg-[#FFFFFF] md:bg-green md:w-[1440px] md:h-[236px] md:pt-[24px] md:pb-[24px] md:flex md:items-center md:justify-center">
-      <div className="w-[381px] h-[340px] flex flex-col items-center md:w-[1018px] md:h-[188px] md:gap-[60px] relative">
+    <div  className="w-[414px] h-[500px] mx-auto flex flex-col items-center justify-center bg-[#FFFFFF] lg:bg-green lg:w-[1440px] lg:h-[236px] lg:pt-[24px] lg:pb-[24px] lg:flex lg:items-center lg:justify-center">
+      <div className="w-[381px] h-[340px] flex flex-col items-center lg:w-[1018px] lg:h-[188px] lg:gap-[60px] relative">
         {/* p0: Problems trying */}
-        <div className="w-full relative h-[44px] md:h-full">
-          <p className="w-[116px] h-[20px] mt-[24px] mx-auto font-montserrat font-normal text-[14px] leading-[20px] tracking-[0.2px] text-[#E74040] text-center md:absolute md:top-[24px] md:left-[16px] md:mt-0 md:mx-0">
+        <div className="w-full relative h-[44px] lg:h-full">
+          <p className="w-[116px] h-[20px] mt-[24px] mx-auto font-montserrat font-normal text-[14px] leading-[20px] tracking-[0.2px] text-[#E74040] text-center lg:absolute lg:top-[24px] lg:left-[16px] lg:mt-0 lg:mx-0">
             Problems trying
           </p>
        
         {/* h2 başlık */}
        
           <h2 className="w-[269px] h-[128px] mt-[48px] mx-auto font-montserrat font-bold text-[24px] leading-[32px] tracking-[0.1px] text-[#252B42] text-center
-            md:w-[394px] md:h-[96px] md:absolute md:top-[72px] md:left-[16px] md:mt-0 md:mx-0 md:text-left">
+            lg:w-[394px] lg:h-[96px] lg:absolute lg:top-[72px] lg:left-[16px] lg:mt-0 lg:mx-0 lg:text-left">
             Met minim Mollie non br desert Alamo est sit cliquey dolor do met sent.
           </h2>
         
         <p className="w-[353px] h-[60px] mt-[80px] ml-[20px] font-montserrat font-normal text-[14px] leading-[20px] tracking-[0.2px] text-[#737373] text-left flex flex-col justify-end
-          md:w-[545px] md:h-[40px] md:absolute md:top-[72px] md:right-[16px] md:mt-0 md:text-left md:justify-start">
-          <span className="md:hidden">
+          lg:w-[545px] lg:h-[40px] lg:absolute lg:top-[72px] lg:right-[16px] lg:mt-0 lg:text-left lg:justify-start">
+          <span className="lg:hidden">
             Problems trying to resolve the conflict between<br />
             the two major realms of Classical physics:<br />
             Newtonian mechanics
           </span>
-          <span className="hidden md:inline">
+          <span className="hidden lg:inline">
             Problems trying to resolve the conflict between the two major realms of<br />
             Classical physics: Newtonian mechanics
           </span>
@@ -106,62 +106,62 @@ const AboutUs = () => (
     </div>
     </div>
     {/* Stats Section - Sadece mobil layout ve iki div */}
-    <div className="w-[414px] h-[1006px] opacity-100 mx-auto flex flex-col items-center justify-center bg-white md:w-[1440px] md:h-[264px] md:opacity-100">
+    <div className="w-[414px] h-[1006px] opacity-100 mx-auto flex flex-col items-center justify-center bg-white lg:w-[1440px] lg:h-[264px] lg:opacity-100">
       {/* row bölümü - stats içinde ortalanmış */}
-      <div className="w-[241px] h-[716px] bg-[#FFFFFF] opacity-100 mx-auto flex flex-col justify-between md:flex-row md:items-center md:gap-[30px] md:w-[1049px] md:h-[104px] md:opacity-100 md:mx-auto">
+      <div className="w-[241px] h-[716px] bg-[#FFFFFF] opacity-100 mx-auto flex flex-col justify-between lg:flex-row lg:items-center lg:gap-[30px] lg:w-[1049px] lg:h-[104px] lg:opacity-100 lg:mx-auto">
         {/* 1. col-md-3 */}
-        <div className="w-[240px] h-[104px] flex flex-col items-center justify-center mb-4 md:mb-0">
+        <div className="w-[240px] h-[104px] flex flex-col items-center justify-center mb-4 lg:mb-0">
           <span className="w-[100px] h-[80px] font-montserrat font-bold text-[58px] leading-[80px] tracking-[0.2px] text-center text-[#252B42] flex items-center justify-center">15K</span>
           <span className="w-[146px] h-[24px] font-montserrat font-bold text-[16px] leading-[24px] tracking-[0.1px] text-center text-[#737373] flex items-center justify-center mt-2 whitespace-nowrap">Happy Customers</span>
         </div>
         {/* 2. col-md-3 */}
-        <div className="w-[240px] h-[104px] flex flex-col items-center justify-center mb-4 md:mb-0">
+        <div className="w-[240px] h-[104px] flex flex-col items-center justify-center mb-4 lg:mb-0">
           <span className="w-[140px] h-[80px] font-montserrat font-bold text-[58px] leading-[80px] tracking-[0.2px] text-center text-[#252B42] flex items-center justify-center">150K</span>
           <span className="w-[134px] h-[24px] font-montserrat font-bold text-[16px] leading-[24px] tracking-[0.1px] text-center text-[#737373] flex items-center justify-center mt-2 whitespace-nowrap">Monthly Visitors</span>
         </div>
         {/* 3. col-md-3 */}
-        <div className="w-[240px] h-[104px] flex flex-col items-center justify-center mb-4 md:mb-0">
+        <div className="w-[240px] h-[104px] flex flex-col items-center justify-center mb-4 lg:mb-0">
           <span className="w-[59px] h-[80px] font-montserrat font-bold text-[58px] leading-[80px] tracking-[0.2px] text-center text-[#252B42] flex items-center justify-center">15</span>
           <span className="w-[177px] h-[24px] font-montserrat font-bold text-[16px] leading-[24px] tracking-[0.1px] text-center text-[#737373] flex items-center justify-center mt-2 whitespace-nowrap">Countries Worldwide</span>
         </div>
         {/* 4. col-md-3 */}
-        <div className="w-[240px] h-[104px] flex flex-col items-center justify-center md:mb-0">
+        <div className="w-[240px] h-[104px] flex flex-col items-center justify-center lg:mb-0">
           <span className="w-[138px] h-[80px] font-montserrat font-bold text-[58px] leading-[80px] tracking-[0.2px] text-center text-[#252B42] flex items-center justify-center">100+</span>
           <span className="w-[104px] h-[24px] font-montserrat font-bold text-[16px] leading-[24px] tracking-[0.1px] text-center text-[#737373] flex items-center justify-center mt-2 whitespace-nowrap">Top Partners</span>
         </div>
       </div>
     </div>
-    <div className="w-[414px] h-[477px] opacity-100 bg-[#FFFFFF] flex items-center justify-center md:w-[1440px] md:h-[764px] md:opacity-100 md:flex md:items-center md:justify-center">
+    <div className="w-[414px] h-[477px] opacity-100 bg-[#FFFFFF] flex items-center justify-center lg:w-[1440px] lg:h-[764px] lg:opacity-100 lg:flex lg:items-center lg:justify-center">
       <VideoCard />      
     </div>
-    {/* Meet Team Section - Mobile only, all desktop (md:) styles removed */}
-    <div className="w-[414px] h-[1627px] opacity-100 flex items-center justify-center mx-auto bg-white md:w-[1440px] md:h-[826px] md:opacity-100 md:flex md:items-center  md:justify-center">
+    {/* Meet Team Section - Mobile only, all desktop (lg:) styles removed */}
+    <div className="w-[414px] h-[1627px] opacity-100 flex items-center justify-center mx-auto bg-white lg:w-[1440px] lg:h-[826px] lg:opacity-100 lg:flex lg:items-center  lg:justify-center">
       {/* Container */}
-      <div className="w-[361px] h-[1609px] opacity-100 bg-[#FFFFFF] flex flex-col items-center justify-center mx-auto md:w-[1050px] md:h-[819px] md:opacity-100 md:gap-[112px] md:pt-[112px]  md:bg-[#FFFFFF] md:pb-[112px]">
+      <div className="w-[361px] h-[1609px] opacity-100 bg-[#FFFFFF] flex flex-col items-center justify-center mx-auto lg:w-[1050px] lg:h-[819px] lg:opacity-100 lg:gap-[112px] lg:pt-[112px]  lg:bg-[#FFFFFF] lg:pb-[112px]">
         {/* Üstteki row */}
-        <div className="w-[361px] h-[280px] opacity-100 flex flex-col items-center justify-center bg-[#FFFFFF] md:w-[607px] md:h-[100px] md:opacity-100 md:gap-[10px]">
+        <div className="w-[361px] h-[280px] opacity-100 flex flex-col items-center justify-center bg-[#FFFFFF] lg:w-[607px] lg:h-[100px] lg:opacity-100 lg:gap-[10px]">
           <h2
-            className="w-[302px] h-[100px] font-montserrat font-bold text-[40px] leading-[50px] tracking-[0.2px] text-center text-[#252B42] flex items-center justify-center mx-auto md:w-[316px] md:h-[50px] md:text-[40px] md:leading-[50px] md:whitespace-nowrap md:mb-0"
+            className="w-[302px] h-[100px] font-montserrat font-bold text-[40px] leading-[50px] tracking-[0.2px] text-center text-[#252B42] flex items-center justify-center mx-auto lg:w-[316px] lg:h-[50px] lg:text-[40px] lg:leading-[50px] lg:whitespace-nowrap lg:mb-0"
             style={{ letterSpacing: '0.2px' }}
           >
             Meet Our Team
           </h2>
           <p
-            className="w-[302px] h-[80px] font-montserrat font-normal text-[14px] leading-[20px] tracking-[0.2px] text-center text-[#737373] flex items-center justify-center mx-auto mt-4 md:w-[469px] md:h-[40px] md:text-[14px] md:leading-[20px] md:font-normal md:tracking-[0.2px] md:text-center md:mt-0"
+            className="w-[302px] h-[80px] font-montserrat font-normal text-[14px] leading-[20px] tracking-[0.2px] text-center text-[#737373] flex items-center justify-center mx-auto mt-4 lg:w-[469px] lg:h-[40px] lg:text-[14px] lg:leading-[20px] lg:font-normal lg:tracking-[0.2px] lg:text-center lg:mt-0"
             style={{ letterSpacing: '0.2px' }}
           >
-            <span className="block md:hidden">
+            <span className="block lg:hidden">
               Problems trying to resolve <br />the conflict between the two major <br />realms of Classical physics: <br />Newtonian mechanics
             </span>
-            <span className="hidden md:block">
+            <span className="hidden lg:block">
               Problems trying to resolve the conflict between the two major realms of Classical physics: Newtonian mechanics
             </span>
           </p>
         </div>
         {/* Alttaki row */}
-        <div className="w-[329px] h-[1269px] opacity-100 flex flex-col items-center justify-center bg-[#FFFFFF] mt-4 md:w-[1034px] md:h-[383px] md:opacity-100 md:gap-[30px] md:flex-row md:items-center md:justify-center">
+        <div className="w-[329px] h-[1269px] opacity-100 flex flex-col items-center justify-center bg-[#FFFFFF] mt-4 lg:w-[1034px] lg:h-[383px] lg:opacity-100 lg:gap-[30px] lg:flex-row lg:items-center lg:justify-center">
           {/* 3 Team Cards - renderTeamCard fonksiyonu ile TeamPage'den */}
-          <div className="flex flex-col gap-[30px] items-center w-full md:flex-row md:gap-[30px] md:items-center md:justify-center  md:w-full">
+          <div className="flex flex-col gap-[30px] items-center w-full lg:flex-row lg:gap-[30px] lg:items-center lg:justify-center  lg:w-full">
             {[{ image: team1, name: "Username", role: "Profession" },
               { image: team2, name: "Username", role: "Profession" },
               { image: team3, name: "Username", role: "Profession" }].map(renderTeamCard)}
@@ -170,52 +170,52 @@ const AboutUs = () => (
       </div>
     </div>
     {/* Clients Section - Mobile layout */}
-    <div className="w-[414px] h-[1444px] opacity-100 bg-[#FAFAFA] mx-auto flex flex-col items-center justify-start md:w-[1440px] md:h-[479px] md:opacity-100 md:flex md:items-center md:justify-center">
+    <div className="w-[414px] h-[1444px] opacity-100 bg-[#FAFAFA] mx-auto flex flex-col items-center justify-start lg:w-[1440px] lg:h-[479px] lg:opacity-100 lg:flex lg:items-center lg:justify-center">
       {/* Clients container */}
-      <div className="w-[414px] h-[1192px] opacity-100 mt-[120px] md:mt-0 flex flex-col items-center justify-start md:w-[1050px] md:h-[479px] md:opacity-100 md:gap-[24px] md:pt-[80px] md:pb-[80px] ">
+      <div className="w-[414px] h-[1192px] opacity-100 mt-[120px] lg:mt-0 flex flex-col items-center justify-start lg:w-[1050px] lg:h-[479px] lg:opacity-100 lg:gap-[24px] lg:pt-[80px] lg:pb-[80px] ">
           {/* Clients container content will be added here */}
           {/* Row 1 */}
-          <div className="w-[325px] h-[240px] opacity-100 flex flex-col items-center justify-center mx-auto gap-[30px] md:w-[864px]  md:h-[120px] md:opacity-100">
+          <div className="w-[325px] h-[240px] opacity-100 flex flex-col items-center justify-center mx-auto gap-[30px] lg:w-[864px]  lg:h-[120px] lg:opacity-100">
             <h2
-              className="w-[287px] h-[150px] font-montserrat font-bold text-[40px] leading-[50px] tracking-[0.2px] text-center text-[#252B42] flex items-center justify-center mx-auto md:w-[496px] md:h-[50px] md:opacity-100 md:whitespace-nowrap"
+              className="w-[287px] h-[150px] font-montserrat font-bold text-[40px] leading-[50px] tracking-[0.2px] text-center text-[#252B42] flex items-center justify-center mx-auto lg:w-[496px] lg:h-[50px] lg:opacity-100 lg:whitespace-nowrap"
               style={{ letterSpacing: '0.2px' }}
             >
               Big Companies Are Here
             </h2>
             <p
-              className="w-[328px] h-[60px] font-montserrat font-normal text-[14px] leading-[20px] tracking-[0.2px] text-center text-[#737373] flex items-center justify-center mx-auto md:w-[547px] md:h-[40px] md:opacity-100"
+              className="w-[328px] h-[60px] font-montserrat font-normal text-[14px] leading-[20px] tracking-[0.2px] text-center text-[#737373] flex items-center justify-center mx-auto lg:w-[547px] lg:h-[40px] lg:opacity-100"
               style={{ letterSpacing: '0.2px' }}
             >
-              <span className="block md:hidden">
+              <span className="block lg:hidden">
                 Problems trying to resolve the conflict between the two major realms of Classical physics: Newtonian mechanics
               </span>
-              <span className="hidden md:block">
+              <span className="hidden lg:block">
                 Problems trying to resolve the conflict between<br />the two major realms of Classical physics: Newtonian mechanics
               </span>
             </p>
           </div>
           {/* Row 2 */}
           <div className="w-[327px] h-[952px] opacity-100 flex items-center justify-center mx-auto bg-transparent overflow-hidden
-            md:w-[1054px] md:h-[175px] md:gap-[30px] md:pt-[50px] md:pb-[50px] md:flex md:items-center md:justify-center">
-            <div className="w-[327px] h-[952px] flex items-center justify-center md:w-full md:h-full md:gap-[30px]">
-              <MobileClients className="w-[327px] h-[952px] !mx-0 md:w-full md:h-full" />
+            lg:w-[1054px] lg:h-[175px] lg:gap-[30px] lg:pt-[50px] lg:pb-[50px] lg:flex lg:items-center lg:justify-center">
+            <div className="w-[327px] h-[952px] flex items-center justify-center lg:w-full lg:h-full lg:gap-[30px]">
+              <MobileClients className="w-[327px] h-[952px] !mx-0 lg:w-full lg:h-full" />
             </div>
           </div>
       </div>
     </div>
     {/* Testimonial Section - Mobile layout */}
-    <div className="w-[414px] h-[520px] opacity-100 bg-[#2A7CC7] mx-auto flex items-center justify-center md:w-[1440px] md:h-[636px] md:opacity-100 md:relative">
+    <div className="w-[414px] h-[520px] opacity-100 bg-[#2A7CC7] mx-auto flex items-center justify-center lg:w-[1440px] lg:h-[636px] lg:opacity-100 lg:relative">
       {/* Desktop Testimonial Image */}
       <img
         src={testimonialImg}
         alt="Testimonial"
-        className="hidden md:block md:w-[590px] md:h-[640px] md:absolute md:left-[850px] md:opacity-100 md:object-cover"
+        className="hidden lg:block lg:w-[590px] lg:h-[640px] lg:absolute lg:left-[850px] lg:opacity-100 lg:object-cover"
       />
       {/* FlexRow */}
-      <div className="w-[272px] h-[328px] bg-transparent mx-auto flex flex-col items-center justify-center gap-[24px] md:w-[438px] md:h-[238px] md:absolute md:top-[194px] md:left-[195px] md:mx-0 md:items-start md:justify-start">
-        <h5 className="w-[128px] h-[24px] font-montserrat font-bold text-[16px] leading-[24px] tracking-[0.1px] text-center text-white mb-0 whitespace-nowrap md:w-[128px] md:h-[24px] md:text-left">WORK WITH US</h5>
-        <h2 className="w-[274px] h-[100px] font-montserrat font-bold text-[40px] leading-[50px] tracking-[0.2px] text-center text-white mb-0 md:w-[440px] md:h-[50px] md:text-left md:whitespace-nowrap">Now Let's grow Yours</h2>
-        <p className="w-[257px] h-[80px] font-montserrat font-normal text-[14px] leading-[20px] tracking-[0.2px] text-center text-white mb-0 md:w-[440px] md:h-[40px] md:text-left">
+      <div className="w-[272px] h-[328px] bg-transparent mx-auto flex flex-col items-center justify-center gap-[24px] lg:w-[438px] lg:h-[238px] lg:absolute lg:top-[194px] lg:left-[195px] lg:mx-0 lg:items-start lg:justify-start">
+        <h5 className="w-[128px] h-[24px] font-montserrat font-bold text-[16px] leading-[24px] tracking-[0.1px] text-center text-white mb-0 whitespace-nowrap lg:w-[128px] lg:h-[24px] lg:text-left">WORK WITH US</h5>
+        <h2 className="w-[274px] h-[100px] font-montserrat font-bold text-[40px] leading-[50px] tracking-[0.2px] text-center text-white mb-0 lg:w-[440px] lg:h-[50px] lg:text-left lg:whitespace-nowrap">Now Let's grow Yours</h2>
+        <p className="w-[257px] h-[80px] font-montserrat font-normal text-[14px] leading-[20px] tracking-[0.2px] text-center text-white mb-0 lg:w-[440px] lg:h-[40px] lg:text-left">
           The gradual accumulation of information about atomic and <br />small-scale behavior during the first quarter of the 20th
         </p>
         <button className="w-[130px] h-[52px] flex items-center justify-center gap-[10px] pt-[15px] pr-[40px] pb-[15px] pl-[40px] rounded-[5px] border border-[#FAFAFA] bg-transparent">

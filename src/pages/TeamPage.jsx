@@ -25,19 +25,19 @@ export function renderTeamCard({ image, name, role }, idx) {
         <h6 className="font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-center text-[#737373] w-[77px] h-[24px]">{role}</h6>
         <div className="flex items-center justify-center gap-[20px] w-[112px] h-[44px] pt-[10px] pb-[10px]">
           {/* Facebook Icon - Mobil */}
-          <span className="w-[24px] h-[24px] flex items-center justify-center md:hidden">
+          <span className="w-[24px] h-[24px] flex items-center justify-center lg:hidden">
             <img src={FbKare} alt="Facebook Kare" width={24} height={24} />
           </span>
           {/* Facebook Icon - Desktop */}
-          <span className="hidden md:flex w-[23px] h-[23px] items-center justify-center">
+          <span className="hidden lg:flex w-[23px] h-[23px] items-center justify-center">
             <img src={FbDaire} alt="Facebook Daire" width={23} height={23} />
           </span>
           {/* Instagram Icon - Mobil */}
-          <span className="w-[24px] h-[24px] flex items-center justify-center md:hidden">
+          <span className="w-[24px] h-[24px] flex items-center justify-center lg:hidden">
             <img src={InstaRed} alt="Instagram Red" width={23} height={23} />
           </span>
           {/* Instagram Icon - Desktop */}
-          <span className="hidden md:flex w-[23px] h-[23px] items-center justify-center">
+          <span className="hidden lg:flex w-[23px] h-[23px] items-center justify-center">
             <img src={InstaBlue} alt="Instagram Blue" width={23} height={23} />
 
           </span>
@@ -68,16 +68,16 @@ import team9 from "../assets/ourteam/139086e5ca1b2a889adad8205d13222ab4105506.jp
 const TeamPage = () => (
   <div className="w-full min-h-screen bg-[#FFFFFF] flex flex-col items-center">
     {/* What We Do */}
-    <div className="bg-white/50 rounded-xl mt-4 flex items-center justify-center w-[414px] h-[330px] md:w-[1440px] md:h-[280px]">
+    <div className="bg-white/50 rounded-xl mt-4 flex items-center justify-center w-[414px] h-[330px] lg:w-[1440px] lg:h-[280px]">
       {/*row */}  
       <div
-        className="flex flex-col items-center justify-center gap-[30px] w-[414px] h-[200px] md:w-[870px] md:h-[280px] md:py-[50px] md:flex-row">
+        className="flex flex-col items-center justify-center gap-[30px] w-[414px] h-[200px] lg:w-[870px] lg:h-[280px] lg:py-[50px] lg:flex-row">
             <div
-        className="flex flex-col items-center justify-center gap-[30px] w-[414px] h-[200px] md:w-[870px] md:h-[280px] md:py-[50px] md:flex-col"
+        className="flex flex-col items-center justify-center gap-[30px] w-[414px] h-[200px] lg:w-[870px] lg:h-[280px] lg:py-[50px] lg:flex-col"
         style={{opacity: 1}}
       >
         <h5 className="font-montserrat font-bold text-[16px] leading-[24px] tracking-[0.1px] text-center text-[#737373]">WHAT WE DO</h5>
-        <h2 className="font-montserrat font-bold text-[40px] leading-[50px] tracking-[0.2px] text-center text-[#252B42]">Innovation<br className="md:hidden" /> tailored for you</h2>
+        <h2 className="font-montserrat font-bold text-[40px] leading-[50px] tracking-[0.2px] text-center text-[#252B42]">Innovation<br className="lg:hidden" /> tailored for you</h2>
         <div className="flex items-center justify-center gap-[15px] w-[120px] h-[44px] pt-[10px] pb-[10px] opacity-100">
           {/* Breadcrumb örneği */}
           <span className="font-montserrat font-bold text-[14px] leading-[24px] tracking-[0.2px] text-center text-[#252B42] w-[43px] h-[24px]">Home</span>
@@ -90,82 +90,82 @@ const TeamPage = () => (
       </div>
     </div>
     {/* Hero Picture Section */}
-    <div className="bg-white w-[413px] h-[1070px] md:w-[1440px] md:h-[530px] flex flex-col items-center justify-center mt-8">
+    <div className="bg-white w-[413px] h-[1070px] lg:w-[1440px] lg:h-[530px] flex flex-col items-center justify-center mt-8">
       {/* Hero Picture Images - Responsive Layout */}
-      <div className="flex flex-col md:flex-row w-full h-full items-center md:items-stretch justify-center md:gap-[10px]">
+      <div className="flex flex-col lg:flex-row w-full h-full items-center lg:items-stretch justify-center lg:gap-[10px]">
         {/* 1. büyük resim */}
         <img
           src={hero1}
           alt="Hero 1"
-          className="w-[413px] h-[530px] md:w-[700px] md:h-[530px] object-cover rounded mb-2 md:mb-0 md:rounded-l"
+          className="w-[413px] h-[530px] lg:w-[700px] lg:h-[530px] object-cover rounded mb-2 lg:mb-0 lg:rounded-l"
         />
         {/* Sağdaki resimler: 2-3 ve 4-5 */}
-        <div className="flex flex-col md:flex-row w-full md:w-[722px] md:gap-[10px]">
+        <div className="flex flex-col lg:flex-row w-full lg:w-[722px] lg:gap-[10px]">
           {/* 2 ve 3 */}
-          <div className="flex flex-row md:flex-col w-full md:w-[361px] gap-[5px] md:gap-[10px] mb-[10px] md:mb-0">
+          <div className="flex flex-row lg:flex-col w-full lg:w-[361px] gap-[5px] lg:gap-[10px] mb-[10px] lg:mb-0">
             <img
               src={hero2}
               alt="Hero 2"
-              className="w-[204px] h-[260px] md:w-[361px] md:h-[260px] object-cover rounded scale-x-[-1] md:rounded-t"
+              className="w-[204px] h-[260px] lg:w-[361px] lg:h-[260px] object-cover rounded scale-x-[-1] lg:rounded-t"
             />
             <img
               src={hero3}
               alt="Hero 3"
-              className="w-[204px] h-[260px] md:w-[361px] md:h-[260px] object-cover rounded md:rounded-b"
+              className="w-[204px] h-[260px] lg:w-[361px] lg:h-[260px] object-cover rounded lg:rounded-b"
             />
           </div>
           {/* 4 ve 5 */}
-          <div className="flex flex-row md:flex-col w-full md:w-[361px] gap-[5px] md:gap-[10px]">
+          <div className="flex flex-row lg:flex-col w-full lg:w-[361px] gap-[5px] lg:gap-[10px]">
             <img
               src={hero4}
               alt="Hero 4"
-              className="w-[204px] h-[260px] md:w-[361px] md:h-[260px] object-cover rounded md:rounded-t"
+              className="w-[204px] h-[260px] lg:w-[361px] lg:h-[260px] object-cover rounded lg:rounded-t"
             />
             <img
               src={hero5}
               alt="Hero 5"
-              className="w-[204px] h-[260px] md:w-[361px] md:h-[260px] object-cover rounded scale-x-[-1] md:rounded-b"
+              className="w-[204px] h-[260px] lg:w-[361px] lg:h-[260px] object-cover rounded scale-x-[-1] lg:rounded-b"
             />
           </div>
         </div>
       </div>
     </div>
       {/* Meet Our Team Section */}
-      <div className="w-[414px] h-[4180px] md:w-[1440px] md:h-[1759px] bg-white flex flex-col items-center mx-auto mt-8">
+      <div className="w-[414px] h-[4180px] lg:w-[1440px] lg:h-[1759px] bg-white flex flex-col items-center mx-auto mt-8">
         {/* Üst Container: Sadece mobilde görünür */}
-        <div className="w-[361px] h-[190px] pt-[45px] pb-[45px] flex flex-col items-center justify-center md:hidden">
+        <div className="w-[361px] h-[190px] pt-[45px] pb-[45px] flex flex-col items-center justify-center lg:hidden">
           <div className="w-[310px] h-[100px] flex items-center justify-center mx-auto">
             <h2 className="font-montserrat font-bold text-[40px] leading-[50px] tracking-[0.2px] text-center text-[#252B42]">Meet Our Team</h2>
           </div>
         </div>
         {/* Alt Container: Mobilde başlık hidden, desktopta başlık görünür, desktop ölçüleri güncellendi */}
         <div className="w-[329px] h-[3867px] flex flex-col items-center gap-[30px] mx-auto
-          md:w-[1050px] md:h-[1759px] md:flex md:flex-col md:gap-[112px] md:items-center md:mx-auto">
+          lg:w-[1050px] lg:h-[1759px] lg:flex lg:flex-col lg:gap-[112px] lg:items-center lg:mx-auto">
           {/* Desktop: başlık ve 3 satır kart, gap ile eşit aralıklı */}
-          <div className="hidden md:flex md:flex-col md:gap-[112px] md:w-full md:h-full md:items-center md:justify-center">
+          <div className="hidden lg:flex lg:flex-col lg:gap-[112px] lg:w-full lg:h-full lg:items-center lg:justify-center">
             {/* Başlık */}
-            <div className="md:w-[607px] md:h-[50px] md:flex md:items-center md:justify-center mx-auto">
+            <div className="lg:w-[607px] lg:h-[50px] lg:flex lg:items-center lg:justify-center mx-auto">
               <h2 className="font-montserrat font-bold text-[40px] leading-[50px] tracking-[0.2px] text-center text-[#252B42]">Meet Our Team</h2>
             </div>
             {/* 3 satır kart */}
-            <div className="md:w-[1034px] md:h-[383px] md:flex md:flex-row md:gap-[30px] md:justify-center md:items-center">
+            <div className="lg:w-[1034px] lg:h-[383px] lg:flex lg:flex-row lg:gap-[30px] lg:justify-center lg:items-center">
               {[{ image: team1, name: "Username", role: "Profession" },
                 { image: team2, name: "Username", role: "Profession" },
                 { image: team3, name: "Username", role: "Profession" }].map(renderTeamCard)}
             </div>
-            <div className="md:w-[1034px] md:h-[383px] md:flex md:flex-row md:gap-[30px] md:justify-center md:items-center">
+            <div className="lg:w-[1034px] lg:h-[383px] lg:flex lg:flex-row lg:gap-[30px] lg:justify-center lg:items-center">
               {[{ image: team4, name: "Username", role: "Profession" },
                 { image: team5, name: "Username", role: "Profession" },
                 { image: team6, name: "Username", role: "Profession" }].map(renderTeamCard)}
             </div>
-            <div className="md:w-[1034px] md:h-[383px] md:flex md:flex-row md:gap-[30px] md:justify-center md:items-center">
+            <div className="lg:w-[1034px] lg:h-[383px] lg:flex lg:flex-row lg:gap-[30px] lg:justify-center lg:items-center">
               {[{ image: team7, name: "Username", role: "Profession" },
                 { image: team8, name: "Username", role: "Profession" },
                 { image: team9, name: "Username", role: "Profession" }].map(renderTeamCard)}
             </div>
           </div>
           {/* Mobilde eski yapı korunur */}
-          <div className="md:hidden w-[329px] flex flex-col gap-[30px] items-center mx-auto">
+          <div className="lg:hidden w-[329px] flex flex-col gap-[30px] items-center mx-auto">
             {[ 
               { image: team1, name: "Username", role: "Profession" },
               { image: team2, name: "Username", role: "Profession" },
@@ -181,12 +181,12 @@ const TeamPage = () => (
         </div>
       </div>
       {/* TEAM CTA BÖLÜMÜ - doğrudan JSX olarak eklenmiştir */}
-    <section className="w-[414px] h-[586px] flex flex-col items-center justify-center bg-white mx-auto md:w-[1440px] md:h-[442px]">
-    <div className="w-[332px] h-[576px] flex flex-col items-center justify-center mx-auto md:w-[1050px] md:h-[442px] md:gap-[96px] md:pt-[80px] md:pb-[80px] md:items-center md:justify-center md:mx-auto" >
-      <div className="w-[332px] h-[352px] flex flex-col items-center justify-center mx-auto md:w-[607px] md:h-[282px] md:mx-auto md:items-center md:justify-center">
-        <div className="w-[332px] h-[352px] flex flex-col items-center justify-center gap-[30px] md:w-[547px] md:h-[282px] md:gap-[30px]">
-          <h2 className="w-[332px] h-[100px] font-montserrat font-bold text-[38px] leading-[48px] tracking-[0.2px] text-center text-[#252B42] whitespace-nowrap md:w-[547px] md:h-[50px] md:text-[40px] md:leading-[50px] md:tracking-[0.2px] md:font-bold md:font-montserrat md:text-center md:text-[#252B42] md:whitespace-nowrap">Start your<span className="md:hidden"><br /></span> 14 days free trial</h2>
-          <h6 className="w-[321px] h-[60px] font-montserrat font-normal text-[14px] leading-[20px] tracking-[0.2px] text-center text-[#737373] md:w-[411px] md:h-[40px] md:font-montserrat md:font-normal md:text-[14px] md:leading-[20px] md:tracking-[0.2px] md:text-center md:text-[#737373]">Met minim Mollie non desert Alamo est sit cliquey dolor do met sent. RELIT official consequent.</h6>
+    <section className="w-[414px] h-[586px] flex flex-col items-center justify-center bg-white mx-auto lg:w-[1440px] lg:h-[442px]">
+    <div className="w-[332px] h-[576px] flex flex-col items-center justify-center mx-auto lg:w-[1050px] lg:h-[442px] lg:gap-[96px] lg:pt-[80px] lg:pb-[80px] lg:items-center lg:justify-center lg:mx-auto" >
+      <div className="w-[332px] h-[352px] flex flex-col items-center justify-center mx-auto lg:w-[607px] lg:h-[282px] lg:mx-auto lg:items-center lg:justify-center">
+        <div className="w-[332px] h-[352px] flex flex-col items-center justify-center gap-[30px] lg:w-[547px] lg:h-[282px] lg:gap-[30px]">
+          <h2 className="w-[332px] h-[100px] font-montserrat font-bold text-[38px] leading-[48px] tracking-[0.2px] text-center text-[#252B42] whitespace-nowrap lg:w-[547px] lg:h-[50px] lg:text-[40px] lg:leading-[50px] lg:tracking-[0.2px] lg:font-bold lg:font-montserrat lg:text-center lg:text-[#252B42] lg:whitespace-nowrap">Start your<span className="lg:hidden"><br /></span> 14 days free trial</h2>
+          <h6 className="w-[321px] h-[60px] font-montserrat font-normal text-[14px] leading-[20px] tracking-[0.2px] text-center text-[#737373] lg:w-[411px] lg:h-[40px] lg:font-montserrat lg:font-normal lg:text-[14px] lg:leading-[20px] lg:tracking-[0.2px] lg:text-center lg:text-[#737373]">Met minim Mollie non desert Alamo est sit cliquey dolor do met sent. RELIT official consequent.</h6>
           <button className="w-[186px] h-[52px] flex items-center justify-center gap-[10px] pt-[15px] pr-[40px] pb-[15px] pl-[40px] rounded-[5px] bg-[#23A6F0]">
             <span className="w-[106px] h-[22px] font-montserrat font-bold text-[14px] leading-[22px] tracking-[0.2px] text-center text-white whitespace-nowrap">Try it free now</span>
           </button>

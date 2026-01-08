@@ -39,7 +39,7 @@ export default function Slider() {
 	return (
 		<>
 			{/* Mobile Only */}
-			<div className="w-full max-w-[414px] mx-auto md:hidden">
+			<div className="w-full max-w-[414px] mx-auto lg:hidden">
 				<div className="relative w-full overflow-hidden h-[753px]">
 					{/* Slide Image */}
 					<img
@@ -86,7 +86,7 @@ export default function Slider() {
 				</div>
 			</div>
 			{/* Desktop Only */}
-			<div className="hidden md:block w-full max-w-[1440px] mx-auto h-[716px] rounded-[5px] border border-[#DEDEDE] relative overflow-hidden">
+			<div className="hidden lg:block w-full max-w-[1440px] mx-auto h-[716px] rounded-[5px] border border-[#DEDEDE] relative overflow-hidden">
 				<div className="relative w-full overflow-hidden h-[716px]">
 					{/* Slide Image */}
 					<img
@@ -129,7 +129,7 @@ export default function Slider() {
 						</div>
 							{/* Carousel Indicators - Desktop */}
 						<div
-							className="hidden md:flex absolute left-1/2 -translate-x-1/2"
+							className="hidden lg:flex absolute left-1/2 -translate-x-1/2"
 							style={{ width: 126, height: 10, top: 650 }}
 						>
 							<div className="flex" style={{ width: 126, height: 10 }}>

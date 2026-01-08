@@ -15,31 +15,31 @@ export default function BlogSection() {
 	];
 
 	return (
-		<section className="w-full bg-[#FFFFFF] flex flex-col items-center py-20 md:max-w-[1440px] md:h-[1044px] md:rounded-xl md:mx-auto md:justify-center">
+		<section className="w-full bg-[#FFFFFF] flex flex-col items-center py-20 lg:max-w-[1440px] lg:h-[1044px] lg:rounded-xl lg:mx-auto lg:justify-center">
 			{/* Container */}
-			<div className="w-[414px] h-[2302px] flex flex-col gap-[80px] pt-[80px] pb-[80px] md:w-[1050px] md:h-[1044px] md:pt-[112px] md:pb-[112px] md:gap-[80px] md:mx-auto">
+			<div className="w-[414px] h-[2302px] flex flex-col gap-[80px] pt-[80px] pb-[80px] lg:w-[1050px] lg:h-[1044px] lg:pt-[112px] lg:pb-[112px] lg:gap-[80px] lg:mx-auto">
 				{/* Row 1 - Text Section */}
-				<div className="w-[300px] h-[184px] mx-auto md:w-[692px] md:h-[134px] md:mx-auto">
+				<div className="w-[300px] h-[184px] mx-auto lg:w-[692px] lg:h-[134px] lg:mx-auto">
 					{/* Main Content */}
 					<div className="w-[279px] h-[184px] flex flex-col gap-[10px] items-center justify-center mx-auto">
 						{/* Frame 1 */}
 						<div className="w-[279px] h-[184px] flex flex-col gap-[10px] items-center justify-center mx-auto">
 							{/* Section Tag */}
 							<h6 className="font-montserrat w-auto h-[24px] text-[14px] font-bold leading-[24px] tracking-[0.2px] text-center text-[#23A6F0] mx-auto whitespace-nowrap
-								md:w-[114px] md:h-[24px] md:font-montserrat md:font-bold md:text-[14px] md:leading-[24px] md:tracking-[0.2px] md:text-center">
+								lg:w-[114px] lg:h-[24px] lg:font-montserrat lg:font-bold lg:text-[14px] lg:leading-[24px] lg:tracking-[0.2px] lg:text-center">
 								Practice Advice
 							</h6>
 
 							{/* Section Title */}
-							<h3 className="font-montserrat text-[40px] font-bold leading-[50px] tracking-[0.2px] text-center text-[#252B42] mx-auto md:whitespace-nowrap">
-								<span className="block md:hidden">Featured Products</span>
-								<span className="hidden md:block">Featured Posts</span>
+							<h3 className="font-montserrat text-[40px] font-bold leading-[50px] tracking-[0.2px] text-center text-[#252B42] mx-auto lg:whitespace-nowrap">
+								<span className="block lg:hidden">Featured Products</span>
+								<span className="hidden lg:block">Featured Posts</span>
 							</h3>
 
 							{/* Paragraph */}
 							<p className="font-montserrat font-[400] text-[15px] leading-[20px] tracking-[0.2px] text-center text-[#737373]">
-								<span className="block md:hidden">Problems trying to resolve the <br/>conflict between the two major</span>
-								<span className="md:block hidden max-w-[500px] whitespace-normal mx-auto  md:ml-[35px]">
+								<span className="block lg:hidden">Problems trying to resolve the <br/>conflict between the two major</span>
+								<span className="lg:block hidden max-w-[500px] whitespace-normal mx-auto  lg:ml-[35px]">
 									<span className="whitespace-nowrap">Problems trying to resolve the conflict between</span><br/>
 									<span className="whitespace-nowrap">the two major realms of Classical physics: Newtonian mechanics</span>
 								</span>
@@ -49,23 +49,23 @@ export default function BlogSection() {
 				</div>
 
 				{/* Row 2 - Blog Cards */}
-				<div className="w-[329px] h-[1878px] flex flex-col gap-[30px] mx-auto md:w-[1045px] md:h-[606px] md:flex-row md:gap-[30px] md:justify-center">
+				<div className="w-[329px] h-[1878px] flex flex-col gap-[30px] mx-auto lg:w-[1045px] lg:h-[606px] lg:flex-row lg:gap-[30px] lg:justify-center">
 					{blogCards.map((card, index) => (
-						<div key={index} className="w-[328px] h-[606px] shadow-[0px_2px_4px_0px_#0000001A] md:w-[328px] md:h-[606px]">
+						<div key={index} className="w-[328px] h-[606px] shadow-[0px_2px_4px_0px_#0000001A] lg:w-[328px] lg:h-[606px]">
 							{/* Content Card */}
-							<div className="w-[330px] h-[606px] md:w-[328px] md:h-[606px]">
+							<div className="w-[330px] h-[606px] lg:w-[328px] lg:h-[606px]">
 								{/* Image Container */}
-								<div className="w-[330px] h-[300px] relative md:w-[328px] md:h-[300px]">
+								<div className="w-[330px] h-[300px] relative lg:w-[328px] lg:h-[300px]">
 									{/* Mobilde eski, desktopta yeni resim */}
 									<img 
 										src={card.image}
 										alt="Blog post"
-										className="w-[330px] h-[300px] object-cover md:hidden"
+										className="w-[330px] h-[300px] object-cover lg:hidden"
 									/>
 									<img
 										src={card.desktopImage}
 										alt="Blog post desktop"
-										className="hidden md:block w-[348px] h-[300px] object-cover"
+										className="hidden lg:block w-[348px] h-[300px] object-cover"
 									/>
           
 									{/* NEW Tag */}

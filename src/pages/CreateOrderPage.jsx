@@ -524,11 +524,12 @@ export default function CreateOrderPage() {
   }
 
   return (
+    <section className="w-full mx-auto max-w-[411px] lg:max-w-none">
     <div className="min-h-screen bg-[#FAFAFA] pb-8">
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
-        <div className="max-w-[1200px] mx-auto px-4 md:px-6 py-4 md:py-6">
-          <h1 className="font-montserrat font-bold text-[20px] md:text-[28px] text-[#252B42]">
+        <div className="max-w-[1200px] mx-auto px-4 lg:px-6 py-4 lg:py-6">
+          <h1 className="font-montserrat font-bold text-[20px] lg:text-[28px] text-[#252B42]">
             Sipariş Oluştur
           </h1>
           
@@ -536,7 +537,7 @@ export default function CreateOrderPage() {
           <div className="flex gap-4 mt-4 border-b border-gray-200">
             <button
               onClick={() => setActiveTab('address')}
-              className={`pb-3 px-2 font-montserrat font-semibold text-[14px] md:text-[16px] border-b-2 transition ${
+              className={`pb-3 px-2 font-montserrat font-semibold text-[14px] lg:text-[16px] border-b-2 transition ${
                 activeTab === 'address'
                   ? 'border-[#23A6F0] text-[#23A6F0]'
                   : 'border-transparent text-gray-500 hover:text-gray-700'
@@ -547,7 +548,7 @@ export default function CreateOrderPage() {
             <button
               onClick={() => setActiveTab('payment')}
               disabled={!selectedShippingAddress || (!billingSameAsShipping && !selectedBillingAddress)}
-              className={`pb-3 px-2 font-montserrat font-semibold text-[14px] md:text-[16px] border-b-2 transition ${
+              className={`pb-3 px-2 font-montserrat font-semibold text-[14px] lg:text-[16px] border-b-2 transition ${
                 activeTab === 'payment'
                   ? 'border-[#23A6F0] text-[#23A6F0]'
                   : 'border-transparent text-gray-500 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed'
@@ -559,7 +560,7 @@ export default function CreateOrderPage() {
         </div>
       </div>
 
-      <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-6 md:py-8">
+      <div className="max-w-[1400px] mx-auto px-4 lg:px-6 py-6 lg:py-8">
         {error && (
           <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
             <p className="font-montserrat text-[14px] text-red-700">{error}</p>
@@ -1030,7 +1031,7 @@ export default function CreateOrderPage() {
         {activeTab === 'payment' && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Sol: Kayıtlı Kartlar */}
-            <div className="bg-white rounded-lg shadow-sm p-6 flex flex-col items-center justify-center md:items-start md:justify-start lg:items-center lg:justify-center">
+            <div className="bg-white rounded-lg shadow-sm p-6 flex flex-col items-center justify-center lg:items-center lg:justify-center">
               <h2 className="font-montserrat font-bold text-[18px] text-[#252B42] mb-4 flex items-center gap-2">
                 <CreditCard size={20} className="text-[#23A6F0]" />
                 Kart Bilgileri
@@ -1117,35 +1118,37 @@ export default function CreateOrderPage() {
                                 : 'border-gray-200 hover:border-gray-300'
                             }`}
                             style={{width: '220px'}}>
+                            <div className="relative mx-auto max-w-[411px] lg:max-w-none">
                             {/* Kart Ön Yüzü Tasarımı */}
-                            <div className="relative bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg p-3 text-white mb-1" style={{aspectRatio: '1.585', maxWidth: '220px'}}>
-                            {/* Sağ Üst: Troy Logo */}
-                            <div className="absolute top-3 right-3 flex items-center">
-                              <img src={troyLogo} alt="Troy Logo" style={{ width: 38, height: 16, objectFit: 'contain' }} />
-                            </div>
-
-                              {/* Sol Üst: İsim Soyisim */}
-                              <div className="absolute top-4 left-4">
-                                <p className="text-[8px] text-gray-400 uppercase tracking-wide">Cardholder</p>
-                                <p className="text-[11px] font-semibold mt-0.5 truncate">{card.name_on_card}</p>
+                              <div className="relative bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg p-3 text-white mb-1" style={{aspectRatio: '1.585', maxWidth: '220px'}}>
+                              {/* Sağ Üst: Troy Logo */}
+                              
+                              <div className="absolute top-3 right-3 flex items-center">
+                                <img src={troyLogo} alt="Troy Logo" style={{ width: 38, height: 16, objectFit: 'contain' }} />
                               </div>
 
-                              {/* Tam Ortada: Kart Numarası */}
-                              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full flex justify-center">
-                                <p className="font-mono text-[13px] tracking-widest">{maskedNumber}</p>
-                              </div>
+                                {/* Sol Üst: İsim Soyisim */}
+                                <div className="absolute top-4 left-4">
+                                  <p className="text-[8px] text-gray-400 uppercase tracking-wide">Cardholder</p>
+                                  <p className="text-[11px] font-semibold mt-0.5 truncate">{card.name_on_card}</p>
+                                </div>
 
-                              {/* Sol Alt: E-com Bank */}
-                              <div className="absolute bottom-4 left-4 text-left">
-                                <p className="text-[10px] font-bold text-white tracking-wide">E-com Bank</p>
-                              </div>
-                              {/* Sağ Alt: Son Kullanma Tarihi */}
-                              <div className="absolute bottom-4 right-4 text-right">
-                                <p className="text-[7px] text-gray-400 uppercase">Valid Thru</p>
-                                <p className="font-mono text-[11px]">{card.expire_month.toString().padStart(2, '0')}/{card.expire_year.toString().slice(-2)}</p>
-                              </div>
-                            </div>
+                                {/* Tam Ortada: Kart Numarası */}
+                                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full flex justify-center">
+                                  <p className="font-mono text-[13px] tracking-widest">{maskedNumber}</p>
+                                </div>
 
+                                {/* Sol Alt: E-com Bank */}
+                                <div className="absolute bottom-4 left-4 text-left">
+                                  <p className="text-[10px] font-bold text-white tracking-wide">E-com Bank</p>
+                                </div>
+                                {/* Sağ Alt: Son Kullanma Tarihi */}
+                                <div className="absolute bottom-4 right-4 text-right">
+                                  <p className="text-[7px] text-gray-400 uppercase">Valid Thru</p>
+                                  <p className="font-mono text-[11px]">{card.expire_month.toString().padStart(2, '0')}/{card.expire_year.toString().slice(-2)}</p>
+                                </div>
+                              </div>
+                              </div>
                             {/* Kart Bilgileri */}
                             <div className="flex items-center justify-end">
                             </div>
@@ -1583,5 +1586,6 @@ export default function CreateOrderPage() {
         </div>
       </div>
     </div>
-  );
+  </section>
+  ); 
 }
